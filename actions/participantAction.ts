@@ -33,7 +33,25 @@ export async function applyParticipant(
     studyId: number
 ): Promise<ActionResponse> {
     const supabase = await createClient()
-    const { user } = await CustomUserAuth(supabase)
+    const {
+        data: { user },
+        error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError) {
+        return {
+            success: false,
+            error: {
+                message: '인증 확인에 실패했습니다. 다시 시도해 주세요.',
+            },
+        }
+    }
+    if (!user) {
+        return {
+            success: false,
+            error: { message: '로그인 후 참여 신청이 가능합니다' },
+        }
+    }
 
     // 신청자 정보 조회
     const { data: userProfile, error: userProfileError } = await supabase
@@ -118,7 +136,6 @@ export async function applyParticipant(
     return { success: true, data }
 }
 
-// 참여 상태 확인
 // 참여 상태 확인
 export async function checkParticipantStatus(
     studyId: number

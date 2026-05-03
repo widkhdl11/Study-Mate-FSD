@@ -47,9 +47,16 @@ export function useApplyParticipant(studyId: number) {
 
     return useMutation({
         mutationFn: async () => {
+            const cachedUser = queryClient.getQueryData(queryKeys.user)
+            if (cachedUser === null) {
+                throw new Error('로그인 후 참여 신청이 가능합니다')
+            }
             return await applyParticipant(studyId)
         },
         onMutate: () => {
+            if (!user?.id) {
+                return { previousData: null }
+            }
             const key = queryKeys.participant(studyId, user?.id)
             queryClient.cancelQueries({ queryKey: key })
             const previousData = queryClient.getQueryData(key)
