@@ -1,15 +1,15 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { addNotification } from './notificationAction'
-import { CustomUserAuth } from '@/utils/auth'
 import { ActionResponse } from '@/types/actionType'
-import { revalidatePath } from 'next/cache'
-import { notFound, redirect } from 'next/navigation'
 import {
     ParticipantResponse,
     ParticipantWithStudyResponse,
 } from '@/types/participantType'
+import { CustomUserAuth } from '@/utils/auth'
+import { revalidatePath } from 'next/cache'
+import { notFound, redirect } from 'next/navigation'
+import { addNotification } from './notificationAction'
 
 // export async function getParticipant(studyId: number) {
 //   const supabase = await createClient();
@@ -119,11 +119,22 @@ export async function applyParticipant(
 }
 
 // 참여 상태 확인
+// 참여 상태 확인
 export async function checkParticipantStatus(
     studyId: number
 ): Promise<ActionResponse> {
     const supabase = await createClient()
-    const { user } = await CustomUserAuth(supabase)
+    const {
+        data: { user },
+        error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError) {
+        throw new Error('인증 확인에 실패했습니다')
+    }
+    if (!user) {
+        return { success: true }
+    }
 
     // 참여 상태 확인
     const { data, error } = await supabase
@@ -367,9 +378,18 @@ export async function removeParticipant(
 // 참여 상태 확인
 export async function checkParticipantStatusSSR(
     studyId: number
-): Promise<ParticipantResponse> {
+): Promise<ParticipantResponse | null> {
     const supabase = await createClient()
-    const { user } = await CustomUserAuth(supabase)
+    const {
+        data: { user },
+        error: authError,
+    } = await supabase.auth.getUser()
+    if (authError) {
+        return null
+    }
+    if (!user) {
+        return null
+    }
 
     // 참여 상태 확인
     const { data, error } = await supabase

@@ -17,7 +17,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   if (!postData) {
     notFound()
   }
-  const participant = await checkParticipantStatusSSR(postData.study.id);
   const relatedPosts: PostsResponse = [];
   
   return (
