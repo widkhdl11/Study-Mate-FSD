@@ -1,8 +1,8 @@
 // actions/ai.ts
 "use server";
 
-import OpenAI from "openai";
 import { createClient } from "@/lib/supabase/server";
+import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,6 +14,7 @@ interface RecommendedStudy {
   reason: string;
 }
 
+// gpt
 export async function getAIRecommendedStudies() {
   const supabase = await createClient();
 
@@ -46,7 +47,7 @@ export async function getAIRecommendedStudies() {
     `,
     )
     .eq("status", "recruiting")
-    .neq("creator_id", user.id) // 내가 만든 스터디 제외
+    .neq("creator_id", user.id)
     .limit(20);
 
   if (!studies || studies.length === 0) {
@@ -87,7 +88,7 @@ ${i + 1}. [ID: ${s.id}] ${s.title}
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-5.5",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       max_tokens: 500,
@@ -118,12 +119,17 @@ ${i + 1}. [ID: ${s.id}] ${s.title}
       ...rec,
       study: recommendedStudies?.find((s) => s.id === rec.studyId),
     }));
+    
+    console.log('result', result)
 
     return { success: true, data: result };
   } catch (error: any) {
+    console.log('error', error)
     return {
       success: false,
       error: { message: "AI 추천 중 오류가 발생했습니다" },
     };
   }
 }
+
+

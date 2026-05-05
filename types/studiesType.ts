@@ -119,3 +119,14 @@ export const STATUS_MAP: Record<string, string> = {
     pending: '수락 대기중',
     rejected: '스터디 종료',
 }
+
+export type StudiesRecommendedResponse = {
+    id: number
+    name: string
+    category: string
+    region: string
+    description: string
+    current_participants: number
+    max_participants: number
+
+}

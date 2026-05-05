@@ -518,3 +518,4 @@ export const getCategoryCodeByValue = (value: string): number | null => {
 
 // ===== 7. 타입 내보내기 =====
 export type { CategoryItem };
+

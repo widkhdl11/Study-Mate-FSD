@@ -3,8 +3,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { getRegionPath } from '@/lib/constants/region'
+import { getCategoryPath } from '@/lib/constants/study-category'
 import { getImageUrl, getProfileImageUrl } from '@/lib/supabase/storage'
 import { PostDetailResponse } from '@/types/postType'
+import { studyStatusConversion } from '@/utils/conversion/study'
 import { formatTimeAgo } from '@/utils/date'
 import Image from 'next/image'
 
@@ -16,15 +19,14 @@ export default function PostCard({
     priority?: boolean
 
 }) {
-    
 
         const getStatusColor = (status: string) => {
         switch (status) {
-            case '모집중':
+            case 'recruiting':
                 return 'bg-success text-white'
-            case '마감':
+            case 'closed':
                 return 'bg-danger text-white'
-            case '수락 대기중':
+            case 'pending':
                 return 'bg-warning text-foreground'
             default:
                 return 'bg-muted text-muted-foreground'
@@ -88,12 +90,17 @@ export default function PostCard({
 
                     {/* Category & Location */}
                     <div className='flex flex-wrap gap-2'>
-                        <Badge
-                            className={`${getCategoryColor(post.study.study_category.toString())} border-0`}>
-                            {post.study.study_category}
-                        </Badge>
+                        {getCategoryPath(Number(post.study.study_category)).labels.map((category) => (
+                            <Badge
+                                key={category}
+                                className={`${getCategoryColor(category)} border-0`}>
+                                {category}
+                            </Badge>
+                        ))}
                         <Badge variant='outline' className='text-xs'>
-                            {post.study.region}
+                            {getRegionPath(Number(post.study.region)).labels.map((region) => (
+                                <span key={region}>{region}</span>
+                            ))}
                         </Badge>
                     </div>
 
@@ -125,7 +132,7 @@ export default function PostCard({
                         </span>
                         <Badge
                             className={`${getStatusColor(post.study.status)} border-0 text-xs`}>
-                            {post.study.status}
+                            {studyStatusConversion(post.study.status) }
                         </Badge>
                     </div>
                 </div>

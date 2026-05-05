@@ -73,3 +73,27 @@ export type PostDetailResponse = {
         avatar_url: string | null
     }
 }
+
+export type PostsRecommendedResponse = {
+    id: number
+    title: string
+    content: string
+    study_id: number
+    image_url: string
+    study: {
+        id: number
+        title: string
+        description: string
+        study_category: number
+        region: number
+        max_participants: number
+        current_participants: number
+        status: string
+        created_at: string
+    }
+    author: {
+        id: number
+        username: string
+        avatar_url: string
+    }
+}

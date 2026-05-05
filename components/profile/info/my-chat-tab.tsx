@@ -1,13 +1,12 @@
 'use client'
 
-import {Card} from "@/components/ui/card";
-import {TabsContent} from "@/components/ui/tabs";
-import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
-import {Badge} from "@/components/ui/badge";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+import { TabsContent } from "@/components/ui/tabs";
+import { getProfileImageUrl } from "@/lib/supabase/storage";
 import { ChatRoom } from "@/types/chatType";
 import { formatTimeAgo } from "@/utils/date";
-import { getProfileImageUrl } from "@/lib/supabase/storage";
+import Link from "next/link";
 export default function MyChatTab({chatRooms} : {
     chatRooms : ChatRoom[]
 }) {

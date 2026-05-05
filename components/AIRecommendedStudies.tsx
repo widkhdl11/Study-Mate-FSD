@@ -1,13 +1,16 @@
 "use client";
 
-import { useAIRecommendedStudies } from "@/hooks/useAgent";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAIRecommendedPosts } from "@/hooks/useAgent";
+import { getRegionPath } from "@/lib/constants/region";
+import { getCategoryPath } from "@/lib/constants/study-category";
+import { Loader2, MapPin, Sparkles, User } from "lucide-react";
 import Link from "next/link";
 
 export function AIRecommendedStudies() {
-  const { data: recommendations, isLoading, error } = useAIRecommendedStudies();
+  const { data: recommendationsPosts, isLoading, error } = useAIRecommendedPosts();
+  console.log('recommendationsPosts', recommendationsPosts)
 
   if (isLoading) {
     return (
@@ -26,7 +29,7 @@ export function AIRecommendedStudies() {
     );
   }
 
-  if (error || !recommendations) {
+  if (error || !recommendationsPosts) {
     return (
       <Card>
         <CardHeader>
@@ -56,10 +59,10 @@ export function AIRecommendedStudies() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {recommendations.map((rec, index) => (
+        {recommendationsPosts.map((rec, index) => (
           <Link 
-            key={rec.studyId} 
-            href={`/studies/${rec.studyId}`}
+            key={rec.id} 
+            href={`/posts/${rec.id}`}
             className="block"
           >
             <div className="p-4 rounded-lg border hover:bg-muted/50 transition-colors">
@@ -69,15 +72,24 @@ export function AIRecommendedStudies() {
                     <Badge variant="secondary" className="text-xs">
                       #{index + 1} 추천
                     </Badge>
-                    {rec.study?.study_category && (
-                      <Badge variant="outline" className="text-xs">
-                        {rec.study.study_category}
-                      </Badge>
-                    )}
+                    {getCategoryPath(Number(rec.study?.study_category)).labels.map((category) => (
+                        <Badge key={category} variant="outline" className={`text-xs font-normal`}>
+                          {category}
+                        </Badge>  
+                      ))}
                   </div>
                   <h3 className="font-semibold">{rec.title}</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    💡 {rec.reason}
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <MapPin className="w-3 h-3" /> {getRegionPath(Number(rec.study?.region)).labels.map((region) => (
+                      <span key={region}>{region}</span>
+                    ))}
+                    </span>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <User className="w-3 h-3" /> {rec.author?.username}
+                    </span>
                   </p>
                 </div>
               </div>
