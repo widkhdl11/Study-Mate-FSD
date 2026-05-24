@@ -46,14 +46,16 @@ export default function CreateForm({ studiesPromise }: { studiesPromise: Promise
 
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || [])
-        if (files.length === 0) return
 
+        const files = Array.from(e.target.files || [])
+        console.log("files : ", files)
+        if (files.length === 0) return
         const newPreviewUrls = files.map((file) => URL.createObjectURL(file))
         setImagePreviewUrls((prev) => [...prev, ...newPreviewUrls])
 
         const currentImages = form.getValues('images') || []
         form.setValue('images', [...currentImages, ...files])
+
     }
 
     const removeImage = (index: number) => {
@@ -61,7 +63,7 @@ export default function CreateForm({ studiesPromise }: { studiesPromise: Promise
             const newUrls = prev.filter((_, i) => i !== index)
             if (prev[index]) {
                 URL.revokeObjectURL(prev[index])
-            }
+            }   
             return newUrls
         })
 

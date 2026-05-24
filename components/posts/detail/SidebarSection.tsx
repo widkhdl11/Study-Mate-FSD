@@ -10,8 +10,8 @@ import { getCategoryPath } from "@/lib/constants/study-category"
 import { getProfileImageUrl } from "@/lib/supabase/storage"
 import { ParticipantResponse } from "@/types/participantType"
 import { PostDetailResponse } from "@/types/postType"
-import { STATUS_MAP } from "@/types/studiesType"
 import { StudyActionButton } from "./RenderActionButton"
+import { PARTICIPANT_STATUS_MAP } from "@/types/studiesType"
 
 export default function SidebarSection({ postData, participant }: { 
   postData: PostDetailResponse, participant: ParticipantResponse | null
@@ -20,7 +20,7 @@ export default function SidebarSection({ postData, participant }: {
     const { data: post } = usePostDetail(postData)
 
     const { data: participantData } = useParticipant(participant, post.study.id);
-    const status = STATUS_MAP[participantData?.status || ""] || "모집중";
+    const status = PARTICIPANT_STATUS_MAP[participantData?.status || ""] || "모집중";
     return (
          <div className="lg:col-span-1">
               {/* 스터디 정보 카드 */}

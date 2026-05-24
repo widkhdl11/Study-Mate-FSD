@@ -4,3 +4,10 @@ export type File = {
   originalName: string;
   size: number;
 }
+
+export type FileMetadata = {
+  id: string;
+  url: string;
+  originalName: string;
+  size: number;
+}

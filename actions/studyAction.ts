@@ -1,5 +1,7 @@
 'use server'
 
+import { parseFormData } from '@/lib/parseFormData'
+import { buildStudyInsert } from '@/lib/studies/buildStudyInsert'
 import { createClient } from '@/lib/supabase/server'
 import {
     StudyCreateFormValues,
@@ -18,36 +20,16 @@ import { notFound, redirect } from 'next/navigation'
 export async function createStudy(formData: FormData): Promise<ActionResponse> {
     const supabase = await createClient()
 
-    const rawData = {
-        title: formData.get('title') as string,
-        mainCategory: formData.get('mainCategory') as string,
-        subCategory: formData.get('subCategory') as string,
-        detailCategory: formData.get('detailCategory') as string,
-        studyCategory: Number(formData.get('studyCategory')) as number,
-        mainRegion: formData.get('mainRegion') as string,
-        detailRegion: formData.get('detailRegion') as string,
-        region: Number(formData.get('region')) as number,
-        maxParticipants: Number(formData.get('maxParticipants')) as number,
-        description: formData.get('description') as string,
-    }
-
+    const { user } = await CustomUserAuth(supabase)
+    const rawData = parseFormData(formData)
     const parseResult = validateWithZod(studyCreateSchema, rawData)
     if (parseResult.success === false) {
         return parseResult
     }
 
-    const { title, studyCategory, region, maxParticipants, description } =
-        parseResult.data as StudyCreateFormValues
-
-    const { user } = await CustomUserAuth(supabase)
-    const { data, error } = await supabase.from('studies').insert({
-        title,
-        study_category: studyCategory,
-        region,
-        max_participants: maxParticipants,
-        description,
-        creator_id: user.id,
-    })
+    const validatedData = parseResult.data as StudyCreateFormValues
+    const insertData = buildStudyInsert(validatedData, user.id)
+    const { error } = await supabase.from('studies').insert(insertData).select().single()
 
     if (error) {
         throw new Error('스터디 생성에 실패했습니다.')
@@ -198,20 +180,21 @@ export async function deleteStudy(id: string) {
 
 export async function updateStudy(formData: FormData): Promise<ActionResponse> {
     const supabase = await createClient()
-    const rawData = {
-        id: formData.get('id') as string,
-        title: formData.get('title') as string,
-        mainCategory: formData.get('mainCategory') as string,
-        subCategory: formData.get('subCategory') as string,
-        detailCategory: formData.get('detailCategory') as string,
-        studyCategory: Number(formData.get('studyCategory')) as number,
-        mainRegion: formData.get('mainRegion') as string,
-        detailRegion: formData.get('detailRegion') as string,
-        region: Number(formData.get('region')) as number,
-        maxParticipants: Number(formData.get('maxParticipants')) as number,
-        description: formData.get('description') as string,
-    }
-
+    // const rawData = {
+    //     id: formData.get('id') as string,
+    //     title: formData.get('title') as string,
+    //     mainCategory: formData.get('mainCategory') as string,
+    //     subCategory: formData.get('subCategory') as string,
+    //     detailCategory: formData.get('detailCategory') as string,
+    //     studyCategory: Number(formData.get('studyCategory')) as number,
+    //     mainRegion: formData.get('mainRegion') as string,
+    //     detailRegion: formData.get('detailRegion') as string,
+    //     region: Number(formData.get('region')) as number,
+    //     maxParticipants: Number(formData.get('maxParticipants')) as number,
+    //     description: formData.get('description') as string,
+    // }
+    const { user } = await CustomUserAuth(supabase)
+    const rawData = parseFormData(formData)
     const parseResult = validateWithZod(studySchema, rawData)
     if (!parseResult.success) {
         return parseResult
@@ -219,7 +202,6 @@ export async function updateStudy(formData: FormData): Promise<ActionResponse> {
     const { id, title, studyCategory, region, maxParticipants, description } =
         parseResult.data as StudyFormValues
 
-    const { user } = await CustomUserAuth(supabase)
     const { data, error } = await supabase
         .from('studies')
         .update({
@@ -232,9 +214,9 @@ export async function updateStudy(formData: FormData): Promise<ActionResponse> {
         .eq('id', id)
         .eq('creator_id', user.id)
         .select()
+        .single()
 
     const {
-        data: participants,
         error: participantsError,
         count: participantsCount,
     } = await supabase

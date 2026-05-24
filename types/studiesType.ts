@@ -114,7 +114,7 @@ export type StudyDetailResponse = {
 }
 
 // 상태 결정 함수
-export const STATUS_MAP: Record<string, string> = {
+export const PARTICIPANT_STATUS_MAP: Record<string, string> = {
     accepted: '참여중',
     pending: '수락 대기중',
     rejected: '스터디 종료',

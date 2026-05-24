@@ -6,6 +6,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdatePost } from "@/hooks/usePost";
+import { getImageUrl } from "@/lib/supabase/storage";
 import { PostFormValues, updatePostSchema } from "@/lib/zod/schemas/postSchema";
 import { PostDetailResponse } from "@/types/postType";
 import { StudiesResponse } from "@/types/studiesType";
@@ -31,7 +32,6 @@ export default function EditForm(
     const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([])
 
     const formRef = useRef<HTMLFormElement>(null);
-
     const {mutate: updatePostMutation, isPending} = useUpdatePost((field ,message)=>{
       form.setError(field as keyof PostFormValues, {
         type: "server",
@@ -43,9 +43,9 @@ export default function EditForm(
 
     const files = Array.from(form.getValues("images") || [])
     if (files.length === 0) return
-    const newPreviewUrls = files.map((file) => URL.createObjectURL(file))
+    const newPreviewUrls = files.map((file) => file.name)
     setImagePreviewUrls(newPreviewUrls)
-
+    console.log("imagePreviewUrls : ", imagePreviewUrls)
   }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,28 +53,41 @@ export default function EditForm(
     const files = Array.from(e.target.files || [])
     if (files.length === 0) return
     const newPreviewUrls = files.map((file) => URL.createObjectURL(file))
-
     setImagePreviewUrls((prev) => [...prev, ...newPreviewUrls])
-
+    console.log("imagePreviewUrls : ", imagePreviewUrls)
     const currentImages = form.getValues("images") || []
     form.setValue("images", [...currentImages, ...files])
   }
 
   const removeImage = (index: number) => {
-    setImagePreviewUrls((prev) => {
-      const newUrls = prev.filter((_, i) => i !== index)
-      if (prev[index] && prev[index].startsWith("blob:")) {
-        URL.revokeObjectURL(prev[index])
-      }
-      return newUrls;
-    })
+  //   setImagePreviewUrls((prev) => {
+  //     const newUrls = prev.filter((_, i) => i !== index)
+  //     if (prev[index] && prev[index].startsWith("blob:")) {
+  //       URL.revokeObjectURL(prev[index])
+  //     }
+  //     return newUrls;
+  //   })
 
-    const currentImages = form.getValues("images") || []
-    form.setValue(
-      "images",
-      currentImages.filter((_, i) => i !== index),
-    )
-  }
+  //   const currentImages = form.getValues("images") || []
+  //   form.setValue(
+  //     "images",
+  //     currentImages.filter((_, i) => i !== index),
+  //   )
+  // }
+    setImagePreviewUrls((prev) => {
+            const newUrls = prev.filter((_, i) => i !== index)
+            if (prev[index]) {
+                URL.revokeObjectURL(prev[index])
+            }   
+            return newUrls
+        })
+
+        const currentImages = form.getValues('images') || []
+        form.setValue(
+            'images',
+            currentImages.filter((_, i) => i !== index)
+        )
+    }
 
   async function onSubmit(values: PostFormValues) {
     if (!formRef.current) return;
@@ -141,7 +154,7 @@ export default function EditForm(
               <FormField
                 control={form.control}
                 name="images"
-                render={() => (
+                render={(field) => (
                   <FormItem>
                     <FormLabel>이미지</FormLabel>
                     <FormDescription>선택사항: 이미지를 업로드하면 모집글이 더 눈에 띕니다</FormDescription>
@@ -178,12 +191,24 @@ export default function EditForm(
                         {imagePreviewUrls.length > 0 && (
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {imagePreviewUrls.map((url, index) => (
-                              <div key={index} className="relative group">
-                                <Image
-                                  src={url || "/placeholder.svg"}
+                              <div key={index} className="relative group h-24">
+                                {url.startsWith("blob:") ? (
+                                 <img
+                                  src={
+                                      url ||
+                                      '/placeholder.svg'
+                                  }
                                   alt={`미리보기 ${index + 1}`}
-                                  className="w-full h-24 object-cover rounded-lg"
-                                />
+                                  className='w-full h-24 object-cover rounded-lg'
+                                  />
+                                ) : (
+                                  <Image
+                                    src={getImageUrl(url) || "/placeholder.svg"}
+                                    alt={`미리보기 ${index + 1}`}
+                                    fill
+                                    className="w-full h-24 object-cover rounded-lg"
+                                  />
+                                )}
                                 <button
                                   type="button"
                                   onClick={() => removeImage(index)}

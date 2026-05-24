@@ -1,11 +1,17 @@
 "use server";
 
+import { parseFormData } from "@/lib/parseFormData";
+import { buildPostInsert } from "@/lib/posts/buildPostInsert";
+import { deletePostImages } from "@/lib/posts/deletePostImages";
+import { uploadPostImages } from "@/lib/posts/uploadPostImages";
 import { createClient } from "@/lib/supabase/server";
 import { PostFormValues, postSchema, UpdatePostFormValues, updatePostSchema } from "@/lib/zod/schemas/postSchema";
 import { ActionResponse } from "@/types/actionType";
+import { FileMetadata } from "@/types/file";
 import { PostDetailResponse, PostsResponse } from "@/types/postType";
 import { CustomUserAuth } from "@/utils/auth";
 import { validateWithZod } from "@/utils/validation";
+import console from "console";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
@@ -53,64 +59,25 @@ export async function createPost(
   formData: FormData
 ): Promise<ActionResponse | never> {
   const supabase = await createClient();
+  const { user } = await CustomUserAuth(supabase);
 
-  const rawData = {
-    title: formData.get("title") as string,
-    content: formData.get("content") as string,
-    studyId: Number(formData.get("studyId")) as number,
-    images: formData.getAll("images") as File[],
-  };
+  const rawData = parseFormData(formData, { arrayKeys: ["images"] });
   const parseResult = validateWithZod(postSchema, rawData);
   if (!parseResult.success) {
     return parseResult;
   }
+ const validatedData = parseResult.data as PostFormValues; 
+ const imageData = validatedData.images && validatedData.images.length > 0
+  ? await uploadPostImages(supabase, validatedData.images)
+  : [];
+ 
+ const insertData = buildPostInsert(validatedData, user.id, imageData);
+ const { data, error } = await supabase.from("posts").insert(insertData).select().single();
 
-  const { title, content, studyId, images } = parseResult.data as PostFormValues;
-
-  const { user } = await CustomUserAuth(supabase);
-
-  // Storage에 업로드 → 메타데이터 배열로 변환
-  const imageData: { id: string; url: string; originalName: string; size: number }[] = [];
-  
-  for (const image of images || []) {
-    if (image instanceof File && image.size > 0) {
-      const uuid = crypto.randomUUID();
-      const extension = image.name.split('.').pop() || '';
-      const fileName = `${uuid}.${extension}`;
-      
-      const { data, error } = await supabase.storage
-        .from("post-images")
-        .upload(fileName, image);
-
-      if (data) {
-        imageData.push({
-          id: uuid,
-          url: data.path,
-          originalName: image.name,
-          size: image.size,
-        });
-      } else {
-        throw new Error("이미지 업로드에 실패했습니다.");
-      }
-    }
-  }
-
-  const { data, error } = await supabase
-    .from("posts")
-    .insert({
-      title,
-      content,
-      study_id: studyId,
-      image_url: imageData, 
-      author_id: user.id,
-    })
-    .select()
-    .single();
-    
   if (error) {
+    await supabase.storage.from("post-images").remove(imageData.map(d => d.url));
     throw new Error("게시글 생성에 실패했습니다.");
   }
-  
   revalidatePath("/posts", "layout");
   redirect(`/posts/${data.id}`);
 }
@@ -261,24 +228,39 @@ export async function checkIsLiked(postId: number): Promise<ActionResponse<boole
 }
 
 // 게시글 삭제
-export async function deletePost(postId: number): Promise<ActionResponse> {
-  const supabase = await createClient();
+  export async function deletePost(postId: number): Promise<ActionResponse> {
+    const supabase = await createClient();
+    const { user } = await CustomUserAuth(supabase);
 
+    const {data : selectPost, error : selectPostError} = await supabase.from("posts")
+    .select("image_url")
+    .eq("id", postId)
+    .eq("author_id", user.id)
+    .single();
 
-  const { user } = await CustomUserAuth(supabase);
+    if (selectPostError) {
+      throw new Error("게시글을 찾을 수 없거나 권한이 없습니다");
+    }
 
-  const { data, error } = await supabase.from("posts")
-  .delete()
-  .eq("id", postId)
-  .eq("author_id", user.id)
-  .select();
-  
-  if (error || !data || data.length === 0) {
-  throw new Error("게시글을 찾을 수 없거나 권한이 없습니다");
+    const { error } = await supabase.from("posts")
+    .delete()
+    .eq("id", postId)
+    .eq("author_id", user.id)
+    
+    if (error) {
+      throw new Error("게시글을 찾을 수 없거나 권한이 없습니다");
+    }
+    const images = (selectPost.image_url ?? []) as FileMetadata[];
+    if (images.length > 0) {
+      const imageUrls = images.map(img => img.url);
+      const { error: deleteError } = await supabase.storage.from("post-images").remove(imageUrls);
+      if (deleteError) {
+        console.error("Storage 삭제 실패:", deleteError);
+      }
+    }
+    revalidatePath("/posts", "layout");
+    redirect(`/posts`);
   }
-  revalidatePath("/posts", "layout");
-  redirect(`/posts`);
-}
 
 // 게시글 수정
 export async function updatePost(formData: FormData): Promise<ActionResponse<PostsResponse>> {
@@ -286,19 +268,13 @@ export async function updatePost(formData: FormData): Promise<ActionResponse<Pos
 
   const { user } = await CustomUserAuth(supabase);
 
-  const rawData = {
-    id: Number(formData.get("id")) as number,
-    title: formData.get("title") as string,
-    content: formData.get("content") as string,
-    studyId: Number(formData.get("studyId")) as number,
-    images: formData.getAll("images") as File[],
-  };
+  const rawData = parseFormData(formData, { arrayKeys: ["images"] });
   const parseResult = validateWithZod(updatePostSchema, rawData);
   if (!parseResult.success) {
     return parseResult;
   }
   const { id, title, content, studyId, images } = parseResult.data as UpdatePostFormValues;
-  const { data: post, error: postError } = await supabase
+  const { data: selectPost, error: postError } = await supabase
   .from("posts")
   .select("*")
   .eq("id", id)
@@ -306,37 +282,49 @@ export async function updatePost(formData: FormData): Promise<ActionResponse<Pos
   .single();
   
   if (postError) {
-    throw new Error("게시글 수정에 실패했습니다.");
+    throw new Error("게시글을 찾을 수 없거나 권한이 없습니다");
   }
-  const imageUrls: string[] = [];
+  // 클라이언트는 기존 이미지를 0바이트 File에 url을 name으로 담아 전송
+  const deletedImages = selectPost.image_url.filter(
+    (savedImage: FileMetadata) => !images?.some(
+      (image) => image.name === savedImage.url
+    )
+  );
 
-  for (const image of images || []) {
-    if (image instanceof File && image.size > 0) {
-      const fileName = `${Date.now()}-${image.name}`;
-      const { data, error } = await supabase.storage
-        .from("post-images")
-        .upload(fileName, image);
-      if (data) {
-        imageUrls.push(data.path);
-      } else {
-        throw new Error(error?.message ?? "이미지 업로드에 실패했습니다.");
-      }
-    }
-  }
+  await deletePostImages(supabase, deletedImages);
+  const addedImages = images?.filter(
+    (image) => !selectPost.image_url.some(
+      (savedImage: FileMetadata) => savedImage.url === image.name
+    )
+  );
+
+  const addedImagesData = addedImages && addedImages.length > 0
+  ? await uploadPostImages(supabase, addedImages)
+  : [];
+
+
+  // // selectPost.image_url에서 deletedImagesData 제거한 배열
+  const existingImages = selectPost.image_url.filter(
+    (savedImage: FileMetadata) => !deletedImages.some(
+      (deletedImage: FileMetadata) => deletedImage.url === savedImage.url
+    )
+  );
+
+
   const { data, error } = await supabase.from("posts").update({
     title,
     content,
     study_id: studyId,
-    image_url: imageUrls.map((path) => path.split("/").pop() ?? ""),
+    image_url: [...existingImages, ...addedImagesData]
   }).eq("id", id)
   .select()
   .single();
 
   if (error) {
-    return { success: false, error: { message: error.message } };
+    throw new Error("게시글을 찾을 수 없거나 권한이 없습니다");  
   }
   revalidatePath("/posts", "layout");
-  redirect(`/posts/${id}`);
+  redirect(`/posts/${data.id}`);
 }
 
 // =================ssr ======================

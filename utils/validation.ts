@@ -4,7 +4,7 @@ import z from "zod";
 
 export function validateWithZod<T>(
   schema: z.ZodType<T>,
-  data: unknown
+  data: Record<string, FormDataEntryValue|FormDataEntryValue[]>
 ): ActionResponse<T> {
   const result = schema.safeParse(data);
   
