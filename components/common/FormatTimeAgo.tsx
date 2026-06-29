@@ -1,6 +1,6 @@
 'use client'
 
-import { formatDate } from '@/utils/date'
+import { formatDate } from '@/shared/lib/date'
 import { useEffect, useState } from 'react'
 
 interface TimeAgoProps {

@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { PostsResponse } from "@/types/postType"
+import { PostsResponse } from "@/entities/post/model/types"
+import { Badge } from "@/shared/shadcn/ui/badge"
+import { Button } from "@/shared/shadcn/ui/button"
+import { Card } from "@/shared/shadcn/ui/card"
 import Image from "next/image"
 
 
@@ -19,7 +19,7 @@ export default function RelationSection({ relatedPosts }: { relatedPosts: PostsR
                   >
                     <div className="relative w-full h-40">
                       <Image
-                        src={relatedPost.image_url[0].url || "/placeholder.svg"}
+                        src={relatedPost.imageUrl[0].url || "/placeholder.svg"}
                         alt={relatedPost.title}
                         fill
                         className="object-cover"

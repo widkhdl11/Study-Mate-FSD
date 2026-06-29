@@ -3,10 +3,10 @@ import {
     getNotifications,
     readNotification,
 } from '@/actions/notificationAction'
-import { queryKeys } from '@/lib/reactQuery/queryKeys'
-import { createClient } from '@/lib/supabase/client'
-import { NotificationResponse } from '@/types/notificationType'
-import { ProfileResponse } from '@/types/profileType'
+import { NotificationResponse } from '@/entities/notification'
+import { ProfileResponse } from '@/entities/user/model/types'
+import { queryKeys } from '@/shared/api/reactQuery/queryKeys'
+import { createClient } from '@/shared/api/supabase/client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'

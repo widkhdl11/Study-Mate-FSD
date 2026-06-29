@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "@/shared/shadcn/ui/card";
 
 export default function SidebarSkeleton() {
   return (

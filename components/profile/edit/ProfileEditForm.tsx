@@ -1,14 +1,14 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+import profileEditSchema, { UpdateProfileCommand } from "@/entities/user/model/profileFormSchema"
+import { ProfileResponse } from "@/entities/user/model/types"
 import { useUpdateProfile } from "@/hooks/useProfile"
-import profileEditSchema, { ProfileEditFormValues } from "@/lib/zod/schemas/profileSchema"
-import { ProfileResponse } from "@/types/profileType"
+import { Button } from "@/shared/shadcn/ui/button"
+import { Card } from "@/shared/shadcn/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form"
+import { Input } from "@/shared/shadcn/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/shadcn/ui/select"
+import { Textarea } from "@/shared/shadcn/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
@@ -21,18 +21,18 @@ export function ProfileEditForm({ useData }: { useData: ProfileResponse }) {
   const { mutate: updateProfileMutation, isPending } = useUpdateProfile()
   const formRef = useRef<HTMLFormElement>(null);
 
-  const form = useForm<ProfileEditFormValues>({
+  const form = useForm<UpdateProfileCommand>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
       username: useData.username || "",
       email: useData.email || "",
       bio: useData.bio || "",
-      birthDate: useData.birth_date || "",
+      birthDate: useData.birthDate || "",
       gender: useData.gender || "",
     },
   })
 
-  async function onSubmit(values: ProfileEditFormValues) {
+  async function onSubmit(values: UpdateProfileCommand) {
     if (!formRef.current) {
       return;
     }

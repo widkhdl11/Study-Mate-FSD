@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/shared/api/supabase/server";
 
 
 export async function deletePostImage(path: string) {

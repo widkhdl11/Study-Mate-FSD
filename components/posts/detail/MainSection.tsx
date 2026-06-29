@@ -1,17 +1,19 @@
 'use client'
 
 import TimeAgo from "@/components/common/FormatTimeAgo";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { useCheckIsLiked, usePostDetail, useToggleLike, } from "@/hooks/usePost";
+import { usePostDetail } from "@/entities/post/api/query/postDetail/usePostDetail";
+import { PostDetailView } from "@/entities/post/api/query/postDetail/view";
+import { ProfileResponse } from "@/entities/user/model/types";
+import { useCheckIsLiked, useToggleLike } from "@/hooks/usePost";
 import { useTrackPostView } from "@/hooks/useTrackPostView";
-import { getProfileImageUrl } from "@/lib/supabase/storage";
-import { PostDetailResponse } from "@/types/postType";
-import { ProfileResponse } from "@/types/profileType";
+import { getProfileImageUrl } from "@/shared/api/supabase/storage";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
+import { Button } from "@/shared/shadcn/ui/button";
+import PostOwnerActions from "@/widgets/post/detail/owner-actions/ui/PostOwnerActions";
 import { ThumbsUp } from "lucide-react";
 import { useRef } from "react";
 
-export default function MainSection({ postData,user }: { postData: PostDetailResponse, user: ProfileResponse | null }) {
+export default function MainSection({ postData,user }: { postData: PostDetailView, user: ProfileResponse | null }) {
     const { data: post } = usePostDetail(postData);
 
     const { mutate: toggleLikeMutation, isPending: isTogglingLike } = useToggleLike(post.id);
@@ -44,13 +46,13 @@ export default function MainSection({ postData,user }: { postData: PostDetailRes
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
                     <AvatarImage
-                      src={getProfileImageUrl(post.author?.avatar_url)}
+                      src={getProfileImageUrl(post.author?.avatarUrl ?? "")}
                       alt={post.author?.username || ""}
                       width={60}
                       height={60}
                     />
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                      {post.author?.email[0].toUpperCase()}
+                      {post.author?.email?.[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
@@ -58,7 +60,7 @@ export default function MainSection({ postData,user }: { postData: PostDetailRes
                       {post.author?.username}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      <TimeAgo date={post.created_at} />
+                      <TimeAgo date={post.createdAt} />
                     </p>
                   </div>
                 </div>
@@ -72,9 +74,12 @@ export default function MainSection({ postData,user }: { postData: PostDetailRes
                     className={`gap-2 ${isLiked ? "bg-blue-50 border-blue-600 text-blue-600" : ""}`}
                   >
                     <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-blue-600" : ""}`} />
-                    <span className="font-semibold">{post.likes_count}</span>
+                    <span className="font-semibold">{post.likesCount}</span>
                   </Button>
-                  <span className="text-sm text-muted-foreground">👁 {post.views_count + (shouldAddView ? 1 : 0)}</span>
+                  <span className="text-sm text-muted-foreground">👁 {post.viewsCount + (shouldAddView ? 1 : 0)}</span>
+                  {user?.id === post.author?.id && (
+                    <PostOwnerActions postId={post.id} />
+                  )}
                 </div>
               </div>
 

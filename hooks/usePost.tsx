@@ -2,18 +2,14 @@
 
 import {
   checkIsLiked,
-  createPost,
-  deletePost,
   getAllPosts,
   getMyPosts,
-  getPostDetail,
   increaseViewCount,
-  toggleLike,
-  updatePost,
+  toggleLike
 } from "@/actions/postAction";
-import { queryKeys } from "@/lib/reactQuery/queryKeys";
-import { PostDetailResponse, PostsResponse } from "@/types/postType";
-import { isRedirect } from "@/utils/format";
+import { PostDetailResponse, PostsResponse } from "@/entities/post/model/types";
+import { queryKeys } from "@/shared/api/reactQuery/queryKeys";
+import { isRedirect } from "@/shared/lib/format";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -32,38 +28,15 @@ export function useGetMyPosts() {
   });
 }
 
-export function useCreatePost(onFieldError?: (field: string, message: string) => void) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: createPost,
-    onSuccess: (response) => {
-      if (!response.success) {
-        toast.error(response.error.message);
-         if (response.error.field && onFieldError) {
-          onFieldError(response.error.field, response.error.message);
-        }
-      }
-    },
-    onError: (error: any) => {
-      if (isRedirect(error)) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.myPosts });
-        queryClient.invalidateQueries({ queryKey: queryKeys.posts });
-        toast.success("게시글을 생성했습니다.");
-        return;
-      }
-      toast.error(error.message);
-    },
-  });
-}
 
 
-export function useGetAllPosts(initialData: PostDetailResponse[]) {
+export function useGetAllPosts(initialData: PostsResponse[]) {
   const query = useQuery({
     queryKey: queryKeys.posts,
     queryFn: async () => {
       const response = await getAllPosts();
       if (response.success) {
-        return response.data as unknown as PostsResponse;
+        return response.data as unknown as PostsResponse[];
       }
       throw new Error(response.error.message);
     },
@@ -167,67 +140,4 @@ export function useToggleLike(postId: number) {
   });
 }
 
-// 게시글 삭제
-export function useDeletePost() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (postId: number) => {
-      return await deletePost(postId);
-    },
-    onSuccess: (response) => {
-      if (!response.success) {
-        // 삭제 실패
-        toast.error(response.error.message);
-      }
-    },
-    onError: (error: any) => {
-      if (isRedirect(error)) {
-        toast.success("게시글을 삭제했습니다");
-        queryClient.invalidateQueries({ queryKey: queryKeys.myPosts });
-        queryClient.invalidateQueries({ queryKey: queryKeys.posts });
-        return;
-      }
-      toast.error(error.message || "게시글 삭제 중 오류가 발생했습니다");
-    },
-  });
-}
-
-export function useUpdatePost(onFieldError?: (field: string, message: string) => void) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (formData : FormData) => {
-      return await updatePost(formData);
-    },
-    onSuccess: (response) => {
-      if (!response.success) {
-        toast.error(response.error.message);
-        if (response.error.field && onFieldError) {
-          onFieldError(response.error.field, response.error.message);
-        }
-      }
-    },
-    onError: (error: any) => {
-      if (isRedirect(error)) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.myPosts });
-        queryClient.invalidateQueries({ queryKey: queryKeys.posts });
-        toast.success("게시글을 수정했습니다");
-        return;
-      }
-      toast.error(error.message || "게시글 수정 중 오류가 발생했습니다");
-    },
-  });
-}
-// 게시글 상세 조회, 서버->리액트 쿼리 캐시등록
-export function usePostDetail(initialPost: PostDetailResponse) {
-  return useQuery({
-    queryKey: queryKeys.post(initialPost.id),
-    queryFn: async () => {
-      const result = await getPostDetail(initialPost.id);
-      if (result.success) return result.data as PostDetailResponse;
-      else throw new Error(result.error?.message);
-    },
-    initialData: initialPost,
-    staleTime: 1000 * 60 * 5,  // 5분간 refetch 안 함
-  });
-}
 

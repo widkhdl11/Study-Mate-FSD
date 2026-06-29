@@ -98,9 +98,9 @@ export const Capacity = {
    * 스터디를 막 만들었을 때 사용.
    *
    * @example
-   *   const r = Capacity.empty(10); // 0 / 10
+   *   const r = Capacity.empty(10); // 1 / 10
    */
-  empty: (max: number): Result<Capacity, CapacityError> => construct(0, max),
+  empty: (max: number): Result<Capacity, CapacityError> => construct(1, max),
 
   // ── 질의 ──────────────────────────────────
 
@@ -139,4 +139,9 @@ export const Capacity = {
     }
     return construct(c.current - 1, c.max);
   },
+
+  toColumns: (c: Capacity): { current_participants: number; max_participants: number } => ({
+    current_participants: c.current,
+    max_participants: c.max,
+  }),
 };

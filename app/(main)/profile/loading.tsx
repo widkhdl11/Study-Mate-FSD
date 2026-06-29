@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/skeleton"
-import { Card } from "@/components/ui/card"
+import { Card } from "@/shared/shadcn/ui/card"
 
 export default function ProfileLoading() {
   return (

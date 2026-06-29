@@ -1,56 +1,47 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { TabsContent } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin } from "lucide-react";
+import { StudyResponse } from "@/entities/study";
+import { StudyCategoryBadges } from "@/entities/study/ui/StudyCategoryBadges";
+import { StudyRegionLabel } from "@/entities/study/ui/StudyRegionLabel";
+import { getCategoryPathByValue } from "@/shared/config/study-category";
+import { studyStatusConversion } from "@/shared/lib/conversion/study";
+import { Badge } from "@/shared/shadcn/ui/badge";
+import { Button } from "@/shared/shadcn/ui/button";
+import { Card } from "@/shared/shadcn/ui/card";
+import { TabsContent } from "@/shared/shadcn/ui/tabs";
 import { Users } from "lucide-react";
-import { Calendar } from "lucide-react";
 import Link from "next/link";
-import { getCategoryPath } from "@/lib/constants/study-category";
-import { getRegionPath } from "@/lib/constants/region";
-import { studyStatusConversion } from "@/utils/conversion/study";
 export default function MyStudiesTab({
   myStudies,
   getStatusColor,
-  getCategoryColor,
 }: {
-  myStudies: any[];
+  myStudies: StudyResponse[];
   getStatusColor: (status: string) => string;
-  getCategoryColor: (category: string) => string;
 }) {
   return (
     <>
       <TabsContent value="studies" className="space-y-4">
         {myStudies.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {myStudies.map((study) => (
-              <Link key={study.studies.id} href={`/studies/${study.studies.id}`}>
+            {myStudies.map((study: StudyResponse) => (
+              <Link key={study.id} href={`/studies/${study.id}`}>
                 <Card className="group overflow-hidden hover:shadow-md transition-all h-full cursor-pointer p-6 space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                        {study.studies.title}
+                        {study.title}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                        {study.studies.description}
+                        {study.description}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">
-                    {getCategoryPath(Number(study.studies.study_category)).labels.map((category) => (
-                      <Badge
-                        variant="outline"
-                        key={category}
-                        className={`text-xs font-normal `}
-                      >
-                        {category}
-                      </Badge>
-                    ))}
+                    <StudyCategoryBadges categoryPath={getCategoryPathByValue(study.studyCategory)} />
+                
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <MapPin className="w-3 h-3" /> {getRegionPath(Number(study.studies.region)).labels.join(" ")}
+                       <StudyRegionLabel region={study.region} />
                     </span>
                   </div>
 
@@ -59,7 +50,7 @@ export default function MyStudiesTab({
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Users className="w-3.5 h-3.5" />
                         <span className="text-xs">
-                          {study.studies.current_participants}/{study.studies.max_participants}명
+                            {study.currentParticipants}/{study.maxParticipants}명
                         </span>
                       </div>
                       {/* <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -72,7 +63,7 @@ export default function MyStudiesTab({
                         className="h-full bg-primary rounded-full transition-all"
                         style={{
                           width: `${
-                            (study.studies.current_participants / study.studies.max_participants) * 100
+                            (study.currentParticipants / study.maxParticipants) * 100
                           }%`,
                         }}
                       />
@@ -80,8 +71,8 @@ export default function MyStudiesTab({
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-border">
-                    <Badge className={getStatusColor(study.studies.status)}>
-                      {studyStatusConversion(study.studies.status)}
+                    <Badge className={getStatusColor(study.status)}>
+                      {studyStatusConversion(study.status)}
                     </Badge>
                     <span className="text-xs text-muted-foreground">관리</span>
                   </div>

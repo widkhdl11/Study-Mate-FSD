@@ -1,12 +1,12 @@
 'use client'
 
-import { Badge } from "@/components/ui/badge";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getRegionPath } from "@/lib/constants/region";
-import { getCategoryPath } from "@/lib/constants/study-category";
-import { PostFormValues } from "@/lib/zod/schemas/postSchema";
-import { StudiesResponse } from "@/types/studiesType";
+import { UpdatePostCommand } from "@/entities/post";
+import { StudyResponse } from "@/entities/study";
+import { getRegionPath } from "@/shared/config/region";
+import { getCategoryPath } from "@/shared/config/study-category";
+import { Badge } from "@/shared/shadcn/ui/badge";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/shadcn/ui/select";
 import { MapPin, Tag, Users } from "lucide-react";
 import { use } from "react";
 import { Control, useWatch } from "react-hook-form";
@@ -16,8 +16,8 @@ studiesPromise,
   control,
   isPending,
 }: {
-  studiesPromise: Promise<StudiesResponse>;
-  control: Control<PostFormValues>;
+  studiesPromise: Promise<StudyResponse[]>;
+  control: Control<UpdatePostCommand>;
   isPending: boolean;
 }) {
   const studies = use(studiesPromise);
@@ -58,7 +58,7 @@ studiesPromise,
                             <Tag className="w-4 h-4 text-blue-600 shrink-0" />
                             <span className="shrink-0">카테고리</span>
                             <div className="flex items-center pr-2">
-                            {getCategoryPath(Number(selectedStudy.study_category)).labels.map((category) => (
+                            {getCategoryPath(Number(selectedStudy.studyCategory)).labels.map((category) => (
                               <Badge key={category} variant="secondary" className="m-auto">{category}</Badge>
                             ))}
                             </div>
@@ -76,7 +76,7 @@ studiesPromise,
                             <Users className="w-4 h-4 text-blue-600" />
                             <span>모집 인원</span>
                             <span className="font-medium text-slate-900 dark:text-white">
-                              {selectedStudy.current_participants}/{selectedStudy.max_participants}명
+                              {selectedStudy.currentParticipants}/{selectedStudy.maxParticipants}명
                             </span>
                           </div>
                         </div>

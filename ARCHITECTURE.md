@@ -10,8 +10,9 @@
 > **함수형 컴포넌트는 그대로, 도메인 레이어를 FP-DDD로 강화, 폴더 구조는 FSD(부분)로 재배치.**
 
 - UI: 함수형 컴포넌트 + React Query (현재 유지)
-- 도메인: `Readonly` + branded type + smart constructor + 순수 함수 (FP-DDD)
-- 인프라: Repository 패턴으로 Supabase 격리
+- 도메인: `entities/*/model`(VO·전이) + `entities/*/service`(루트·cross 규칙) + FP-DDD
+- Use Case: `features/*/api/*Action` — repo Load/Save + domain `service`/`model` 호출
+- 인프라: Repository·Query로 Supabase 격리 (`entities/*/api`)
 - 폴더: `entities / features / widgets / shared` 4-레이어 (FSD), Next.js `app/`은 라우팅만
 
 ---
@@ -36,6 +37,16 @@
 - ❌ 본격 DI 컨테이너 (tsyringe 등) — 부분 적용/팩토리 함수로 충분
 - ❌ `fp-ts` / `effect-ts` — 자체 정의 `Result` 타입으로 시작, 필요시 `neverthrow` 정도
 - ❌ FSD의 `pages/` 레이어 — Next.js `app/` 사용
+
+#### 원칙 vs 실무 (이동·배치 판단 3원칙)
+
+구조는 _값을 줄 때_ 적용한다. 다이어그램을 만족시키려 움직이지 않는다.
+
+1. **곧 마이그레이션될 legacy로/그 주변으로 타입·코드를 옮기지 마라.** 그 슬라이스가 이동할 때 _함께_ 옮긴다 (churn for churn 금지). 예: 추천 읽기 DTO는 원칙상 추천 기능 소유지만, 소비처가 아직 legacy `actions/`라면 ai-recommend 마이그레이션 때 같이 이동.
+2. **원칙 만족용 빈 폴더·1줄 세그먼트를 만들지 마라.** `model/types.ts`에 넣을 게 없으면 그냥 비워둔다 (빈 게 정상 — 아키텍처가 깔끔하다는 신호).
+3. **전환기(transitional) 상태는 허용하되 기록하라.** "원칙상 X, 지금은 Y, Z 시점에 이동"을 메모리/주석에 남긴다.
+
+> 보조 관점: FSD = _예측 가능한 위치 + 의존성 통제(import 규칙)로 변경 범위(blast radius)를 가둠_. DDD = _불변식·도메인 언어·신뢰 경계를 model 한 곳에 모음_. 마이그레이션 중 잦은 이동은 구조를 세우는 일회성 비용이고, "이동 최소화"는 정상상태의 결과지 여정의 규칙이 아니다.
 
 ---
 
@@ -75,12 +86,18 @@ study-mate/
 │  ├─ chat-send/
 │  └─ ai-recommend/
 │
-├─ entities/                         🆕 도메인 (model + api + ui)
+├─ entities/                         🆕 도메인 (model + service + api + ui)
 │  ├─ study/
-│  │  ├─ model/                      ← FP-DDD: type + 순수 함수
-│  │  ├─ api/                        ← Repository + 조회 훅
+│  │  ├─ model/                      ← 타입, VO, 단일 VO 생성·질의·전이
+│  │  ├─ service/                    ← aggregate 루트 규칙 (여러 VO/컬럼 조합)
+│  │  ├─ api/                        ← Repository + Query (DB only)
 │  │  ├─ ui/                         ← 표현 컴포넌트 (Presentational)
 │  │  └─ lib/                        ← 도메인 헬퍼
+│  ├─ Participant/
+│  │  ├─ model/
+│  │  ├─ service/                    ← Participant 시나리오 (Study는 Study/service 경유)
+│  │  ├─ api/
+│  │  └─ ui/
 │  ├─ post/
 │  ├─ participant/
 │  ├─ user/
@@ -149,9 +166,15 @@ widgets/post-detail-sidebar/
 - **들어가지 않는 것**: mutation 호출(→ feature), 도메인 룰(→ entity).
 - **이 프로젝트 신호**: 파일 이름이 `*Section` 인 것들은 보통 widget.
 
-### 3-c. `features/` — 사용자 시나리오 (앱의 명세서)
+### 3-c. `features/` — 사용자 행위 (앱의 명세서)
 
-"사용자가 하는 한 가지 일"을 한 폴더에 모은 것.
+"사용자가 _하는_ 한 가지 행위(상호작용)"를 한 폴더에 모은 것.
+
+> **feature = 행위(action)지, 조회(read)가 아니다.** (정통 FSD)
+> 사용자가 클릭·제출·입력·토글로 _무언가를 일으키는_ 단위만 feature다 (신청/수락/삭제/검색 등).
+> 단순히 데이터를 **보여주기만** 하는 것(상세 뷰 등)은 feature가 **아니다** →
+> 조회는 `entities/*/api`, 표현은 `entities/*/ui`, 조립은 `widgets`/`app`.
+> 판별 기준은 read/write가 아니라 **"사용자가 행동을 하는가?"** — 검색은 읽지만 *조작*하므로 feature, 상세 뷰는 _바라볼_ 뿐이라 아님.
 
 ```
 features/participant-accept/
@@ -163,52 +186,119 @@ features/participant-accept/
   index.ts                       ← 외부에 노출할 것만 re-export
 ```
 
-- **역할**: 한 시나리오의 UI + 훅 + 액션을 한 폴더에 응집.
+- **역할**: 한 시나리오의 UI + 훅 + **Use Case(action)** 를 한 폴더에 응집.
 - **들어가는 것**: 그 시나리오에만 쓰이는 모든 것.
-- **들어가지 않는 것**: 여러 시나리오가 공유하는 도메인 모델(→ entity), 재사용 UI(→ entity ui).
+- **들어가지 않는 것**: 여러 시나리오가 공유하는 도메인 모델(→ entity), 재사용 UI(→ entity ui), **순수 조회/표시(→ `entities/api`·`ui`, `widgets`/`page`)**.
+- **`api/*Action` = App Service (Use Case)**: auth → repo Load → `entities/*/service` 또는 `model` → repo Save → `{ success, error }`.
 - **`application/` 폴더 규칙**: 복잡할 때만 만듦. 단순 시나리오는 액션에 inline.
 - **features 폴더 = 앱이 할 수 있는 일의 명세서**.
 
+#### Write 요청 흐름 (CSR)
+
+```
+app/.../page.tsx          SSR 레이아웃·초기 데이터 (Read는 아래 참고)
+  → features/기능/ui     폼·버튼·useState
+    → features/기능/model  useMutation 등 hook
+      → features/기능/api/*Action   Use Case
+           ├─ entities/*/api        Repository load/save
+           ├─ entities/*/service    도메인 연산 (cross-aggregate 포함)
+           └─ entities/*/model      단일 aggregate 전이 (필요 시)
+```
+
+**aggregate root가 repo를 실행하지 않음.** Load/Save는 Use Case(action) 책임.
+
 ### 3-d. `entities/` — 도메인 (FP-DDD의 심장부)
 
-도메인 개념(Study, Post, Participant ...) 단위로 모델 + 영속성 + 표현을 모은 곳.
+도메인 개념(Study, Participant, Post, User ...) 단위로 **model / service / api / ui** 를 모은 곳.
+
+> **`service` 주의**: Nest/인프라 service가 아님. **순수 도메인 연산 모음** (DDD Domain Service·Aggregate Root 연산). DB/Supabase 호출 금지.
 
 ```
 entities/study/
-  model/                         ← FP-DDD: type + 순수 함수
-    Study.ts                     ← Aggregate 타입 + 순수 함수 (acceptParticipant 등)
-    Participant.ts               ← Study 안의 자식 Entity
-    Capacity.ts                  ← Value Object (branded type + 모듈)
-    StudyStatus.ts               ← 판별 유니온 + 헬퍼
-    ParticipantStatus.ts         ← 판별 유니온 + 헬퍼
-    errors.ts                    ← AcceptError, ApplyError 등 판별 유니온
-    types.ts                     ← DB row 매핑용 타입
-  api/                           ← 영속성 + 조회 훅
-    StudyRepository.ts           ← Repository type + Supabase 구현 함수
-    useStudyDetail.ts            ← React Query 조회 훅
-    useGetMyStudies.ts
-    useGetMyCreatedStudies.ts
-  ui/                            ← Presentational only (props만 받음)
+  model/
+    Study.ts                     ← Aggregate 타입, fromRow/toRow (얇게)
+    Capacity.ts                  ← Value Object — 단일 VO 생성·질의·전이
+    StudyStatus.ts               ← 판별 유니온 — 단일 VO 생성·질의·전이
+    errors.ts
+  service/
+    StudyMembership.ts           ← 여러 VO 조합 루트 규칙 (예: canAcceptParticipant)
+  api/
+    StudyRepository.ts           ← Write: findById, save …
+    queryStudyDetail.ts          ← Read: DB 조인 only
+  ui/
     StudyCard.tsx
-    StudyCapacityIndicator.tsx
     StudyStatusBadge.tsx
-    StudyDetailLayout.tsx        ← slot pattern
-  lib/                           ← 도메인 유틸 (헬퍼 함수)
   index.ts
+
+entities/participant/
+  model/
+    Participant.ts               ← Aggregate 타입, 단일 aggregate 전이 (kick, accept …)
+    ParticipantStatus.ts
+    ParticipantRole.ts
+    errors.ts
+  service/
+    ParticipantHostActions.ts    ← kick, accept, reject (Study/service 경유)
+    ParticipantSelfActions.ts    ← createDeleteIntent (자진 취소/탈퇴)
+  api/
+    ParticipantRepository.ts
+  ui/
+  index.ts
+
+entities/user/
+  model/
+    UserId.ts                    ← 공유 VO (여러 aggregate에서 직접 import OK)
 ```
+
+#### `model` vs `service` — 역할 분리
+
+| 폴더           | 담당                                                                                   | 예                                                                    |
+| -------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **`model/`**   | 타입·VO 정의, **단일 VO** 생성·질의·전이, aggregate 타입·매핑                          | `StudyStatus.kick`, `Capacity.isFull`, `Participant.kick(p)`          |
+| **`service/`** | **여러 VO/필드가 엮이는 비즈니스 규칙**, cross-aggregate 시나리오(주도 aggregate 기준) | `StudyMembership.canAcceptParticipant`, `ParticipantHostActions.kick` |
+| **`api/`**     | Repository·Query — **DB만**                                                            | `findStudyById`, `queryStudyDetail`                                   |
+| **`ui/`**      | props만 받는 표현                                                                      | `StudyStatusBadge`                                                    |
+
+**같은 aggregate 안** (Study + Capacity + StudyStatus):
+
+- `StudyStatus.isRecruiting` → `model/`
+- `canAcceptParticipant` (status + capacity) → `study/service/`
+- 바깥에서는 **`Study/service`만** 호출. `StudyStatus` 직접 import ❌
+
+**다른 aggregate 연관** (강퇴 = Participant 기능 + Study 조건):
+
+- 구현 위치 → **`Participant/service/`** (Participant 주도 시나리오)
+- Study 조건 접근 → **`Study/service/`** 경유 (`StudyStatus` 직접 ❌)
+- `Participant/model`의 `kick(p)` — participant **단일 전이만** (accepted → kicked)
 
 #### 도메인 목록
 
-| entity         | 비고                                         |
-| -------------- | -------------------------------------------- |
-| `study`        | Aggregate Root. Participant를 자식으로 가짐. |
-| `post`         | Aggregate Root. PostImage(VO)를 포함.        |
-| `participant`  | Study 자식이지만 단독 조회/UI도 있어 분리.   |
-| `user`         | Auth 사용자. `UserId` 브랜드.                |
-| `profile`      | 프로필 정보.                                 |
-| `notification` | 알림.                                        |
-| `chat-room`    | 채팅방.                                      |
-| `message`      | 채팅 메시지.                                 |
+| entity         | 비고                                                       |
+| -------------- | ---------------------------------------------------------- |
+| `study`        | Aggregate Root. `service/`에 status+capacity 등 루트 규칙. |
+| `Participant`  | Study와 연관되나 단독 조회/UI·시나리오가 있어 분리.        |
+| `post`         | Aggregate Root. PostImage(VO)를 포함.                      |
+| `user`         | 공유 VO (`UserId`). aggregate가 아닌 identity 연산.        |
+| `profile`      | 프로필 정보.                                               |
+| `notification` | 알림.                                                      |
+| `chat-room`    | 채팅방.                                                    |
+| `message`      | 채팅 메시지.                                               |
+
+#### entities 간 의존 방향
+
+```
+features/api (Use Case)
+    ↓
+Participant/service  ──→  Study/service
+    ↓                           ↓
+Participant/model         Study/model (VO)
+    ↓
+Participant/api (Repository)
+```
+
+- `Study/service` → `Participant` ❌
+- `Participant/model` → `Study` ❌
+- `Participant/service` → `Study/service` ✅
+- `UserId` — `entities/user/model`에서 **공유 VO**로 직접 import ✅
 
 ### 3-e. `shared/` — 도메인 무관 공용 자원
 
@@ -250,30 +340,101 @@ export type Brand<K, T> = K & { readonly __brand: T }
 
 ---
 
-## 4. 폴더 안의 규칙 (강제 사항)
+## 4. Read vs Write
 
-### 4-a. `entities/*/model/` 규칙
+|               | **Read (읽기)**                               | **Write (쓰기)**                     |
+| ------------- | --------------------------------------------- | ------------------------------------ |
+| 목적          | 화면에 **보여주기**                           | 상태 **바꾸기**                      |
+| DB            | `entities/*/api` (Query/Repository)           | `entities/*/api` (Repository)        |
+| VO / service  | **안 씀** (plain / row)                       | **씀** (Load → service/model → Save) |
+| orchestration | `entities/*/api` 조회 + `widgets`/`page` 조립 | `features/*/api/*Action`             |
+| 응답          | `Result<PlainView, E>`                        | `{ success, error }`                 |
+
+### Read 경로
+
+```
+entities/*/api/queryXxx.ts       DB 조인·조회 + 정렬 + Result + plain (조회 책임 일체)
+entities/*/api/useXxx.ts         React Query 조회 훅 (선택)
+widgets / page                   조회 결과 + entity UI + feature 버튼 조립
+```
+
+- VO, Domain service 호출 없음. mapper 계층은 보류(현재 `as` 허용).
+- **`getXxxView`는 features에서 폐지** — 조회 가공(정렬·plain 변환)은 `entities/*/api` 쿼리가 일체 담당. features는 행위(`*Action`)만.
+
+### Write 경로 + 도장 3종
+
+```
+features/*/api/*Action
+  → Auth + ID VO
+  → Repository Load (fromRow → VO)
+  → entities/*/service (또는 model 전이)
+  → Repository Save
+  → { success, error }
+```
+
+| 연산       | Save에 넘기는 것                                   |
+| ---------- | -------------------------------------------------- |
+| **insert** | `ParticipantInsert` 등 Brand                       |
+| **update** | 전이된 **VO** + `guardStatus` (Update Intent 없음) |
+| **delete** | `DeleteParticipantIntent` 등 Brand                 |
+
+---
+
+## 5. 폴더 안의 규칙 (강제 사항)
+
+### 5-a. `entities/*/model/` 규칙
 
 - ✅ `Readonly<T>` + branded type
+- ✅ **단일 VO** 생성·질의·전이, aggregate 타입·`fromRow`/`toRow`
 - ✅ 순수 함수만 (class 없음)
 - ✅ `Result<T, E>` 반환 (throw는 smart constructor의 검증 실패뿐)
-- ❌ Supabase 호출, fetch, `new Date()` 직접 사용 X
+- ❌ 여러 VO를 묶는 루트 규칙 (→ `service/`)
+- ❌ 다른 aggregate의 sub-VO 직접 import (→ 해당 aggregate `service/`)
+- ❌ Supabase 호출, fetch
 - ❌ `useState`, `useEffect` X (UI 코드 아님)
 
-### 4-b. `entities/*/api/` 규칙
+### 5-b. `entities/*/service/` 규칙
 
-- Repository: 함수 record 패턴 (`{ findById, save, ... }`)
-- 조회 훅(React Query)은 여기. mutation 훅은 feature로.
+- ✅ **여러 VO/필드 조합** 비즈니스 규칙 (같은 aggregate)
+- ✅ **주도 aggregate 기준** cross-aggregate 시나리오 (`Participant/service` → `Study/service`)
+- ✅ `Result<T, E>` 반환, `if (!r.ok) return r` bubble
+- ✅ Load된 VO만 인자로 받음 (repo 호출 ❌)
+- ❌ Supabase, auth, `{ success, error }` (→ features/api)
+- ❌ 다른 aggregate의 `model/StudyStatus` 직접 호출 (→ `Study/service`)
+
+### 5-c. `entities/*/api/` 규칙
+
+api는 **데이터 경계 세그먼트**다. 두 측(CQRS)이 공존하며, **의도적으로 이질적**이다 — 한 폴더에 섞인 게 아니라 _측별로 가른_ 것이다.
+
+- **command측 (Write)**: Repository — `findById`, `save`, `update`, `delete` … → **도메인 VO(Aggregate) 반환**.
+- **query측 (Read)**: Query — `queryStudyDetail` 등 → **plain DTO 반환** (VO 아님). DB 조회·정렬·매핑까지 일체.
+- **조회 훅**(React Query)은 query측에 둔다. mutation 훅은 feature(`features/*/model`)로.
+- 측 구분은 **파일명**(`*Repository` / `query*`·`use*`) 또는 **하위폴더**(`api/query/`)로. entity가 커지면 하위폴더 권장.
 - Supabase 호출은 이 폴더 안에만.
+- ❌ 조회 훅을 `model/`에 두지 말 것 — DDD 순수 도메인이 React에 오염됨. `ui/`도 ❌ (fetch 금지 규칙).
 
-### 4-c. `entities/*/ui/` 규칙
+#### Read DTO 규칙 — 캐논 1개 + 파생 view
+
+조회 타입은 **엔티티당 캐논(default) 타입 1개**를 두고, **읽기마다 그 캐논에서 `Pick`/`Omit`으로 파생한 view**를 쓴다. 손으로 새 타입을 다시 적지 않는다.
+
+- **캐논**: 그 엔티티의 _실제 모양_(DB 컬럼/도메인). 화면별 요구의 합집합으로 부풀리지 말 것(god-type 금지). 예) `PostResponse`, `ProfileResponse`.
+- **파생 view**: 그 읽기가 _실제 쓰는 필드만_. `type StudyDetailPostView = Omit<PostResponse, "commentsCount">` / `type StudyDetailCreatorView = Pick<ProfileResponse, "id"|"username"|"email"|"avatarUrl">`. view는 **그 모양을 필요로 하는 슬라이스**에 둔다(study-detail용 post view는 study가 소유).
+- **불변식 — 타입 = select = 현실**: row 타입·SQL `select`·view 셋이 항상 같은 필드. row 타입은 "갖고 싶은 필드"가 아니라 "쿼리가 실제 주는 필드". 셋이 어긋난 채 `as`로 덮으면 런타임 `undefined`가 새는 거짓말이 된다(읽기 경계 `data as Row`는 supabase 추론↔명명 타입의 정당한 trust-boundary 캐스팅으로 한정).
+- **UI 컴포넌트는 자기가 그리는 최소 모양만 받는다**: `entities/post/ui`의 카드는 `PostCardView`(= `Pick<PostResponse, …>`)를 prop으로 받음 → 그 필드를 가진 어떤 view든 주입 가능.
+- **소유 엔티티 vs 조인된 외부 애그리거트**: 소유 자식(study의 post·participant)은 풀 재사용도 무방. 조인된 _다른_ 애그리거트(study 쿼리 속 creator=Profile)는 사적 필드(bio/points 등)까지 끌어오지 말고 `Pick`으로 좁힐 것.
+
+### 5-d. `entities/*/ui/` 규칙
 
 - 데이터를 props로만 받음.
 - fetch / mutation 직접 호출 X.
 - `useState`는 순수 UI 효과(호버, 토글)만.
 - 액션 자리는 slot으로 비움 (`rightSlot?: ReactNode`).
 
-### 4-d. `features/*/api/` 규칙 (UseCase 추출 시 3원칙)
+### 5-e. `features/*/api/` 규칙 (Use Case = App Service)
+
+`*Action`은 헥사고날 아키텍처의 **App Service**. domain(`model`/`service`)과 persistence(`entities/*/api`) **둘 다** 호출한다.
+
+UseCase를 별도 파일로 추출할 때 3원칙:
 
 UseCase로 추출한다면 다음 3원칙 준수. 안 지키면 분리 의미 없음.
 
@@ -293,7 +454,7 @@ export const acceptParticipantUseCase =
     }
 ```
 
-### 4-e. UseCase 추출 기준
+### 5-f. UseCase 추출 기준
 
 | 추출 권장                                | inline 유지                |
 | ---------------------------------------- | -------------------------- |
@@ -304,22 +465,51 @@ export const acceptParticipantUseCase =
 
 ---
 
-## 5. 의존성 방향 규칙
+## 6. 의존성 방향 규칙
 
 ```
 app/  →  widgets  →  features  →  entities  →  shared
 ```
 
-- 위에서 아래로만 import
-- 같은 레이어끼리 import 금지 (`features/post-create`가 `features/post-edit` 못 부름)
-- `entities/study`가 `entities/post`를 import? 가능하지만 최소화 (강한 결합이면 합쳐야 할 신호)
-- `shared`는 다른 어떤 것도 import 안 함
+### 6-a. Layer Import Rule (FSD 공식)
+
+- Slice 내부 모듈은 **자신보다 아래 Layer의 Slice만** import한다 (`app → widgets → features → entities → shared`, 위→아래 단방향).
+- **Slice 격리**: 같은 Layer의 다른 Slice는 import 금지 (`features/post-create`가 `features/post-edit` 못 부름). 목표는 **Zero 결합 + 높은 응집**.
+- `shared`·`app`은 **Slice가 없다** (shared=비즈니스 로직 없음, app=앱 전체라 다시 나눌 의미 없음). `shared`는 다른 어떤 것도 import 안 함.
+
+### 6-b. entities 내부 방향
+
+- `Participant/service` → `Study/service` → `Study/model` (sub-VO 직접 노출 금지)
+- `entities/user` (`UserId`) — 공유 VO, 여러 entity에서 직접 import OK
+- `entities/study`가 `entities/post`를 import? 가능하지만 최소화
+
+### 6-c. Slice 이름 · Slice Group · Public API (FSD 공식)
+
+- **Slice 이름은 고정 규칙이 없다** — 앱의 비즈니스 도메인에 맞춰 자유롭게 정함. `study-create`(플랫), `study/create`(그룹), `participant-apply` 모두 정식. → "플랫만 정통"은 틀린 말. 다만 앱 안에서 **한 컨벤션으로 일관**되게(취향 문제, FSD 규칙 아님).
+- **Slice Group**: 연관 높은 Slice들을 폴더로 묶을 수 있다 (`features/study/{create,edit,delete}`). **단, 그룹으로 묶어도 격리 규칙은 그대로** — 그룹 내부라고 `study/create`↔`study/edit` 코드 공유가 허용되는 게 **아니다**.
+- **Slice Public API Rule**: 각 Slice는 외부 노출용 **Public API(`index.ts`)** 를 정의하고, 외부는 내부 파일에 직접 접근하지 않고 Public API로만 접근한다. (→ 이 프로젝트는 Phase 0에서 `index.ts`를 **의도적으로 보류** 중 = FSD 정식 규칙을 아직 안 지키는 지점.)
 
 → Phase 1에서는 수동 준수. 익숙해진 후 ESLint(`eslint-plugin-boundaries`)로 강제 가능.
 
+### 6-d. 에러 전파 (Result) convention
+
+에러는 **가장 깊은 VO에서 origin을 한 번만 정의**하고, 위로는 **버블링(통과)** 시킨다. 변환은 *경계*에서만.
+
+- **origin 정의**: 가장 깊은 VO가 자기 에러를 소유. 전이 에러는 generic `InvalidTransition` + `from`/`to` payload(각 연산의 `to`가 달라 맥락 복원). → kind는 **연산별 granular + 체인 전체에서 unique**.
+- **Aggregate 안 = 통과(passthrough)**: 같은 Ubiquitous Language. `return next`로 origin을 그대로 올림(재정의·래핑 X). 예: `Participant.accept` → `ParticipantStatus.accept` 통과.
+- **Aggregate/컨텍스트/UI 경계 = 번역(ACL)**: 다른 Aggregate의 에러를 통과시키지 않는다. 정책이 자기 kind로 갈아입힌다. 예: `hostAccept`가 Study 사실을 `NotHost`/`StudyNotActive`로 번역.
+- **action = 버블 정지 → UI 메시지**: origin kind를 메시지로 매핑. **reachable kind만** case로(호출 체인 추적) + `default`. 연산별 메시지 필요하면 `from`/`to`로 분기.
+- **plumbing/버그류**(`Capacity`의 `NegativeCurrent` 등)는 사용자 에러가 아니라 버그 → 경계에서 collapse(일반 메시지).
+
+판별 3줄:
+
+1. **유니온 vs 래핑** — action의 `kind` switch까지 저수준 유니온이 _새면_ 막아라(번역). `cause` 안 유니온은 아무도 switch 안 하니 둬도 됨.
+2. **래핑 vs 통과** — 래퍼 kind에 _의미 있는 새 이름_(위치/도메인 이유)을 못 지으면(타입 이름 echo면) 감싸지 말고 통과/유니온.
+3. **결합 측정** — "참조가 있냐"가 아니라 **"바뀌면 거기도 고쳐야 하냐"**. 통과는 결합을 Aggregate 안으로 한정, 경계 번역이 결합을 차단.
+
 ---
 
-## 6. 마이그레이션 매핑 표
+## 7. 마이그레이션 매핑 표
 
 | 현재 파일                                              | 새 위치                                                          |
 | ------------------------------------------------------ | ---------------------------------------------------------------- |
@@ -363,12 +553,12 @@ app/  →  widgets  →  features  →  entities  →  shared
 
 ---
 
-## 7. Phase별 도입 로드맵
+## 8. Phase별 도입 로드맵
 
 ### Phase 0 — 사전 결정 사항
 
 - [x] `src/` 사용 여부 → **미사용** (`@/*` → `./*` 그대로 유지, 마이그레이션 비용 최소화)
-- [ ] `index.ts` 배럴 파일 → **처음엔 미사용**, entity 안정되면 추가
+- [ ] `index.ts` 배럴 파일(= FSD **Slice Public API**) → **처음엔 미사용**(정식 규칙을 의도적으로 보류), Slice 안정되면 추가
 - [ ] 옛 폴더 정책 → 새 코드는 새 폴더에, 옛 코드는 **수정할 때만** 이동
 
 ### Phase 1 — 기반 타입 + 첫 Value Object (이번 주)
@@ -429,7 +619,7 @@ entities/study/ui/
 
 ---
 
-## 8. 자주 헷갈리는 것 정리
+## 9. 자주 헷갈리는 것 정리
 
 ### Q1. 새로 만든 폴더 위치는 어떻게 정하나?
 
@@ -496,11 +686,29 @@ export function PostCard({
 
 단순 시나리오(`toggleLike`, `increaseViewCount`)는 액션에 inline OK.
 
+### Q6. action이 repo를 호출하는 게 맞나? aggregate가 실행해야 하지 않나?
+
+**action(Use Case)이 repo를 호출하는 게 맞다.** aggregate/`service`는 순수 도메인만 — Load/Save는 App Service 책임. 헥사고날에서 안쪽(domain)이 바깥(persistence)을 모른다.
+
+### Q7. `model`과 `service`는 어떻게 나누나?
+
+- **단일 VO** 규칙 → `model/` (`StudyStatus`, `Capacity`)
+- **여러 VO/컬럼 조합** → `service/` (`canAcceptParticipant`)
+- **Participant 기능 + Study 조건** → `Participant/service/` (Study는 `Study/service` 경유)
+
+### Q8. `StudyStatus`를 Participant에서 직접 써도 되나?
+
+**❌** 다른 aggregate의 sub-VO. `Study/service`의 `assertAllows…` / `canAccept…` 만 호출.
+
+### Q9. Domain Service와 `entities/*/service`는 같은가?
+
+이름만 같음. 여기서 `service` = **순수 도메인 연산 폴더** (인프라 service 아님). cross-aggregate는 **주도 aggregate의 `service/`** 에 둔다.
+
 ---
 
-## 9. 부록: FP-DDD 핵심 패턴 코드 템플릿
+## 10. 부록: FP-DDD 핵심 패턴 코드 템플릿
 
-### 9-a. Value Object (smart constructor + branded type)
+### 10-a. Value Object (smart constructor + branded type)
 
 ```typescript
 // entities/study/model/Capacity.ts
@@ -528,7 +736,7 @@ export const Capacity = {
 }
 ```
 
-### 9-b. 판별 유니온 + 상태 머신
+### 10-b. 판별 유니온 + 상태 머신
 
 ```typescript
 // entities/study/model/ParticipantStatus.ts
@@ -556,59 +764,38 @@ export const ParticipantStatus = {
 }
 ```
 
-### 9-c. Aggregate (type + 순수 함수)
+### 10-c. Aggregate `model` + `service` 분리
 
 ```typescript
-// entities/study/model/Study.ts
-declare const StudyBrand: unique symbol
+// entities/study/model/Study.ts — 타입·매핑만 (얇게)
+export type Study = Brand<{ id: StudyId; status: StudyStatus; capacity: Capacity; ... }, 'Study'>
 
-export type Study = Readonly<{
-    id: StudyId
-    creatorId: UserId
-    title: string
-    status: StudyStatus
-    capacity: Capacity
-    participants: ReadonlyArray<Participant>
-}> & { readonly [StudyBrand]: true }
+// entities/study/service/StudyMembership.ts — 여러 VO 조합
+export const StudyMembership = {
+  canAcceptParticipant: (s: Study): boolean =>
+    StudyStatus.isRecruiting(s.status) && !Capacity.isFull(s.capacity),
 
-export type AcceptError =
-    | { kind: 'NotHost' }
-    | { kind: 'StudyCompleted' }
-    | { kind: 'StudyFull' }
-    | { kind: 'ParticipantNotFound' }
-    | { kind: 'NotPending' }
+  assertAllowsHostMemberManagement: (s: Study): Result<void, StudyStatusError> => {
+    if (!StudyStatus.isRecruiting(s.status) && !StudyStatus.isCompleted(s.status)) {
+      return err({ kind: 'InvalidStudyStatus', status: s.status.kind })
+    }
+    return ok(undefined)
+  },
+}
 
-export const acceptParticipant = (
-    study: Study,
-    participantId: ParticipantId,
-    hostId: UserId,
-    now: Date
-): Result<Study, AcceptError> => {
-    if (!UserId.equals(study.creatorId, hostId)) return err({ kind: 'NotHost' })
-    if (StudyStatus.isCompleted(study.status))
-        return err({ kind: 'StudyCompleted' })
-    if (Capacity.isFull(study.capacity)) return err({ kind: 'StudyFull' })
-
-    const target = study.participants.find((p) =>
-        ParticipantId.equals(p.id, participantId)
-    )
-    if (!target) return err({ kind: 'ParticipantNotFound' })
-    if (!ParticipantStatus.isPending(target.status))
-        return err({ kind: 'NotPending' })
-
-    return ok({
-        ...study,
-        capacity: Capacity.increment(study.capacity),
-        participants: study.participants.map((p) =>
-            ParticipantId.equals(p.id, participantId)
-                ? { ...p, status: ParticipantStatus.accepted(now) }
-                : p
-        ),
-    } as Study)
+// entities/participant/service/ParticipantHostActions.ts — cross-aggregate (Participant 주도)
+export const ParticipantHostActions = {
+  kick: (p: Participant, study: Study, actorId: UserId): Result<Participant, ParticipantError> => {
+    const host = UserId.isSelf(study.creatorId, actorId)
+    if (!host.ok) return host
+    const studyOk = StudyMembership.assertAllowsHostMemberManagement(study)
+    if (!studyOk.ok) return studyOk
+    return Participant.kick(p) // model — 단일 전이만
+  },
 }
 ```
 
-### 9-d. Repository (함수 record + 부분 적용 DI)
+### 10-d. Repository (함수 record + 부분 적용 DI)
 
 ```typescript
 // entities/study/api/StudyRepository.ts
@@ -637,7 +824,7 @@ export const createSupabaseStudyRepository = (
 })
 ```
 
-### 9-e. UseCase (고차 함수, 선택)
+### 10-e. UseCase (고차 함수, 선택)
 
 ```typescript
 // features/participant-accept/application/acceptParticipantUseCase.ts
@@ -659,31 +846,42 @@ export const acceptParticipantUseCase =
   };
 ```
 
-### 9-f. Server Action (얇은 어댑터)
+### 10-f. Server Action (Use Case = App Service)
 
 ```typescript
-// features/participant-accept/api/acceptParticipantAction.ts
+// features/participant-kick/api/kickParticipantAction.ts
 'use server'
-export async function acceptParticipant(participantId: number) {
-    const sb = await createClient()
-    const { user } = await CustomUserAuth(sb)
+export async function kickParticipantAction(participantId: number) {
+    const supabase = await createClient()
+    const { user } = await CustomUserAuth(supabase)
+    // … UserId / ParticipantId VO
 
-    const run = acceptParticipantUseCase({
-        studyRepo: createSupabaseStudyRepository(sb),
-        now: () => new Date(),
-    })
+    const loadP = await findParticipantById(supabase, participantIdVO)
+    if (!loadP.ok) return { success: false, error: { message: '…' } }
 
-    const result = await run({ participantId, hostId: user.id })
-    if (!result.ok) return toActionResponse(result)
+    const loadStudy = await findStudyById(loadP.value.studyId)
+    if (!loadStudy.ok) return { success: false, error: { message: '…' } }
 
-    revalidatePath('/studies', 'layout')
+    const kicked = ParticipantHostActions.kick(
+        loadP.value,
+        loadStudy.value,
+        userIdVO
+    )
+    if (!kicked.ok) return { success: false, error: { message: '…' } }
+
+    const saved = await updateParticipant(
+        supabase,
+        kicked.value /* guard: accepted */
+    )
+    if (!saved.ok) return { success: false, error: { message: '…' } }
+
     return { success: true }
 }
 ```
 
 ---
 
-## 10. 참고 자료
+## 11. 참고 자료
 
 - 《Domain Modeling Made Functional》 — Scott Wlaschin (F# 기반이지만 TS에 그대로 적용 가능)
 - 《도메인 주도 개발 시작하기》 — 최범균 (한국어 DDD 입문)
@@ -692,8 +890,14 @@ export async function acceptParticipant(participantId: number) {
 
 ---
 
-## 11. 변경 이력
+## 12. 변경 이력
 
-| 날짜       | 내용                                    |
-| ---------- | --------------------------------------- |
-| 2026-05-23 | 최초 작성. Phase 1 시작 전 청사진 확정. |
+| 날짜       | 내용                                                                                                                                                                                                                                      |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-23 | 최초 작성. Phase 1 시작 전 청사진 확정.                                                                                                                                                                                                   |
+| 2026-05-25 | 도메인 모델 1차 완료 (Capacity, Status/Role VO, ID 타입, Study/Participant Aggregate). 단계별 학습 로그는 `docs/learning-log.md` 참고.                                                                                                    |
+| 2026-06-04 | `entities/*/service` 도입. model/service/api 역할 분리, Read/Write 경로, Use Case(action)↔repo↔domain 계층, cross-aggregate 규칙 정리.                                                                                                    |
+| 2026-06-10 | **feature 정의를 행위(action) 전용으로 확정** (정통 FSD). 순수 조회/표시는 features에서 제외 → `entities/*/api`(조회·가공) + `widgets`/`page`(조립). `getXxxView` 폐지. → `study-detail`/`participant-status` 등 조회성 폴더 재배치 대상. |
+| 2026-06-10 | `entities/*/api`를 **command(Repository→VO) / query(Query→DTO·조회훅)** 두 측으로 명시 (CQRS). `model`은 DDD 순수 도메인 전용 → 조회 훅은 api/query측. ("model" 단어가 FSD↔DDD에서 겹쳐 생기던 이질감 정리.)                              |
+| 2026-06-12 | FSD 공식문서 반영 — **Slice 이름 자유 / Slice Group / Slice Public API / Layer Import Rule** 명문화(6-a~c). `features/study/*` 같은 Slice Group은 정식(격리 규칙 유지 조건). "플랫만 정통"이라던 이전 메모 철회.                          |
+| 2026-06-12 | **에러 전파 convention 확정(6-d)** — origin 1회 정의 → Aggregate 안 통과(passthrough) → 경계 번역(ACL) → action 매핑. 전이 에러는 generic `InvalidTransition`+from/to. participant(accept/reject/kick/policy)를 레퍼런스로 정렬 완료.     |

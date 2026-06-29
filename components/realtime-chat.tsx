@@ -1,14 +1,14 @@
 'use client'
 
 import { ChatMessageItem } from '@/components/chat-message'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useChatScroll } from '@/hooks/use-chat-scroll'
 import {
   type ChatMessage,
   useRealtimeChat,
 } from '@/hooks/use-realtime-chat'
-import { cn } from '@/utils/cn'
+import { Button } from '@/shared/shadcn/ui/button'
+import { Input } from '@/shared/shadcn/ui/input'
+import { cn } from '@/shared/lib/cn'
 import { Send } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 

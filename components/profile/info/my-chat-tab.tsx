@@ -1,11 +1,11 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
-import { TabsContent } from "@/components/ui/tabs";
-import { getProfileImageUrl } from "@/lib/supabase/storage";
-import { ChatRoom } from "@/types/chatType";
-import { formatTimeAgo } from "@/utils/date";
+import { getProfileImageUrl } from "@/shared/api/supabase/storage";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
+import { Card } from "@/shared/shadcn/ui/card";
+import { TabsContent } from "@/shared/shadcn/ui/tabs";
+import { ChatRoom } from "@/entities/chat";
+import { formatTimeAgo } from "@/shared/lib/date";
 import Link from "next/link";
 export default function MyChatTab({chatRooms} : {
     chatRooms : ChatRoom[]

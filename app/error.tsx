@@ -1,7 +1,7 @@
 "use client";
 
+import { Button } from "@/shared/shadcn/ui/button";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 interface ErrorProps {
   error: Error & { digest?: string };

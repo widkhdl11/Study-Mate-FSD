@@ -1,8 +1,8 @@
+import { Badge } from "@/shared/shadcn/ui/badge"
+import { Button } from "@/shared/shadcn/ui/button"
+import { Card } from "@/shared/shadcn/ui/card"
 import { BookOpen, Sparkles, Target, Users } from "lucide-react"
 import Link from "next/link"
-import { Badge } from "../ui/badge"
-import { Button } from "../ui/button"
-import { Card } from "../ui/card"
 
 export default function HeroSection() {
   return (

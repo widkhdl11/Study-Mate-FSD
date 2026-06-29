@@ -1,29 +1,29 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { getMainRegion, getRegionCodeByValue, getRegionPath, getSubRegion } from "@/lib/constants/region";
+import { PostsResponse } from "@/entities/post/model/types";
+import { getMainRegion, getRegionCodeByValue, getRegionPath, getSubRegion } from "@/shared/config/region";
 import {
   getCategoryCodeByValue,
   getCategoryPath,
   getDetailCategories,
   getMainCategories,
   getSubcategories,
-} from "@/lib/constants/study-category";
-import { STUDY_STATUS } from "@/lib/constants/study-status";
-import { getImageUrl, getProfileImageUrl } from "@/lib/supabase/storage";
-import { PostsResponse } from "@/types/postType";
-import { getStudyStatusExistValue, studyStatusConversion } from "@/utils/conversion/study";
+} from "@/shared/config/study-category";
+import { STUDY_STATUS } from "@/shared/config/study-status";
+import { getImageUrl, getProfileImageUrl } from "@/shared/api/supabase/storage";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
+import { Badge } from "@/shared/shadcn/ui/badge";
+import { Button } from "@/shared/shadcn/ui/button";
+import { Card } from "@/shared/shadcn/ui/card";
+import { Input } from "@/shared/shadcn/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/shadcn/ui/select";
+import { getStudyStatusExistValue, studyStatusConversion } from "@/shared/lib/conversion/study";
 import { Calendar, Eye, MapPin, Search, ThumbsUp, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

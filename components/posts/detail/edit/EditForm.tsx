@@ -1,16 +1,15 @@
 'use client'
 
 import { StudySelectSkeleton } from "@/components/skeleton";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useUpdatePost } from "@/hooks/usePost";
-import { getImageUrl } from "@/lib/supabase/storage";
-import { PostFormValues, updatePostSchema } from "@/lib/zod/schemas/postSchema";
-import { PostDetailResponse } from "@/types/postType";
-import { StudiesResponse } from "@/types/studiesType";
-import { zodResolverFirstError } from "@/utils/validation";
+import { PostDetailResponse, UpdatePostCommand, updatePostSchema } from "@/entities/post";
+import { StudyResponse } from "@/entities/study";
+import { useUpdatePost } from "@/features/post/edit/model/useUpdatePost";
+import { getImageUrl } from "@/shared/api/supabase/storage";
+import { Button } from "@/shared/shadcn/ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form";
+import { Input } from "@/shared/shadcn/ui/input";
+import { Textarea } from "@/shared/shadcn/ui/textarea";
+import { zodResolverFirstError } from "@/shared/lib/validation";
 import { Link } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -19,9 +18,9 @@ import StudySelectField from "./StudySelectField";
 
 
 export default function EditForm(
-    { postData, studiesPromise }: {postData: PostDetailResponse, studiesPromise: Promise<StudiesResponse>; }
+    { postData, studiesPromise }: {postData: PostDetailResponse, studiesPromise: Promise<StudyResponse[]>; }
 ) {
-      const form = useForm<PostFormValues>({
+      const form = useForm<UpdatePostCommand>({
       resolver: zodResolverFirstError(updatePostSchema),
       defaultValues: {
         ...postData,  
@@ -33,7 +32,7 @@ export default function EditForm(
 
     const formRef = useRef<HTMLFormElement>(null);
     const {mutate: updatePostMutation, isPending} = useUpdatePost((field ,message)=>{
-      form.setError(field as keyof PostFormValues, {
+      form.setError(field as keyof UpdatePostCommand, {
         type: "server",
         message,
       });
@@ -45,7 +44,6 @@ export default function EditForm(
     if (files.length === 0) return
     const newPreviewUrls = files.map((file) => file.name)
     setImagePreviewUrls(newPreviewUrls)
-    console.log("imagePreviewUrls : ", imagePreviewUrls)
   }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,15 +87,9 @@ export default function EditForm(
         )
     }
 
-  async function onSubmit(values: PostFormValues) {
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
-    if (values.images) {
-      values.images.forEach((file) => {
-        formData.append("images", file as File);
-      });
-    }
-    updatePostMutation(formData);
+  async function onSubmit(values: UpdatePostCommand) {
+    
+    updatePostMutation(values);
   }
     return (
          <Form {...form}>

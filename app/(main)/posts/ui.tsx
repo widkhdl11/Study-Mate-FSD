@@ -2,7 +2,7 @@
 
 import HeaderSection from "@/components/posts/HeaderSection";
 import MainSection from "@/components/posts/MainSection";
-import { PostsResponse } from "@/types/postType";
+import { PostsResponse } from "@/entities/post/model/types";
 import { useSearchParams } from "next/navigation";
 
 export default function PostsUI({ allPosts }: { allPosts: PostsResponse }) {

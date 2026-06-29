@@ -1,5 +1,5 @@
-import { Toaster } from "@/components/ui/sonner";
-import ReactQueryClientProvider from "@/config/ReactQueryClientProvider";
+import ReactQueryClientProvider from "@/shared/api/reactQuery/ReactQueryClientProvider";
+import { Toaster } from "@/shared/shadcn/ui/sonner";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import type React from "react";

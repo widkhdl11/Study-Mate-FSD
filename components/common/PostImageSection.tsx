@@ -1,23 +1,23 @@
-import { getImageUrl } from "@/lib/supabase/storage"
-// import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel"
-import { PostDetailResponse } from "@/types/postType"
+import { PostDetailView } from "@/entities/post/api/query/postDetail/view"
+import { getImageUrl } from "@/shared/api/supabase/storage"
+// import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/shared/shadcn/ui/carousel"
 import dynamic from 'next/dynamic'
 import Image from "next/image"
 
-const Carousel = dynamic(() => import('../ui/carousel').then(mod => mod.Carousel))
-const CarouselContent = dynamic(() => import('../ui/carousel').then(mod => mod.CarouselContent))
-const CarouselItem = dynamic(() => import('../ui/carousel').then(mod => mod.CarouselItem))
-const CarouselNext = dynamic(() => import('../ui/carousel').then(mod => mod.CarouselNext))
-const CarouselPrevious = dynamic(() => import('../ui/carousel').then(mod => mod.CarouselPrevious))
+const Carousel = dynamic(() => import('@/shared/shadcn/ui/carousel').then(mod => mod.Carousel))
+const CarouselContent = dynamic(() => import('@/shared/shadcn/ui/carousel').then(mod => mod.CarouselContent))
+const CarouselItem = dynamic(() => import('@/shared/shadcn/ui/carousel').then(mod => mod.CarouselItem))
+const CarouselNext = dynamic(() => import('@/shared/shadcn/ui/carousel').then(mod => mod.CarouselNext))
+const CarouselPrevious = dynamic(() => import('@/shared/shadcn/ui/carousel').then(mod => mod.CarouselPrevious))
 
-export default function PostImageSection({ postData }: { postData: PostDetailResponse }) {
+export default function PostImageSection({ postData }: { postData: PostDetailView }) {
     return (
         <div className="relative w-full mb-8">
             <Carousel className="w-full">
               <CarouselContent >
-                {postData.image_url.length > 0 ? (
+                {postData.imageUrl.length > 0 ? (
                   <>
-                  {postData.image_url.map((image: { url: string }, index: number) => (
+                  {postData.imageUrl.map((image: { url: string }, index: number) => (
                     <CarouselItem key={index}>
                       <div className="relative w-full h-96 rounded-lg overflow-hidden shadow-lg" >
                         <Image

@@ -1,14 +1,14 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Card } from '@/components/ui/card'
-import { getRegionPath } from '@/lib/constants/region'
-import { getCategoryPath } from '@/lib/constants/study-category'
-import { getImageUrl, getProfileImageUrl } from '@/lib/supabase/storage'
-import { PostDetailResponse } from '@/types/postType'
-import { studyStatusConversion } from '@/utils/conversion/study'
-import { formatTimeAgo } from '@/utils/date'
+import { PostDetailResponse } from '@/entities/post/model/types'
+import { getRegionPath } from '@/shared/config/region'
+import { getCategoryPath } from '@/shared/config/study-category'
+import { getImageUrl, getProfileImageUrl } from '@/shared/api/supabase/storage'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
+import { Badge } from '@/shared/shadcn/ui/badge'
+import { Card } from '@/shared/shadcn/ui/card'
+import { studyStatusConversion } from '@/shared/lib/conversion/study'
+import { formatTimeAgo } from '@/shared/lib/date'
 import Image from 'next/image'
 
 export default function PostCard({

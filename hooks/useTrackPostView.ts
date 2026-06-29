@@ -1,7 +1,7 @@
 "use client";
 
 import { increaseViewCount } from "@/actions/postAction";
-import { useViewCountStore } from "@/lib/zustand/stores/viewCountStore";
+import { useViewCountStore } from "@/shared/lib/zustand/stores/viewCountStore";
 import { useEffect, useRef, useState } from "react";
 
 /**

@@ -1,14 +1,14 @@
 // 'use client'
 
-// import { getProfileImageUrl } from '@/lib/supabase/storage'
-// import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
+// import { getProfileImageUrl } from '@/shared/api/supabase/storage'
+// import { Avatar, AvatarImage, AvatarFallback } from '@/shared/shadcn/ui/avatar'
 // import { Edit, Lock, LogOut, Settings } from 'lucide-react'
-// import { ProfileResponse } from '@/types/profileType'
-// import { Badge } from '../ui/badge'
+// import { ProfileResponse } from '@/entities/user/model/types'
+// import { Badge } from '@/shared/shadcn/ui/badge'
 // import Link from 'next/link'
-// import { Button } from '../ui/button'
-// import { StudiesResponse } from '@/types/studiesType'
-// import { PostsResponse } from '@/types/postType'
+// import { Button } from '@/shared/shadcn/ui/button'
+// import { StudiesResponse } from '@/entities/study/model/types'
+// import { PostsResponse } from '@/entities/post/model/types'
 // import { UseMutationResult } from '@tanstack/react-query'
 // import Image from 'next/image'
 
@@ -32,7 +32,7 @@
 //                     <div className='relative shrink-0'>
 //                         <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
 //                             <AvatarImage
-//                                 src={getProfileImageUrl(currentUser?.avatar_url)}
+//                                 src={getProfileImageUrl(currentUser?.avatarUrl)}
 //                                 alt={currentUser.username || ''}
 //                                 width={96}
 //                                 height={96}
@@ -148,26 +148,24 @@
 // }
 'use client'
 
-import { useLogout } from '@/hooks/useAuth'
+import { ProfileResponse } from '@/entities/user'
 import { useUpdateProfileImage } from '@/hooks/useProfile'
-import { getProfileImageUrl } from '@/lib/supabase/storage'
-import { ProfileResponse } from '@/types/profileType'
-import { Edit, Lock, LogOut, Settings } from 'lucide-react'
+import { getProfileImageUrl } from '@/shared/api/supabase/storage'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
+import { Badge } from '@/shared/shadcn/ui/badge'
+import { Button } from '@/shared/shadcn/ui/button'
+import { Edit, Lock, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
 
 export default function ProfileSection({
     currentUser,
 }: {
     currentUser: ProfileResponse
 }) {
-    const logoutMutation = useLogout()
     const updateProfileImage = useUpdateProfileImage()
     const [profileImage, setProfileImage] = useState(
-        currentUser?.avatar_url || '/placeholder.svg'
+        currentUser?.avatarUrl || '/placeholder.svg'
     )
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,7 +191,7 @@ export default function ProfileSection({
                     <div className='relative shrink-0'>
                         <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
                             <AvatarImage
-                                src={getProfileImageUrl(currentUser?.avatar_url)}
+                                src={getProfileImageUrl(currentUser?.avatarUrl)}
                                 alt={currentUser.username || ''}
                                 width={96}
                                 height={96}
@@ -254,14 +252,7 @@ export default function ProfileSection({
                                     비밀번호 변경
                                 </Button>
                             </Link>
-                            <Button
-                                variant='outline'
-                                className='gap-2 bg-transparent'
-                                onClick={() => logoutMutation.mutate()}
-                                disabled={logoutMutation.isPending}>
-                                <LogOut className='w-4 h-4' />
-                                로그아웃
-                            </Button>
+                           
                         </div>
                     </div>
                 </div>

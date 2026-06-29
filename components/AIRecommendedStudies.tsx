@@ -1,16 +1,15 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAIRecommendedPosts } from "@/hooks/useAgent";
-import { getRegionPath } from "@/lib/constants/region";
-import { getCategoryPath } from "@/lib/constants/study-category";
+import { getRegionPath } from "@/shared/config/region";
+import { getCategoryPath } from "@/shared/config/study-category";
+import { Badge } from "@/shared/shadcn/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/shadcn/ui/card";
 import { Loader2, MapPin, Sparkles, User } from "lucide-react";
 import Link from "next/link";
 
 export function AIRecommendedStudies() {
   const { data: recommendationsPosts, isLoading, error } = useAIRecommendedPosts();
-  console.log('recommendationsPosts', recommendationsPosts)
 
   if (isLoading) {
     return (

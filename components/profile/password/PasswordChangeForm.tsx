@@ -1,34 +1,31 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useUpdatePassword } from "@/hooks/useAuth"
-import { PasswordChangeFormValues, passwordChangeSchema } from "@/lib/zod/schemas/authSchema"
+import { ChangePasswordCommand, passwordChangeSchema } from "@/entities/user/model/authFormSchema"
+import { useChangePassword } from "@/features/auth/change-password/model/useChangePassword"
+import { Button } from "@/shared/shadcn/ui/button"
+import { Card } from "@/shared/shadcn/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form"
+import { Input } from "@/shared/shadcn/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft, Lock } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useForm } from "react-hook-form"
 
 
 
 export function PasswordChangeForm() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
 
 
-  const { mutate: updatePasswordMutation } = useUpdatePassword((field, message) => {
-        form.setError(field as keyof PasswordChangeFormValues, {
+  const { mutate: updatePasswordMutation, isPending } = useChangePassword((field, message) => {
+        form.setError(field as keyof ChangePasswordCommand, {
             type: 'server',
             message,
         })
     })
 
-  const form = useForm<PasswordChangeFormValues>({
+  const form = useForm<ChangePasswordCommand>({
     resolver: zodResolver(passwordChangeSchema),
     defaultValues: {
       currentPassword: "",
@@ -37,19 +34,8 @@ export function PasswordChangeForm() {
     },
   })
 
-  async function onSubmit() {
-    setIsLoading(true)
-    try {
-      // TODO: 실제 비밀번호 변경 API 호출
-      if (!formRef.current) {
-        return
-      }
-      const formData = new FormData(formRef.current)
-      updatePasswordMutation(formData)
-      router.push("/profile")
-    } finally {
-      setIsLoading(false)
-    }
+  async function onSubmit(values: ChangePasswordCommand) {
+    updatePasswordMutation(values)
   }
 
   return (
@@ -89,7 +75,7 @@ export function PasswordChangeForm() {
                       <Input
                         placeholder="현재 비밀번호를 입력해주세요"
                         type="password"
-                        disabled={isLoading}
+                        disabled={isPending}
                         {...field}
                       />
                     </FormControl>
@@ -109,7 +95,7 @@ export function PasswordChangeForm() {
                       <Input
                         placeholder="새 비밀번호를 입력해주세요 (최소 6자)"
                         type="password"
-                        disabled={isLoading}
+                        disabled={isPending}
                         {...field}
                       />
                     </FormControl>
@@ -129,7 +115,7 @@ export function PasswordChangeForm() {
                       <Input
                         placeholder="새 비밀번호를 다시 입력해주세요"
                         type="password"
-                        disabled={isLoading}
+                        disabled={isPending}
                         {...field}
                       />
                     </FormControl>
@@ -155,12 +141,12 @@ export function PasswordChangeForm() {
                 <Button
                   type="submit"
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  disabled={isLoading}
+                  disabled={isPending}
                 >
-                  {isLoading ? "변경 중..." : "비밀번호 변경"}
+                  {isPending ? "변경 중..." : "비밀번호 변경"}
                 </Button>
                 <Link href="/profile" className="flex-1">
-                  <Button type="button" variant="outline" className="w-full bg-transparent" disabled={isLoading}>
+                  <Button type="button" variant="outline" className="w-full bg-transparent" disabled={isPending}>
                     취소
                   </Button>
                 </Link>

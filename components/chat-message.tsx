@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/lib/cn'
 import type { ChatMessage } from '@/hooks/use-realtime-chat'
 
 interface ChatMessageItemProps {

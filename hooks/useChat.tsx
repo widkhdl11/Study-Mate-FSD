@@ -1,7 +1,7 @@
 import { createChat, getChatMessages, getChatParticipants, getMyChatRooms, sendMessage } from "@/actions/chatAction";
-import { queryKeys } from "@/lib/reactQuery/queryKeys";
-import { createClient } from "@/lib/supabase/client";
-import { ChatParticipant, ChatRoom } from "@/types/chatType";
+import { queryKeys } from "@/shared/api/reactQuery/queryKeys";
+import { createClient } from "@/shared/api/supabase/client";
+import { ChatParticipant, ChatRoom } from "@/entities/chat";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";

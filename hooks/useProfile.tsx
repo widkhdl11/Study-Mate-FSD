@@ -1,7 +1,7 @@
 'use client'
 
 import { updateMyProfile, updateProfileImage } from "@/actions/profileAction"
-import { queryKeys } from "@/lib/reactQuery/queryKeys"
+import { queryKeys } from "@/shared/api/reactQuery/queryKeys"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"

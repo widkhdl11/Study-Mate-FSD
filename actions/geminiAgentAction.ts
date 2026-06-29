@@ -1,8 +1,8 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { PostsRecommendedResponse } from "@/types/postType";
-import { StudiesRecommendedResponse } from "@/types/studiesType";
+import { PostsRecommendedResponse } from "@/entities/post/model/types";
+import { StudyRecommendationView } from "@/entities/study/model/types";
+import { createClient } from "@/shared/api/supabase/server";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -82,7 +82,7 @@ JSON 배열로만 응답하세요. 다른 텍스트 없이.
     }
 
     // const recommendations: RecommendedStudy[] = JSON.parse(content);
-    const recommendationsStudies: StudiesRecommendedResponse[] = JSON.parse(content);
+    const recommendationsStudies: StudyRecommendationView[] = JSON.parse(content);
     // console.log('recommendations', recommendations)
 
     // 4, 5번 — DB 재조회 + 합치기 부분도 OpenAI 버전과 완전히 동일
@@ -146,7 +146,6 @@ export async function getAIRecommendedPosts() {
     .eq("study.status", "recruiting")
     .not("study", "is", null)
     .limit(4);
-  console.log('posts', posts)
 
   if (!posts || posts.length === 0) {
     return { success: false, error: { message: "추천할 스터디가 없습니다" } };
@@ -190,7 +189,7 @@ JSON 배열로만 응답하세요. 다른 텍스트 없이.
         "id": 숫자,
         "url": "게시글 이미지 URL",
         "originalName": "게시글 이미지 원본 이름",
-        "siae": 숫자
+        "size": 숫자
       }
     ],
     "study": {

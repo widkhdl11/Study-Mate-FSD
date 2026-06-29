@@ -1,13 +1,13 @@
 'use client'
 
-import { ChatRoom } from '@/types/chatType'
-import { PostsResponse } from '@/types/postType'
-import { MyProfileCountResponse, ProfileResponse } from '@/types/profileType'
-import { StudiesResponse } from '@/types/studiesType'
+import { ChatRoom } from '@/entities/chat'
+import { PostsWithStudyView } from '@/entities/post/api/query/postsWithStudy/view'
+import { StudyResponse } from '@/entities/study/model/types'
+import { MyProfileCountResponse, ProfileResponse } from '@/entities/user/model/types'
+import { Tabs, TabsList, TabsTrigger } from '@/shared/shadcn/ui/tabs'
 import { BookOpen, FileText, MessageSquare, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Tabs, TabsList, TabsTrigger } from '../ui/tabs'
 import MyChatTab from './info/my-chat-tab'
 import MyInfoTab from './info/my-info-tab'
 import MyPostTab from './info/my-post-tab'
@@ -34,8 +34,8 @@ export default function TabSection({
     profilesCountData,
 }: {
     chatRooms: ChatRoom[]
-    myPosts: PostsResponse
-    myStudies: StudiesResponse
+    myPosts: PostsWithStudyView
+    myStudies: StudyResponse[] | []
     currentUser: ProfileResponse
     profilesCountData: MyProfileCountResponse
 }) {
@@ -65,7 +65,7 @@ export default function TabSection({
                 {/* <div className='grid grid-cols-3 gap-4 mb-6'>
                     <div className='text-center p-3 bg-muted/50 rounded-lg'>
                         <p className='text-2xl font-bold text-foreground'>
-                            {profilesCountData.my_participated_studies_count}
+                            {profilesCountData.myParticipatedStudiesCount}
                         </p>
                         <p className='text-xs text-muted-foreground'>
                             내 스터디
@@ -73,15 +73,15 @@ export default function TabSection({
                     </div>
                     <div className='text-center p-3 bg-muted/50 rounded-lg'>
                         <p className='text-2xl font-bold text-foreground'>
-                            {profilesCountData.my_posts_count}
+                            {profilesCountData.myPostsCount}
                         </p>
                         <p className='text-xs text-muted-foreground'>
-                            모집글 ({profilesCountData.my_posts_count})
+                            모집글 ({profilesCountData.myPostsCount})
                         </p>
                     </div>
                     <div className='text-center p-3 bg-muted/50 rounded-lg'>
                         <p className='text-2xl font-bold text-foreground'>
-                            {profilesCountData.my_participated_chat_rooms_count}
+                            {profilesCountData.myParticipatedChatRoomsCount}
                         </p>
                         <p className='text-xs text-muted-foreground'>
                             포인트
@@ -99,15 +99,15 @@ export default function TabSection({
                         </TabsTrigger>
                         <TabsTrigger value='chats' className='gap-2'>
                             <MessageSquare className='w-4 h-4 hidden sm:inline' />
-                            채팅 ({profilesCountData.my_participated_chat_rooms_count})
+                            채팅 ({profilesCountData.myParticipatedChatRoomsCount})
                         </TabsTrigger>
                         <TabsTrigger value='posts' className='gap-2'>
                             <FileText className='w-4 h-4 hidden sm:inline' />
-                            작성한 글 ({profilesCountData.my_posts_count})
+                            작성한 글 ({profilesCountData.myPostsCount})
                         </TabsTrigger>
                         <TabsTrigger value='studies' className='gap-2'>
                             <BookOpen className='w-4 h-4 hidden sm:inline' />내
-                            스터디 ({profilesCountData.my_participated_studies_count})
+                            스터디 ({profilesCountData.myParticipatedStudiesCount})
                         </TabsTrigger>
                     </TabsList>
 
@@ -121,7 +121,6 @@ export default function TabSection({
                     <MyStudiesTab
                         myStudies={myStudies}
                         getStatusColor={getStatusColor}
-                        getCategoryColor={getCategoryColor}
                     />
                 </Tabs>
             </div>

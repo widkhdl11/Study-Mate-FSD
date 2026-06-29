@@ -1,7 +1,9 @@
 import { getMyProfileSSR } from "@/actions/profileAction";
-import { getStudyDetailSSR } from "@/actions/studyAction";
 import { StudyDetailSkeleton } from "@/components/skeleton";
-import StudyDetailUI from "@/components/studies/detail/StudyDetailUI";
+import { queryStudyDetail } from "@/entities/study";
+import { createClient } from "@/shared/api/supabase/server";
+import HeaderSection from "@/widgets/study/detail/header/ui/HeaderSection";
+import TabSection from "@/widgets/study/detail/tabs/ui/TabSection";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -24,7 +26,12 @@ async function StudyDetailLoader({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const study = await getStudyDetailSSR(Number(id));
+  const supabase = await createClient();
+  const result = await queryStudyDetail(supabase, Number(id)) 
+  if (!result.ok) notFound()
+
+  const study = result.value
+  
   const user = await getMyProfileSSR();
 
   if (!user) {
@@ -32,6 +39,11 @@ async function StudyDetailLoader({
   }
 
   return (
-    <StudyDetailUI study={study} user={user} />
+    <div className="min-h-screen flex flex-col bg-background">
+      <main className="flex-1">
+        <HeaderSection study={study} currentUserId={user.id} />
+        <TabSection study={study} user={user} />
+     </main>
+    </div>
   )
 }

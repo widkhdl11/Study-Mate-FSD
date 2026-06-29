@@ -1,18 +1,15 @@
 'use server'
 
-import { parseFormData } from '@/lib/parseFormData'
-import { buildStudyInsert } from '@/lib/studies/buildStudyInsert'
-import { createClient } from '@/lib/supabase/server'
 import {
-    StudyCreateFormValues,
+    CreateStudyCommand,
     studyCreateSchema,
-    StudyFormValues,
-    studySchema,
-} from '@/lib/zod/schemas/studySchema'
-import type { ActionResponse } from '@/types/actionType'
-import { StudiesResponse, StudyResponse } from '@/types/studiesType'
-import { CustomUserAuth } from '@/utils/auth'
-import { validateWithZod } from '@/utils/validation'
+} from '@/entities/study'
+import { parseFormData } from '@/shared/lib/parseFormData'
+import { buildStudyInsert } from '@/entities/study/lib/buildStudyInsert'
+import { createClient } from '@/shared/api/supabase/server'
+import type { ActionResponse } from '@/shared/kernel/actionType'
+import { CustomUserAuth } from '@/shared/lib/auth'
+import { validateWithZod } from '@/shared/lib/validation'
 import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
 
@@ -27,7 +24,7 @@ export async function createStudy(formData: FormData): Promise<ActionResponse> {
         return parseResult
     }
 
-    const validatedData = parseResult.data as StudyCreateFormValues
+    const validatedData = parseResult.data as CreateStudyCommand
     const insertData = buildStudyInsert(validatedData, user.id)
     const { error } = await supabase.from('studies').insert(insertData).select().single()
 
@@ -286,53 +283,3 @@ export async function getMyStudiesSSR(): Promise<StudiesResponse> {
     return data as unknown as StudiesResponse
 }
 
-// 스터디 상세 조회
-export async function getStudyDetailSSR(id: number): Promise<StudyResponse> {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-        .from('studies')
-        .select(
-            `
-      *,
-      creator:profiles!studies_creator_id_fkey (
-        id,
-        username,
-        email,
-        avatar_url
-      ),
-      participants!participants_study_id_fkey (
-        id,
-        user_id,
-        username,
-        user_email,
-        study_id,
-        role,
-        status,
-        avatar_url
-      ),
-      posts!posts_study_id_fkey (
-        id,
-        title,
-        study_id,
-        content,
-        image_url,
-        likes_count,
-        views_count,
-        created_at,
-        updated_at
-      )
-      `
-        )
-        .eq('id', id)
-        .single()
-
-    // participants를 id 오름차순으로 정렬
-    if (data && data.participants && Array.isArray(data.participants)) {
-        data.participants.sort((a: any, b: any) => a.id - b.id)
-    }
-
-    if (error) {
-        notFound()
-    }
-    return data as unknown as StudyResponse
-}

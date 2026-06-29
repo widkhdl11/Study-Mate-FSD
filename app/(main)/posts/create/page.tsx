@@ -1,6 +1,6 @@
 import { getMyCreatedStudiesSSR } from "@/actions/studyAction";
-import CreateForm from "@/components/posts/create/CreateForm";
-import { Card } from "@/components/ui/card";
+import PostCreateForm from "@/features/post/create/ui/PostCreateForm";
+import { Card } from "@/shared/shadcn/ui/card";
 
 export default function PostCreatePage() {
   const studiesPromise = getMyCreatedStudiesSSR();
@@ -28,7 +28,7 @@ export default function PostCreatePage() {
                         모집글 작성
                     </h2>
 
-                    <CreateForm studiesPromise={studiesPromise} />
+                    <PostCreateForm studiesPromise={studiesPromise} />
                 </Card>
             </div>
         </div>

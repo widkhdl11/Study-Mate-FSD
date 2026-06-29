@@ -1,10 +1,10 @@
 'use server';
 
-import {createClient} from "@/lib/supabase/server";
+import { ChatMessage, ChatParticipant, ChatRoom } from "@/entities/chat";
+import { createClient } from "@/shared/api/supabase/server";
+import { ActionResponse } from "@/shared/kernel/actionType";
+import { CustomUserAuth } from "@/shared/lib/auth";
 import { notFound } from "next/navigation";
-import { CustomUserAuth } from "@/utils/auth";
-import { ActionResponse } from "@/types/actionType";
-import { ChatMessage, ChatParticipant, ChatRoom } from "@/types/chatType";
 
 
 // 채팅방 생성

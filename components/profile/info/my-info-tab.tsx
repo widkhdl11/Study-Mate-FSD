@@ -1,9 +1,9 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { TabsContent } from "@/components/ui/tabs";
-import { ProfileResponse } from "@/types/profileType";
-import { formatDateToInput, formatGender } from "@/utils/format";
+import { ProfileResponse } from "@/entities/user/model/types";
+import { formatDateToInput, formatGender } from "@/shared/lib/format";
+import { Card } from "@/shared/shadcn/ui/card";
+import { TabsContent } from "@/shared/shadcn/ui/tabs";
 
 export default function MyInfoTab({ currentUser }: { currentUser: ProfileResponse }) {
   return (
@@ -28,7 +28,7 @@ export default function MyInfoTab({ currentUser }: { currentUser: ProfileRespons
               <div className="p-4 bg-muted/50 rounded-lg">
                 <p className="text-sm text-muted-foreground mb-1">생년월일</p>
                 <p className="text-lg font-semibold text-foreground">
-                  {currentUser?.birth_date}
+                  {currentUser?.birthDate}
                 </p>
               </div>
               <div className="p-4 bg-muted/50 rounded-lg">
@@ -47,7 +47,7 @@ export default function MyInfoTab({ currentUser }: { currentUser: ProfileRespons
             <div className="p-4 bg-muted/50 rounded-lg">
               <p className="text-sm text-muted-foreground mb-1">가입일</p>
               <p className="text-lg font-semibold text-foreground">
-                {formatDateToInput(new Date(currentUser?.created_at || ""))}
+                {formatDateToInput(new Date(currentUser?.createdAt || ""))}
               </p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg">

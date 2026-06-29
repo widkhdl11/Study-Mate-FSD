@@ -1,15 +1,14 @@
 'use server'
 
+import { MyProfileCountResponse, ProfileResponse } from '@/entities/user'
 import profileEditSchema, {
-    ProfileEditFormValues,
-} from '@/lib/zod/schemas/profileSchema'
-import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
-import { MyProfileCountResponse, ProfileResponse } from '@/types/profileType'
-import { CustomUserAuth } from '@/utils/auth'
-import { ActionResponse } from '@/types/actionType'
-import { validateWithZod } from '@/utils/validation'
-import { User, UserResponse } from '@supabase/supabase-js'
+    UpdateProfileCommand,
+} from '@/entities/user/model/profileFormSchema'
+import { createClient } from '@/shared/api/supabase/server'
+import { ActionResponse } from '@/shared/kernel/actionType'
+import { CustomUserAuth } from '@/shared/lib/auth'
+import { validateWithZod } from '@/shared/lib/validation'
+import { User } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { cache } from 'react'
 
@@ -80,7 +79,7 @@ export async function updateMyProfile(
         return parseResult
     }
     const { username, bio, birthDate, gender } =
-        parseResult.data as ProfileEditFormValues
+        parseResult.data as UpdateProfileCommand
 
     // birthDate를 date 타입(YYYY-MM-DD에서 Date)으로 변환
     const birthDateObj = new Date(birthDate)
@@ -132,9 +131,9 @@ export async function getMyProfilesCountSSR(): Promise<MyProfileCountResponse> {
     const { data: user, error: userError } = await supabase.auth.getUser()
     if (userError) {
         return {
-            my_posts_count: 0,
-            my_participated_studies_count: 0,
-            my_participated_chat_rooms_count: 0
+            myPostsCount: 0,
+            myParticipatedStudiesCount: 0,
+            myParticipatedChatRoomsCount: 0
         }
     }
     const id = user.user.id
@@ -149,14 +148,14 @@ export async function getMyProfilesCountSSR(): Promise<MyProfileCountResponse> {
         .single()
     if (error) {
         return {
-            my_posts_count: 0,
-            my_participated_studies_count: 0,
-            my_participated_chat_rooms_count: 0
+            myPostsCount: 0,
+            myParticipatedStudiesCount: 0,
+            myParticipatedChatRoomsCount: 0
         }
     }
     return {
-        my_posts_count: data.posts?.[0]?.count ?? 0,
-        my_participated_studies_count: data.participants?.[0]?.count ?? 0,
-        my_participated_chat_rooms_count: data.chat_participants?.[0]?.count ?? 0,
+        myPostsCount: data.posts?.[0]?.count ?? 0,
+        myParticipatedStudiesCount: data.participants?.[0]?.count ?? 0,
+        myParticipatedChatRoomsCount: data.chat_participants?.[0]?.count ?? 0,
     }
 }

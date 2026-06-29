@@ -1,9 +1,11 @@
-import { getStudyDetailSSR } from "@/actions/studyAction";
 import { FormSkeleton } from "@/components/skeleton";
-import StudyEditForm from "@/components/studies/detail/edit/StudyEditForm";
-import { getRegionPath } from "@/lib/constants/region";
-import { getCategoryPath } from "@/lib/constants/study-category";
-import { StudyWithAllCategoriesAndRegions } from "@/types/studiesType";
+import { queryStudyEditView } from "@/entities/study";
+import { StudyEditFormValues } from "@/features/study/edit/model/types";
+import StudyEditForm from "@/features/study/edit/ui/StudyEditForm";
+import { getRegionPathByValue } from "@/shared/config/region";
+import { getCategoryPathByValue } from "@/shared/config/study-category";
+import { createClient } from "@/shared/api/supabase/server";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function StudyEditPage({
@@ -19,38 +21,47 @@ export default async function StudyEditPage({
 }
 async function StudyEditLoader({ params }: { params: Promise<{ id: string }>}) {
   const { id } = await params;
-  const study = await getStudyDetailSSR(Number(id));
+  const supabase = await createClient();
+  const result = await queryStudyEditView(supabase, Number(id));
+  if (!result.ok) notFound();
 
-  const categoryPath = getCategoryPath(Number(study.study_category));
+  const study = result.value;
+
+  const categoryPath = getCategoryPathByValue(study.studyCategory);
   const [mainCategory, subCategory, detailCategory] = categoryPath.values;
-
 
   let detailRegion = "";
   let mainRegion = "";
-  
-  if (Number(study.region) === 0) {
+
+  if (study.region === "ONLINE") {
     mainRegion = "ONLINE";
   } else {
-    const regionPath = getRegionPath(Number(study.region));
+    const regionPath = getRegionPathByValue(study.region);
     [mainRegion, detailRegion] = regionPath.values;
   }
 
-  const initialData: StudyWithAllCategoriesAndRegions = {
-      ...study,  
-      mainCategory,
-      subCategory,
-      detailCategory,
-      studyCategory: study.study_category,
-      mainRegion,
-      detailRegion: detailRegion || "",
-      region: study.region,
-      maxParticipants: study.max_participants,
+  const initialData: StudyEditFormValues = {
+    id: study.id,
+    creatorId: study.creatorId,
+    title: study.title,
+    description: study.description,
+    studyCategory: study.studyCategory,
+    region: study.region,
+    currentParticipants: study.currentParticipants,
+    maxParticipants: study.maxParticipants,
+    status: study.status,
+    createdAt: study.createdAt,
+    updatedAt: study.updatedAt,
+    mainCategory,
+    subCategory,
+    detailCategory,
+    mainRegion,
+    detailRegion: detailRegion || "",
   };
 
   return (
      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 py-8">
       <div className="w-full max-w-2xl">
-        {/* 로고 및 제목 */}
         <div className="mb-8 text-center">
           <div className="mb-4 flex items-center justify-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">

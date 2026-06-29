@@ -1,4 +1,4 @@
-import StudyCreateForm from "@/components/studies/create/StudyCreateForm";
+import StudyCreateForm from "@/features/study/create/ui/StudyCreateForm";
 
 export default function StudyCreatePage() {
     return (
@@ -17,7 +17,7 @@ export default function StudyCreatePage() {
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
             함께 성장하는 스터디 문화
           </p>
-        </div>
+        </div> 
         <StudyCreateForm />
       </div>
     </div>

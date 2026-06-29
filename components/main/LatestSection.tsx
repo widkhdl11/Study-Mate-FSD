@@ -1,7 +1,7 @@
 import { getAllPostsSSR } from "@/actions/postAction"
-import { PostDetailResponse } from "@/types/postType"
+import { PostDetailResponse } from "@/entities/post/model/types"
+import { Button } from "@/shared/shadcn/ui/button"
 import Link from "next/link"
-import { Button } from "../ui/button"
 import PostCard from "./PostCard"
 
 

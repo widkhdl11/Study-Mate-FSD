@@ -1,4 +1,4 @@
-import SignupUI from "./ui";
+import SignupCard from "@/widgets/auth/ui/SignupCard";
 
 export default function SignupPage() {
   return (
@@ -18,7 +18,7 @@ export default function SignupPage() {
             함께 성장하는 스터디 문화
           </p>
         </div>
-        <SignupUI />
+        <SignupCard />
       </div>
     </div>
   );

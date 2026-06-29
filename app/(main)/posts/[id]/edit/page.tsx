@@ -1,7 +1,7 @@
 import { getPostDetailSSR } from "@/actions/postAction";
 import { getMyCreatedStudiesSSR } from "@/actions/studyAction";
-import EditForm from "@/components/posts/detail/edit/EditForm";
-import { Card } from "@/components/ui/card";
+import PostUpdateForm from "@/features/post/edit/ui/PostUpdateForm";
+import { Card } from "@/shared/shadcn/ui/card";
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -30,7 +30,7 @@ export default async function PostEditPage({ params }: PageProps) {
         <Card className="p-6 md:p-8">
           <h2 className="mb-6 text-2xl font-semibold text-slate-900 dark:text-white">모집글 수정</h2>
 
-          <EditForm postData={postData} studiesPromise={studiesPromise} />
+          <PostUpdateForm postData={postData} studiesPromise={studiesPromise} />
         </Card>
       </div>
     </div>

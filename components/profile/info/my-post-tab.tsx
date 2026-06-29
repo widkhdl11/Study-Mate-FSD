@@ -1,22 +1,22 @@
 'use client'
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { PostsWithStudyView } from '@/entities/post'
+import { useDeletePost } from '@/features/post/delete/model/useDeletePost'
+import { getImageUrl } from '@/shared/api/supabase/storage'
+import { getRegionPath } from '@/shared/config/region'
+import { getCategoryPath } from '@/shared/config/study-category'
+import { studyStatusConversion } from '@/shared/lib/conversion/study'
+import { formatTimeAgo } from '@/shared/lib/date'
+import { Badge } from '@/shared/shadcn/ui/badge'
+import { Button } from '@/shared/shadcn/ui/button'
+import { Card } from '@/shared/shadcn/ui/card'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { TabsContent } from '@/components/ui/tabs'
-import { useDeletePost } from '@/hooks/usePost'
-import { getRegionPath } from '@/lib/constants/region'
-import { getCategoryPath } from '@/lib/constants/study-category'
-import { getImageUrl } from '@/lib/supabase/storage'
-import { PostsResponse } from '@/types/postType'
-import { studyStatusConversion } from '@/utils/conversion/study'
-import { formatTimeAgo } from '@/utils/date'
+} from '@/shared/shadcn/ui/dropdown-menu'
+import { TabsContent } from '@/shared/shadcn/ui/tabs'
 import { Edit, Eye, MapPin, MoreVertical, ThumbsUp, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ export default function MyPostTab({
     getStatusColor,
     getCategoryColor,
 }: {
-    myPosts: PostsResponse
+    myPosts: PostsWithStudyView
     getStatusColor: (status: string) => string
     getCategoryColor: (category: string) => string
 }) {
@@ -54,10 +54,10 @@ export default function MyPostTab({
         <TabsContent value='posts' className='space-y-4'>
             {myPosts && myPosts?.length > 0 ? (
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    {myPosts.map((post, index) => (
-                        <div key={post.id} className='relative'>
+                    {myPosts.map((item, index) => (
+                        <div key={item.id} className='relative'>
                             <Card className='group overflow-hidden hover:shadow-md transition-all h-full flex flex-col p-0 gap-0'>
-                                <Link href={`/posts/${post.id}`}>
+                                <Link href={`/posts/${item.id}`}>
                                     <div className='relative w-full h-40 bg-muted overflow-hidden cursor-pointer'>
                                         <Image
                                             fill
@@ -65,18 +65,18 @@ export default function MyPostTab({
                                             fetchPriority={index === 0 ? "high" : "auto"}
                                             sizes="(max-width: 640px) 100vw, 424px"
                                             src={
-                                                post.image_url?.[0]?.url ? getImageUrl(post.image_url?.[0]?.url) : '/default-post-thumbnail.jpg'
+                                                item.imageUrl?.[0]?.url ? getImageUrl(item.imageUrl?.[0]?.url) : '/default-post-thumbnail.jpg'
                                             }
-                                            alt={post.title}
+                                            alt={item.title}
                                             className='w-full h-full object-cover group-hover:scale-105 transition-transform'
                                         />
                                         <div className='absolute top-3 right-3'>
                                             <Badge
                                                 className={getStatusColor(
-                                                    post.study.status
+                                                    item.study.status
                                                 )}>
                                                 {studyStatusConversion(
-                                                    post.study.status
+                                                    item.study.status
                                                 )}
                                             </Badge>
                                         </div>
@@ -100,14 +100,14 @@ export default function MyPostTab({
                                                 className='w-40'>
                                                 <DropdownMenuItem
                                                     onClick={(e) =>
-                                                        handleUpdate(post.id, e)
+                                                        handleUpdate(item.id, e)
                                                     }>
                                                     <Edit className='mr-2 h-4 w-4' />
                                                     수정
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={(e) =>
-                                                        handleDelete(post.id, e)
+                                                        handleDelete(item.id, e)
                                                     }
                                                     className='text-red-600 focus:text-red-600'>
                                                     <Trash2 className='mr-2 h-4 w-4' />
@@ -117,13 +117,13 @@ export default function MyPostTab({
                                         </DropdownMenu>
                                     </div>
 
-                                    <Link href={`/posts/${post.id}`}>
+                                    <Link href={`/posts/${item.id}`}>
                                         <div className='cursor-pointer'>
                                             <div className='flex items-center gap-2 mb-2'>
                                                 {getCategoryPath(
                                                     Number(
-                                                        post.study
-                                                            .study_category
+                                                        item.study
+                                                            .studyCategory
                                                     )
                                                 ).labels.map((category) => (
                                                     <Badge
@@ -140,16 +140,16 @@ export default function MyPostTab({
                                                     <MapPin className='w-3 h-3' />{' '}
                                                     {getRegionPath(
                                                         Number(
-                                                            post.study.region
+                                                            item.study.region
                                                         )
                                                     ).labels.join(' ')}
                                                 </span>
                                             </div>
                                             <h3 className='font-bold text-foreground line-clamp-1 hover:text-primary transition-colors'>
-                                                {post.title}
+                                                {item.title}
                                             </h3>
                                             <p className='text-sm text-muted-foreground line-clamp-2 mt-1'>
-                                                {post.content}
+                                                {item.content}
                                             </p>
                                         </div>
                                     </Link>
@@ -157,17 +157,17 @@ export default function MyPostTab({
                                     <div className='flex items-center justify-between text-xs text-muted-foreground mt-auto pt-2 border-t border-border'>
                                         <span>
                                             {formatTimeAgo(new Date(
-                                                post.created_at
+                                                item.createdAt
                                             ).toISOString())}
                                         </span>
                                         <div className='flex items-center gap-2'>
                                             <span className='flex items-center gap-1'>
                                                 <ThumbsUp className='w-3 h-3' />{' '}
-                                                {post.likes_count}
+                                                {item.likesCount}
                                             </span>
                                             <span className='flex items-center gap-1'>
                                                 <Eye className='w-3 h-3' />{' '}
-                                                {post.views_count}
+                                                {item.viewsCount}
                                             </span>
                                         </div>
                                     </div>

@@ -1,9 +1,9 @@
 'use server';
 
-import { createClient } from "@/lib/supabase/server";
-import { ActionResponse } from "@/types/actionType";
-import { NotificationInsert, NotificationResponse } from "@/types/notificationType";
-import { CustomUserAuth } from "@/utils/auth";
+import { createClient } from "@/shared/api/supabase/server";
+import { ActionResponse } from "@/shared/kernel/actionType";
+import { NotificationInsert, NotificationResponse } from "@/entities/notification";
+import { CustomUserAuth } from "@/shared/lib/auth";
 import { notFound } from "next/navigation";
 
 

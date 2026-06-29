@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv *)",
+      "Bash(mv components/ui shared/ui)"
+    ]
+  }
+}

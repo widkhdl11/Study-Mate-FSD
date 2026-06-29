@@ -1,5 +1,5 @@
-import LoginUI from "./ui";
+import LoginCard from "@/widgets/auth/ui/LoginCard";
 
 export default function LoginPage() {
-  return <LoginUI />;
+  return <LoginCard />;
 }

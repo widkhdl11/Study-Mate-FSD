@@ -1,6 +1,6 @@
-import Link from "next/link"
-import { Button } from "../ui/button"
+import { Button } from "@/shared/shadcn/ui/button"
 import { Users } from "lucide-react"
+import Link from "next/link"
 
 export default function HeaderSection() {
     return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { getAIRecommendedPosts, getAIRecommendedStudies } from "@/actions/geminiAgentAction";
-import { queryKeys } from "@/lib/reactQuery/queryKeys";
+import { queryKeys } from "@/shared/api/reactQuery/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 
 export function useAIRecommendedStudies() {
