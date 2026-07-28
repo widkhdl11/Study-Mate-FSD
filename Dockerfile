@@ -5,7 +5,9 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci
+# npm ci 대신 install: lockfile이 Windows(로컬)에서 생성돼 Linux 빌드의 플랫폼 optional dep(@emnapi 등)과
+# 엄격히 안 맞아 npm ci가 실패함. install은 플랫폼 차이를 흡수해 안정적으로 빌드됨.
+RUN npm install --no-audit --no-fund
 
 # 빌드
 FROM base AS builder
