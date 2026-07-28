@@ -1,9 +1,17 @@
-import { getMyCreatedStudiesSSR } from "@/actions/studyAction";
-import PostCreateForm from "@/features/post/create/ui/PostCreateForm";
+import { queryMyStudies } from "@/entities/study";
+import { PostCreateForm } from "@/features/post/create";
+import { createClient } from "@/shared/api/supabase/server";
+import { CustomUserAuth } from "@/shared/lib/auth";
 import { Card } from "@/shared/shadcn/ui/card";
+import { notFound } from "next/navigation";
 
-export default function PostCreatePage() {
-  const studiesPromise = getMyCreatedStudiesSSR();
+export default async function PostCreatePage() {
+  const supabase = await createClient();
+  const { user } = await CustomUserAuth(supabase);
+  const studiesPromise = queryMyStudies(supabase, user.id).then((res) => {
+    if (!res.ok) notFound();
+    return res.value;
+  });
   return (
      <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 py-8'>
             <div className='w-full max-w-2xl'>

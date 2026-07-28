@@ -1,18 +1,34 @@
-'use server';
-
-import { createClient } from "@/shared/api/supabase/server";
+import { toPostView } from "@/entities/post/model/types";
+import { toUserSummaryView } from "@/entities/user/model/types";
 import { err, ok, Result } from "@/shared/kernel/Result";
-import { PostDetailQueryRow } from "./row";
-import { toPostDetailView } from "./toView";
-import { PostDetailView } from "./view";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { PostDetailQueryRow, PostDetailView } from "./types";
 
 
 export type QueryPostDetailError =
   | { readonly kind: "NotFound" }
   | { readonly kind: "Infra"; readonly message: string };
 
-export async function queryPostDetail(id: number): Promise<Result<PostDetailView, QueryPostDetailError>> {
-  const supabase = await createClient();
+function toPostDetailView(row: PostDetailQueryRow): PostDetailView {
+  return {
+    ...toPostView(row),
+    // study는 상세 전용 subset(creator_id/updated_at 미선택)이라 인라인 유지
+    study: {
+      id: row.study.id,
+      title: row.study.title,
+      description: row.study.description,
+      studyCategory: row.study.study_category,
+      region: row.study.region,
+      maxParticipants: row.study.max_participants,
+      currentParticipants: row.study.current_participants,
+      status: row.study.status,
+      createdAt: row.study.created_at,
+    },
+    author: toUserSummaryView(row.author),
+  };
+}
+
+export async function queryPostDetail(supabase: SupabaseClient, id: number): Promise<Result<PostDetailView, QueryPostDetailError>> {
   const { data, error } = await supabase
     .from("posts")
     .select(`

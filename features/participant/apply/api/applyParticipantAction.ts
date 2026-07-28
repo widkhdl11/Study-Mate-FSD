@@ -1,90 +1,12 @@
 'use server'
 
-// import { createClient } from "@/shared/api/supabase/server"
-// import { CustomUserAuth } from "@/shared/lib/auth"
-
-// export async function applyParticipantAction(studyId: number) {
-//     const supabase = await createClient()
-//     const { user } = await CustomUserAuth(supabase)
-
-//     const userIdVO = UserId.of(user.id)
-//     if (!userIdVO.ok) {
-//         return { success: false, error: { message: '유효하지 않은 사용자입니다.' } }
-//     }
-
-//     const studyIdVO = StudyId.of(studyId)
-//     if (!studyIdVO.ok) {
-//         return { success: false, error: { message: '유효하지 않은 스터디입니다.' } }
-//     }
-
-//     const loadStudyVO = await findStudyById(studyIdVO.value)
-//     if (!loadStudyVO.ok) {
-//         return { success: false, error: { message: '스터디를 찾을 수 없습니다.' } }
-//     }
-
-//     if (!Study.isAcceptable(loadStudyVO.value)) {
-//         return { success: false, error: { message: '스터디는 모집중이 아니거나 정원이 가득 찼습니다.' } }
-//     }
-
-//     if (loadStudyVO.value.creatorId === userIdVO.value) {
-//         return { success: false, error: { message: '본인의 스터디에는 신청할 수 없습니다' } }
-//     }
-
-//     const existingResult = await findParticipantByStudyAndUser(
-//         supabase,
-//         studyIdVO.value,
-//         userIdVO.value
-//     )
-//     if (!existingResult.ok) {
-//         return { success: false, error: { message: '참여 상태를 확인할 수 없습니다.' } }
-//     }
-
-//     const existing = existingResult.value
-//     if (existing) {
-//         if (ParticipantStatus.isPending(existing.status)) {
-//             return { success: false, error: { message: '이미 신청했습니다' } }
-//         }
-//         if (ParticipantStatus.isAccepted(existing.status)) {
-//             return { success: false, error: { message: '이미 참여중입니다' } }
-//         }
-
-//         const applyVO = Participant.apply(existing)
-//         if (!applyVO.ok) {
-//             return { success: false, error: { message: '재신청할 수 없습니다.' } }
-//         }
-
-//         const updateResult = await updateParticipant(
-//             supabase,
-//             applyVO.value,
-//         )
-//         if (!updateResult.ok) {
-//             return { success: false, error: { message: '재신청에 실패했습니다.' } }
-//         }
-
-//         return { success: true }
-//     }
-
-//     const createParticipantVO = Participant.createNew({
-//         studyId: studyIdVO.value,
-//         userId: userIdVO.value,
-//         role: ParticipantRole.common(),
-//     })
-
-//     const insertResult = await insertParticipant(supabase, createParticipantVO)
-//     if (!insertResult.ok) {
-//         return { success: false, error: { message: '참가자를 생성할 수 없습니다.' } }
-//     }
-
-    
-
-//     return { success: true }
-// }
-
-import { findParticipantByStudyAndUser, upsertParticipant, ApplyError, ParticipantPolicy } from "@/entities/participant"
+import { createNotification, Notification } from "@/entities/notification"
+import { ApplyError, findParticipantByStudyAndUser, ParticipantPolicy, upsertParticipant } from "@/entities/participant"
 import { findStudyById, StudyId } from "@/entities/study"
 import { UserId } from "@/entities/user"
 import { createClient } from "@/shared/api/supabase/server"
-import { CustomUserAuth } from "@/shared/lib/auth"
+import { CustomUserAuth, getUserProfile } from "@/shared/lib/auth"
+import { logError } from "@/shared/lib/logError"
 
 // 신청 규칙(모집 가능 여부 / 본인 스터디 / 중복 신청 / 재신청 가능)은
 // ParticipantPolicy.decideApply 에 모여 있다.
@@ -102,6 +24,12 @@ export async function applyParticipantAction(studyId: number) {
     if (!userIdVO.ok) {
         return { success: false, error: { message: '유효하지 않은 사용자입니다.' } }
     }
+
+    const hostProfile = await getUserProfile(supabase, user.id)
+    if (!hostProfile) {
+        return { success: false, error: { message: '호스트 정보를 찾을 수 없습니다.' } }
+    }
+    const hostName = hostProfile.username ?? ''
 
     const studyIdVO = StudyId.of(studyId)
     if (!studyIdVO.ok) {
@@ -137,6 +65,24 @@ export async function applyParticipantAction(studyId: number) {
     if (!upsertParticipantVO.ok) {
         return { success: false, error: { message: '재신청에 실패했습니다.' } }
     }
+
+    const createNotificationVO = Notification.createNew({
+        userId: loadStudy.value.creatorId,
+        type: "request_accepted",
+        senderId: userIdVO.value,
+        reference: { kind: "study", id: studyId },
+        ctx: { senderName: hostName, targetTitle: loadStudy.value.title },
+    })
+
+    
+    if (!createNotificationVO.ok) {
+        logError('applyParticipantAction', createNotificationVO.error)
+        return { success: false, error: { message: '알람을 생성할 수 없습니다.' } }
+    }
+
+    await createNotification(supabase, createNotificationVO.value)
+
+
     return { success: true }
 }
 

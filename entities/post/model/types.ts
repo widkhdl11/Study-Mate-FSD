@@ -1,7 +1,13 @@
 import { ImageUrl } from "@/shared/lib/file"
 import type { PostRow } from "./Post"
 
-export type PostsResponse = {
+
+/**
+ * Post 응답 타입
+ * 
+ */
+
+export type PostWithRelationResponse = {
     id: number
     title: string
     content: string
@@ -38,7 +44,7 @@ export type PostsResponse = {
         username: string
         avatar_url: string | null
     }
-}[]
+}
 
 export type PostResponse = {
     id: number
@@ -113,7 +119,7 @@ export type PostDetailResponse = {
     }
 }
 
-export type PostsRecommendedResponse = {
+export type PostRecommendedResponse = {
     id: number
     title: string
     content: string

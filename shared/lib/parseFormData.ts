@@ -6,7 +6,6 @@ export function parseFormData(
 {
  // 폼 객체 key 값을 순회.
 const result: Record<string, FormDataEntryValue|FormDataEntryValue[]> = {}
-const entries = formData.entries()
 
 // for (const pair of entries) {
 //   const key = pair[0]

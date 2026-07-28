@@ -1,6 +1,6 @@
 'use server'
 
-import { findParticipantById, updateParticipant, ParticipantId, ParticipantPolicy, RejectError } from "@/entities/participant"
+import { findParticipantById, ParticipantId, ParticipantPolicy, RejectError, updateParticipant } from "@/entities/participant"
 import { findStudyById } from "@/entities/study"
 import { UserId } from "@/entities/user"
 import { createClient } from "@/shared/api/supabase/server"

@@ -1,9 +1,9 @@
 "use client"
 
-import { useChatScroll } from "@/hooks/use-chat-scroll"
+import { useChatScroll } from "@/shared/lib/useChatScroll"
 import { ChatMessage } from "@/hooks/use-realtime-chat"
 import { useGetChatMessages, useSendMessage } from "@/hooks/useChat"
-import { useUser } from "@/hooks/useUser"
+import { useCurrentUser } from "@/entities/user"
 import { getProfileImageUrl } from "@/shared/api/supabase/storage"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar"
 import { Button } from "@/shared/shadcn/ui/button"
@@ -17,7 +17,7 @@ import React, { useEffect, useRef, useState } from "react"
 export default function ChatRoomUI({ chatParticipants, chatRoom }: 
   { chatParticipants: ChatParticipant[], chatRoom: ChatRoom }) {
 
-    const { data: user } = useUser();
+    const { data: user } = useCurrentUser();
     const inputRef = useRef<HTMLInputElement>(null);
     const { data: messages, isLoading } = useGetChatMessages(Number(chatRoom.id));
     const sendMessageMutation = useSendMessage(Number(chatRoom.id));    

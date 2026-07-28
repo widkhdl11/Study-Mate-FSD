@@ -20,7 +20,7 @@ export const useCreateStudy=(
                 }
             }
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             if (isRedirect(error)) {
                 queryClient.invalidateQueries({ queryKey: queryKeys.myStudies })
                 queryClient.invalidateQueries({

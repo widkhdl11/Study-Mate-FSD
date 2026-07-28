@@ -1,4 +1,4 @@
-import SignupCard from "@/widgets/auth/ui/SignupCard";
+import { SignupCard } from "@/widgets/auth";
 
 export default function SignupPage() {
   return (

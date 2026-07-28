@@ -1,7 +1,8 @@
-import { getAllPostsSSR } from "@/actions/postAction";
-import HeaderSection from "@/components/posts/HeaderSection";
-import MainSection from "@/components/posts/MainSection";
 import { PostsListSkeleton } from "@/components/skeleton";
+import { queryAllPosts } from "@/entities/post";
+import { createClient } from "@/shared/api/supabase/server";
+import { HeaderSection, MainSection } from "@/widgets/post";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function PostsPage(
@@ -24,7 +25,10 @@ async function MainSectionLoader({search}:
   {
     search: string
   }) {
-  const allPosts = await getAllPostsSSR()
-
-  return <MainSection allPosts={allPosts} search={search as string} />
+  const supabase = await createClient()
+  const allPosts = await queryAllPosts(supabase)
+  if (!allPosts.ok) {
+    notFound()
+  }
+  return <MainSection allPosts={allPosts.value} search={search as string} />
 }

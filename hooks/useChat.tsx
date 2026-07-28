@@ -1,12 +1,12 @@
 import { createChat, getChatMessages, getChatParticipants, getMyChatRooms, sendMessage } from "@/actions/chatAction";
+import { ChatParticipant, ChatRoom } from "@/entities/chat";
+import { useCurrentUser } from "@/entities/user";
 import { queryKeys } from "@/shared/api/reactQuery/queryKeys";
 import { createClient } from "@/shared/api/supabase/client";
-import { ChatParticipant, ChatRoom } from "@/entities/chat";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import type { ChatMessage } from "./use-realtime-chat";
-import { useUser } from "./useUser";
 
 
 // 채팅방 생성(아직 사용처 없음)
@@ -21,7 +21,7 @@ export const useCreateChat = () => {
                 toast.error(response.error?.message || "채팅방 생성 중 오류가 발생했습니다");
             }
         },
-        onError: (error) => {
+        onError: (error: Error) => {
             toast.error(error?.message || "채팅방 생성 중 오류가 발생했습니다");
         },
     })
@@ -47,7 +47,7 @@ export const useGetMyChatRooms = () => {
 export const useGetChatMessages = (chatId : number) => {
   const queryClient = useQueryClient();
   const supabase = createClient();  // Realtime용
-  const { data: user } = useUser();
+  const { data: user } = useCurrentUser();
   // 초기 메시지 로드 (Server Action)
   const query = useQuery({
     queryKey: queryKeys.chatMessages(chatId),
@@ -75,7 +75,7 @@ export const useGetChatMessages = (chatId : number) => {
         },
 
         // 메세지 중복 출력 방지  
-        async (payload: any) => {
+        async (payload: { new: ChatMessage }) => {
            if (payload.new.sender_id === user?.id) {
             return;
         }
@@ -135,7 +135,7 @@ export const useGetChatParticipants = (chatId : number) => {
 // 메시지 전송 훅
 export const useSendMessage = (chatId: number) => {
   const queryClient = useQueryClient();
-  const { data: user } = useUser();
+  const { data: user } = useCurrentUser();
 
   return useMutation({
     mutationFn: async (content: string) => {
@@ -158,7 +158,7 @@ export const useSendMessage = (chatId: number) => {
         created_at: new Date().toISOString(),
         profile: {
           username: user?.username || "",
-          avatar_url: user?.avatar_url || null,
+          avatar_url: user?.avatarUrl || "",
         },
       };
 

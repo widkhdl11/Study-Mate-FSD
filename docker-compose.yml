@@ -6,6 +6,31 @@ services:
         env_file: .env
         environment:
             - NODE_ENV=production
+        # ---- 보안 하드닝 ----
+        read_only: true
+        tmpfs:
+            - /tmp:noexec,nosuid,size=256M
+            - /app/.next/cache:size=256M
+        security_opt:
+            - no-new-privileges:true
+        cpus: 1.5
+        mem_limit: 512m
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'wget -q --spider http://127.0.0.1:3000/ || exit 1',
+                ]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 40s
+        logging:
+            driver: json-file
+            options:
+                max-size: '10m'
+                max-file: '3'
+
     # 배포 자동화 전까지 사용
     # build:
     #     context: .
@@ -33,3 +58,10 @@ services:
         depends_on:
             - app
         restart: unless-stopped
+        security_opt:
+            - no-new-privileges:true
+        logging:
+            driver: json-file
+            options:
+                max-size: '10m'
+                max-file: '3'

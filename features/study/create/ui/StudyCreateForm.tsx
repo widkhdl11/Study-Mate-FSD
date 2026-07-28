@@ -1,7 +1,7 @@
 'use client'
 
 import { CreateStudyCommand, studyCreateSchema } from "@/entities/study";
-import { useCreateStudy } from "@/features/study/create/model/useCreateStudy";
+import { useCreateStudy } from "../model/useCreateStudy";
 import { getMainRegion, getSubRegion } from "@/shared/config/region";
 import { getDetailCategories, getMainCategories, getSubcategories } from "@/shared/config/study-category";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -12,12 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/shared/shadcn/ui/textarea";
 import { zodResolverFirstError } from "@/shared/lib/validation";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState, type BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
 
 export default function StudyCreateForm() {
-   const formRef = useRef<HTMLFormElement>(null);
-
   const form = useForm<CreateStudyCommand>({
     resolver: zodResolverFirstError(studyCreateSchema),
     defaultValues: {
@@ -41,11 +39,10 @@ export default function StudyCreateForm() {
   });
 
 
-  async function onSubmit(values: CreateStudyCommand) {
-    if (!formRef.current) {
-      return;
-    }
-    const formData = new FormData(formRef.current);
+  async function onSubmit(_data: CreateStudyCommand, event?: BaseSyntheticEvent) {
+    const formEl = event?.target as HTMLFormElement | undefined;
+    if (!formEl) return;
+    const formData = new FormData(formEl);
     createStudyMutation(formData);
   }
   const [mainCategoryValue, setMainCategoryValue] = useState("");
@@ -72,7 +69,6 @@ export default function StudyCreateForm() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              ref={formRef}
               className="space-y-5"
             >
               {/* 제목 */}

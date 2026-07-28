@@ -1,14 +1,14 @@
 'use client'
 
 import { StudySelectSkeleton } from "@/components/skeleton";
-import { PostDetailResponse, UpdatePostCommand, updatePostSchema } from "@/entities/post";
+import { PostDetailView, UpdatePostCommand, updatePostSchema } from "@/entities/post";
 import { StudyResponse, StudySelect } from "@/entities/study";
+import { zodResolverFirstError } from "@/shared/lib/validation";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form";
 import { Input } from "@/shared/shadcn/ui/input";
 import { Textarea } from "@/shared/shadcn/ui/textarea";
 import { ImageUploadField } from "@/shared/ui/ImageUploadField";
-import { zodResolverFirstError } from "@/shared/lib/validation";
 import { Link } from "lucide-react";
 import { Suspense } from "react";
 import { useForm } from "react-hook-form";
@@ -16,14 +16,14 @@ import { useUpdatePost } from "../model/useUpdatePost";
 
 
 export default function PostUpdateForm(
-    { postData, studiesPromise }: {postData: PostDetailResponse, studiesPromise: Promise<StudyResponse[]>; }
+    { postData, studiesPromise }: {postData: PostDetailView, studiesPromise: Promise<StudyResponse[]>; }
 ) {
       const form = useForm<UpdatePostCommand>({
       resolver: zodResolverFirstError(updatePostSchema),
       defaultValues: {
         ...postData,  
         studyId: postData.study.id, 
-        images: postData.image_url.map((image) => new File([], image.url)) as File[] || [],
+        images: postData.imageUrl.map((image) => new File([], image.url)) as File[] || [],
       },
     })
 

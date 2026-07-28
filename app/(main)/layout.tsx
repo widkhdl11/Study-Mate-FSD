@@ -1,5 +1,5 @@
-import Footer from '@/widgets/footer/Footer';
-import Header from '@/widgets/header/ui/Header';
+import { Footer } from '@/widgets/footer';
+import { Header } from '@/widgets/header';
 
 export default function MainLayout({
     children,

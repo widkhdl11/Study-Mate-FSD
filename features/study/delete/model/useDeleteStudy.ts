@@ -23,7 +23,7 @@ export function useDeleteStudy() {
             toast.success('스터디를 삭제했습니다.')
             router.push('/profile')
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             toast.error(error.message)
             router.push('/profile')
         },

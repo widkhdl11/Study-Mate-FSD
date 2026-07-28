@@ -123,7 +123,7 @@ ${i + 1}. [ID: ${s.id}] ${s.title}
     console.log('result', result)
 
     return { success: true, data: result };
-  } catch (error: any) {
+  } catch (error) {
     console.log('error', error)
     return {
       success: false,

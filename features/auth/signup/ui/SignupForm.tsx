@@ -1,11 +1,11 @@
 import { SignupCommand, signupSchema } from "@/entities/user";
 import { zodResolverFirstError } from "@/shared/lib/validation";
 import { Button } from "@/shared/shadcn/ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/shadcn/ui/form";
 import { Input } from "@/shared/shadcn/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@radix-ui/react-select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/shadcn/ui/select";
 import { useRef } from "react";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useSignup } from "../model/useSignup";
 
 export default function SignupForm() {

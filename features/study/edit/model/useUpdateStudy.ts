@@ -33,7 +33,7 @@ export function useUpdateStudy(
             const studyId = variables.get('id')
             router.push(`/studies/${studyId}`)
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             if (isRedirect(error)) {
                 queryClient.invalidateQueries({
                     queryKey: queryKeys.myCreatedStudies,

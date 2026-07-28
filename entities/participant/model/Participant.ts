@@ -75,7 +75,6 @@ export type ParticipantRow = {
   user_id: string;
   username: string;
   avatar_url: string;
-  user_email: string;
   role: string;
   status: string;
   created_at: string;

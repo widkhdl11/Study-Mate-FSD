@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import SignupForm from "@/features/auth/signup/ui/SignupForm";
+import { SignupForm } from "@/features/auth/signup";
 import { Card } from "@/shared/shadcn/ui/card";
 
 export default function SignupCard() {

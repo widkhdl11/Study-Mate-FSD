@@ -2,9 +2,9 @@
 
 import { getRegionPath } from "@/shared/config/region"
 import { getCategoryPath } from "@/shared/config/study-category"
+import { studyStatusConversion } from "@/shared/lib/conversion/study"
 import { Badge } from "@/shared/shadcn/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/shadcn/ui/select"
-import { studyStatusConversion } from "@/shared/lib/conversion/study"
 import { MapPin, Tag, Users } from "lucide-react"
 import Link from "next/link"
 import { use } from "react"

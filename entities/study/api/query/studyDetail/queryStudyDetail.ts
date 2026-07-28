@@ -1,13 +1,54 @@
-'use server';
+import type { ParticipantResponse } from "@/entities/participant/model/types";
+import { toUserSummaryView } from "@/entities/user/model/types";
 import { err, ok, type Result } from "@/shared/kernel/Result";
 import { SupabaseClient } from "@supabase/supabase-js";
-import type { StudyDetailQueryRow } from "./row";
-import { toStudyDetailView } from "./toView";
-import type { StudyDetailView } from "./view";
+import type { StudyDetailParticipantRow, StudyDetailQueryRow, StudyDetailView } from "./types";
 
 export type QueryStudyDetailError =
   | { readonly kind: "NotFound" }
   | { readonly kind: "Infra"; readonly message: string };
+
+// row(snake, DB 거울) → view(camel, 화면용). 읽기 경계의 유일한 snake→camel 변환 지점.
+function toStudyDetailView(row: StudyDetailQueryRow): StudyDetailView {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    studyCategory: row.study_category,
+    region: row.region,
+    maxParticipants: row.max_participants,
+    currentParticipants: row.current_participants,
+    status: row.status,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    participants: row.participants.map(toParticipantResponse),
+    posts: row.posts.map((p) => ({
+      id: p.id,
+      title: p.title,
+      content: p.content,
+      imageUrl: p.image_url,
+      likesCount: p.likes_count,
+      viewsCount: p.views_count,
+      createdAt: p.created_at,
+    })),
+    creator: toUserSummaryView(row.creator),
+  };
+}
+
+function toParticipantResponse(p: StudyDetailParticipantRow): ParticipantResponse {
+  return {
+    id: p.id,
+    userId: p.user_id,
+    studyId: p.study_id,
+    userEmail: p.user_email,
+    status: p.status,
+    role: p.role,
+    username: p.username,
+    avatarUrl: p.avatar_url,
+    createdAt: p.created_at,
+    updatedAt: p.updated_at,
+  };
+}
 
 // select는 studyDetailQueryRow의 필드와 1:1 (ARCHITECTURE §5-c 불변식)
 export async function queryStudyDetail(

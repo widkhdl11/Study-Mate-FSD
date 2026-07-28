@@ -42,6 +42,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${GeistSans.variable}`}>
+      <head>
+        <meta name="naver-site-verification" content="8699548ac724e7466db107bc0072bc6894628fac" />
+      </head>
       <body className="antialiased font-sans">
         <ReactQueryClientProvider>
           {children}

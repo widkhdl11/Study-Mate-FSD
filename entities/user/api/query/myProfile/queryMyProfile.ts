@@ -1,31 +1,44 @@
-'use server'
-
 import { ProfileRow } from "@/entities/user/model/Profile"
 import { ProfileResponse } from "@/entities/user/model/types"
-import { createClient } from "@/shared/api/supabase/server"
 import { err, ok, Result } from "@/shared/kernel/Result"
-import { CustomUserAuth } from "@/shared/lib/auth"
-import { toProfileResponse } from "./toView"
+import { SupabaseClient } from "@supabase/supabase-js"
 
 export type QueryMyProfileError =
 | { readonly kind: "Infra", readonly message: string }
 | { readonly kind: "NotFound", readonly userId: string }
 | { readonly kind: "Mapping", readonly cause: string }
 
-export async function queryMyProfile(): Promise<Result<ProfileResponse, QueryMyProfileError>> {
-    const supabase = await createClient()
-    const { user } = await CustomUserAuth(supabase)
+function toProfileResponse(profile: ProfileRow): ProfileResponse {
+    return {
+        id: profile.id,
+        email: profile.email,
+        username: profile.username,
+        avatarUrl: profile.avatar_url,
+        birthDate: profile.birth_date,
+        gender: profile.gender,
+        bio: profile.bio,
+        points: profile.points,
+        createdAt: profile.created_at,
+        updatedAt: profile.updated_at,
+    }
+}
+
+export async function queryMyProfile(
+    supabase: SupabaseClient,
+    userId: string,
+): Promise<Result<ProfileResponse, QueryMyProfileError>> {
     const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
 
     if (error) {
         return err({ kind: 'Infra', message: error.message })
     }
+    if (!data) {
+        return err({ kind: 'NotFound', userId })
+    }
 
-
-    const profileResponse = toProfileResponse(data as ProfileRow)
-    return ok(profileResponse)
+    return ok(toProfileResponse(data as ProfileRow))
 }

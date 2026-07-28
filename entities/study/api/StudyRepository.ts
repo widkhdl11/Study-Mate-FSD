@@ -1,6 +1,6 @@
 import { err, ok, Result } from "@/shared/kernel/Result";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { DeleteStudyIntent, Study, StudyFromRowError, StudyInsert, StudyRow } from "../model/Study";
+import { StudyDeleteIntent, Study, StudyFromRowError, StudyInsert, StudyRow } from "../model/Study";
 import { StudyId } from "../model/StudyId";
 
 export type StudyRepositoryError =
@@ -61,7 +61,7 @@ export async function findAllStudies(supabase: SupabaseClient): Promise<Result<r
     return ok(studies)
 }
 
-export async function updateStudy(supabase: SupabaseClient, study:Study, originalUpdatedAt: string) : Promise<Result<Study, StudyRepositoryError>> {
+export async function updateStudy(supabase: SupabaseClient, study:Study, _originalUpdatedAt: string) : Promise<Result<Study, StudyRepositoryError>> {
     const studyRow = Study.toUpdateRow(study)
     
     
@@ -90,9 +90,9 @@ export async function updateStudy(supabase: SupabaseClient, study:Study, origina
 
 }
 
-export async function deleteStudy(supabase : SupabaseClient, deleteStudyIntent: DeleteStudyIntent) : Promise<Result<void,StudyRepositoryError>> {
+export async function deleteStudy(supabase : SupabaseClient, deleteStudyIntent: StudyDeleteIntent) : Promise<Result<void,StudyRepositoryError>> {
 
-    const { data, error } = await supabase
+    const { error } = await supabase
     .from("studies")
     .delete()
     .eq("id",deleteStudyIntent.studyId)

@@ -1,8 +1,8 @@
 'use client'
 
-import { useUser } from "@/hooks/useUser"
-import { queryKeys } from "@/shared/api/reactQuery/queryKeys"
 import { ParticipantResponse } from "@/entities/participant"
+import { useCurrentUser } from "@/entities/user"
+import { queryKeys } from "@/shared/api/reactQuery/queryKeys"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { applyParticipantAction } from "../api/applyParticipantAction"
@@ -10,7 +10,7 @@ import { applyParticipantAction } from "../api/applyParticipantAction"
 
 export function useApplyParticipant(studyId: number) {
     const queryClient = useQueryClient()
-    const { data: user } = useUser()
+    const { data: user } = useCurrentUser()
 
     return useMutation({
         mutationFn: async () => {
@@ -31,7 +31,7 @@ export function useApplyParticipant(studyId: number) {
             })
             return { previousData }
         },
-        onError: (error: any, variables, context) => {
+        onError: (error, variables, context) => {
             queryClient.setQueryData(
                 queryKeys.participant(studyId, user?.id),
                 context?.previousData

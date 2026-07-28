@@ -1,6 +1,6 @@
 'use client'
 
-import { ProfileResponse } from '@/entities/user/model/types'
+import { CurrentUserResponse } from '@/entities/user'
 import dynamic from 'next/dynamic'
 import LoginDropdown from './LoginDropdown'
 
@@ -9,7 +9,7 @@ const NotificationDropdown = dynamic(
     { ssr: false }
 )
 
-export default function UserMenu({ user }: { user: ProfileResponse }) {
+export default function UserMenu({ user }: { user: CurrentUserResponse }) {
     return (
         <>
             <NotificationDropdown user={user}/>

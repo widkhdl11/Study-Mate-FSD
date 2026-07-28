@@ -1,4 +1,4 @@
-import StudyCreateForm from "@/features/study/create/ui/StudyCreateForm";
+import { StudyCreateForm } from "@/features/study/create";
 
 export default function StudyCreatePage() {
     return (

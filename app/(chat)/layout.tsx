@@ -1,4 +1,4 @@
-import Header from "@/widgets/header/ui/Header";
+import { Header } from "@/widgets/header";
 
 export default function ChatLayout({
   children,

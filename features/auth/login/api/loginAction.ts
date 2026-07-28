@@ -14,7 +14,7 @@ export async function loginAction(loginFormValues: LoginCommand): Promise<Action
     return { success: false, error: parseResult.error };
   }
   const { email, password } = parseResult.value;
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });

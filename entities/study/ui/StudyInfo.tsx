@@ -1,4 +1,4 @@
-import { StudyDetailView } from "@/entities/study/api/query/studyDetail/view";
+import { StudyDetailView } from "@/entities/study/api/query/studyDetail/types";
 import { Card } from "@/shared/shadcn/ui/card";
 import { formatDate } from "date-fns";
 

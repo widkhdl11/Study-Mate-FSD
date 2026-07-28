@@ -1,27 +1,56 @@
+import { UserId } from "@/entities/user";
+import { NotificationReference } from "./NotificationReference";
+
 export type NotificationResponse = {
     id: number;
-    user_id: string;
-    created_at: string;
+    userId: string;
+    createdAt: string;
     type: string;
     title: string;
     content: string;
-    is_read: boolean;
-    is_deleted: boolean;
-    reference_type: string | null;
-    reference_id: number | null;
-    sender_id: string | null;
+    isRead: boolean;
+    isDeleted: boolean;
+    referenceType: string;
+    referenceId: number;
+    senderId: string;
+}
+
+
+export type NotificationRow = {
+  id: number;
+  user_id: string;
+  type: string;
+  title: string;
+  content: string;
+  reference_type: string;
+  reference_id: number;
+  sender_id: string;
+  is_read: boolean;
+  is_deleted: boolean;
+  created_at: string;
+}
+
+export type NotificationInsertRow = {
+  user_id: string
+  type: string
+  title: string
+  content: string
+  reference_type: string
+  reference_id: number
+  sender_id: string
+  is_read: boolean
+  is_deleted: boolean
 }
 
 export type NotificationInsert = {
-    user_id: string;
-    type: string;
+    userId: UserId;
+    type: NotificationType;
     title: string;
     content: string;
-    is_read: boolean;
-    is_deleted: boolean;
-    reference_type: string | null;
-    reference_id: number | null;
-    sender_id: string | null;
+    isRead: boolean;
+    isDeleted: boolean;
+    reference: NotificationReference;
+    senderId: UserId;
 }
 
 export type NotificationType =
@@ -31,3 +60,4 @@ export type NotificationType =
   | 'new_participant' // 새로운 참여자
   | 'participant_left'     // 참여자 탈퇴
   | 'participant_kicked';  // 강퇴
+

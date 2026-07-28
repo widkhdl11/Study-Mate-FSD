@@ -1,4 +1,4 @@
-import { useDeleteStudy } from "@/features/study/delete/model/useDeleteStudy";
+import { useDeleteStudy } from "../model/useDeleteStudy";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Trash2 } from "lucide-react";
 

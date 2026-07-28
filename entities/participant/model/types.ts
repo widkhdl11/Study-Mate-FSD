@@ -19,7 +19,7 @@ export interface ParticipantResponse {
   userId?: string;
   studyId: number;
   userEmail: string;
-  status?: string;
+  status: string;
   role: string;
   username: string;
   avatarUrl?: string;

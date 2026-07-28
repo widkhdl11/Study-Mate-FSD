@@ -1,7 +1,7 @@
 "use server";
 
-import { PostsRecommendedResponse } from "@/entities/post/model/types";
-import { StudyRecommendationView } from "@/entities/study/model/types";
+import { PostRecommendedResponse } from "@/entities/post";
+import { StudyRecommendationView } from "@/entities/study";
 import { createClient } from "@/shared/api/supabase/server";
 import { GoogleGenAI } from "@google/genai";
 
@@ -98,7 +98,7 @@ JSON 배열로만 응답하세요. 다른 텍스트 없이.
     }));
 
     return { success: true, data: result };
-  } catch (error: unknown) {
+  } catch {
     return {
       success: false,
       error: { message: "AI 추천 중 오류가 발생했습니다" },
@@ -226,12 +226,12 @@ JSON 배열로만 응답하세요. 다른 텍스트 없이.
       return { success: false, error: { message: "AI 응답이 없습니다" } };
     }
 
-    const result: PostsRecommendedResponse[] = JSON.parse(content);
+    const result: PostRecommendedResponse[] = JSON.parse(content);
 
     // 4, 5번 — DB 재조회 + 합치기 부분도 OpenAI 버전과 완전히 동일
 
     return { success: true, data: result };
-  } catch (error: unknown) {
+  } catch {
     return {
       success: false,
       error: { message: "AI 추천 중 오류가 발생했습니다" },

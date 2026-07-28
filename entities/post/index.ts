@@ -8,16 +8,22 @@
 
 // ── 읽기 (Query) ──
 export { queryPostDetail } from "./api/query/postDetail/queryPostDetail";
-export type { PostDetailView } from "./api/query/postDetail/view";
+export { usePostDetail } from "./api/query/postDetail/usePostDetail";
+export type { PostDetailView } from "./api/query/postDetail/types";
+export { queryAllPosts } from "./api/query/postsAll/queryPostsAll";
+export type { PostWithStudyView } from "./api/query/postsAll/types";
+export { queryMyPostsWithStudy } from "./api/query/myPostsWithStudy/queryMyPostsWithStudy";
+export { useIsLiked } from "./api/query/isLiked/useIsLiked";
 
 // ── UI (표현) ──
 export { default as PostListItem } from "./ui/PostListItem";
+export { default as PostImageSection } from "./ui/PostImageSection";
 
 // ── 공개 타입 ──
-export type { PostsWithStudyRow } from "./api/query/postsWithStudy/row";
-export type { PostsWithStudyView } from "./api/query/postsWithStudy/view";
+export type { MyPostWithStudyRow } from "./api/query/myPostsWithStudy/types";
+export type { MyPostWithStudyView } from "./api/query/myPostsWithStudy/types";
 export type { PostError } from "./model/Post"; // action 에러 번역(ACL)용
-export type { PostCardView, PostDetailResponse, PostResponse, PostsResponse } from "./model/types";
+export type { PostCardView, PostDetailResponse, PostResponse, PostWithRelationResponse, PostRecommendedResponse } from "./model/types";
 // ── 쓰기 (Command, use-case 진입) ──  ※ policy finalize 후 추가
 export { PostId } from "./model/PostId";
 export { PostPolicy } from "./service/Post-policy"; // createPost / updatePost / deletePost (완전 연산)
@@ -33,4 +39,8 @@ export { createPostSchema, updatePostSchema, type CreatePostCommand, type Update
 
 // ㅡ Repository ㅡ
 export { createPost, deletePost, findPostById, updatePost } from "./api/PostRepository";
+
+// ── lib (이미지 스토리지 헬퍼 — features가 사용) ──
+export { uploadPostImages } from "./lib/uploadPostImages";
+export { deletePostImages } from "./lib/deletePostImages";
 

@@ -1,4 +1,4 @@
-import LoginCard from "@/widgets/auth/ui/LoginCard";
+import { LoginCard } from "@/widgets/auth";
 
 export default function LoginPage() {
   return <LoginCard />;

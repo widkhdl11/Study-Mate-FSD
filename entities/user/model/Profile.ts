@@ -33,7 +33,7 @@ export type ProfileRow = {
     gender: string;
     birth_date: string;
     bio: string;
-    avatar_url: string;
+    avatar_url: string | null;
     created_at: string;
     updated_at: string;
 }

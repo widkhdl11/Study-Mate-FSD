@@ -1,7 +1,7 @@
 'use client'
 
 import { ChatMessageItem } from '@/components/chat-message'
-import { useChatScroll } from '@/hooks/use-chat-scroll'
+import { useChatScroll } from '@/shared/lib/useChatScroll'
 import {
   type ChatMessage,
   useRealtimeChat,

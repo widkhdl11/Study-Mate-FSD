@@ -1,6 +1,6 @@
 'use client'
-import { ProfileResponse } from '@/entities/user/model/types'
-import { useLogout } from '@/features/auth/logout/model/useLogout'
+import { CurrentUserResponse } from '@/entities/user'
+import { useLogout } from '@/features/auth/logout'
 import { getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import {
@@ -16,7 +16,7 @@ export default function LoginDropdown(
     {
         user,
     }: {    
-        user: ProfileResponse
+        user: CurrentUserResponse
     }
 ) {
 

@@ -69,6 +69,7 @@ export const ParticipantPolicy = {
     actor: UserId,
     existing: Participant | null
   ): Result<Participant |ParticipantInsert, ApplyError> => {
+    
     if (!Study.isAcceptable(study)) return err({ kind: "StudyNotAcceptable" });
     if (Study.isHost(study, actor)) return err({ kind: "SelfApply" });
 

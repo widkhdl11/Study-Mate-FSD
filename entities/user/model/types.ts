@@ -4,7 +4,7 @@ export type ProfileResponse = {
     id: string   
     email: string
     username: string
-    avatarUrl: string
+    avatarUrl: string | null
     birthDate: string
     gender: string
     bio: string

@@ -1,12 +1,16 @@
-import { getMyProfileSSR } from '@/actions/profileAction'
-import CreateStudyButton from '@/features/study/create/ui/CreateStudyButton'
+import { queryCurrentUser } from '@/entities/user'
+import { CreateStudyButton } from '@/features/study/create'
+import { createClient } from '@/shared/api/supabase/server'
 import { Button } from '@/shared/shadcn/ui/button'
 import Link from 'next/link'
 import SearchBox from './SearchBox'
 import UserMenu from './UserMenu'
 
 export const Header = async () => {
-    const myProfile = await getMyProfileSSR();
+    const supabase = await createClient();
+    const currentUserResult = await queryCurrentUser(supabase);
+    const currentUser = currentUserResult.ok ? currentUserResult.value : null;
+
     return (
         <header className='sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -26,14 +30,14 @@ export const Header = async () => {
                             className='text-foreground hover:text-accent transition-colors font-medium'>
                             모집글
                         </Link>
-                        <CreateStudyButton isLoggedIn={!!myProfile} />
+                        <CreateStudyButton isLoggedIn={!!currentUser} />
                     </nav>
 
                     <div className='flex items-center gap-4'>
                         <SearchBox/>
 
-                        {myProfile ? (
-                            <UserMenu user={myProfile} />
+                        {currentUser ? (
+                            <UserMenu user={currentUser} />
                         ) : (
                             <Button asChild>
                                 <Link href='/auth/login'>로그인</Link>

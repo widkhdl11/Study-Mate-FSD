@@ -39,6 +39,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# nextjs 사용자로 실행(보안상 중요)
 USER nextjs
 
 EXPOSE 3000

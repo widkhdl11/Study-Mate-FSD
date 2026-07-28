@@ -44,7 +44,7 @@ export async function getUserInfoByUserId(userId: string): Promise<Result<Profil
 
 export async function updateUserInfo(userId: string, userInfo: ProfileResponse): Promise<Result<ProfileResponse, UserDetailError>> {
     const supabase = await createClient()
-    const { user } = await CustomUserAuth(supabase)
+    await CustomUserAuth(supabase)
     const { data, error } = await supabase
     .from('profiles')
     .update(userInfo)

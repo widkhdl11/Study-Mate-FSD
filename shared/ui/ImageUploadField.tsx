@@ -112,6 +112,7 @@ export function ImageUploadField<T extends FieldValues>({
                                             <div
                                                 key={index}
                                                 className='relative group'>
+                                                {/* eslint-disable-next-line @next/next/no-img-element -- blob: 미리보기 URL은 next/image 최적화 대상이 아님 */}
                                                 <img
                                                     src={url || '/placeholder.svg'}
                                                     alt={`미리보기 ${index + 1}`}

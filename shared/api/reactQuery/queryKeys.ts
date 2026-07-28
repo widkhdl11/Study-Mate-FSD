@@ -27,6 +27,7 @@ export const queryKeys = {
   chatMessages: (chatId: number) => ["chatMessages", chatId],
   myChatRooms: ["myChatRooms"],
   notifications: ["notifications"],
+  notification: (userId: string) => ["notifications", userId],
   chatParticipants: (chatId: number) => ["chatParticipants", chatId],
 
 

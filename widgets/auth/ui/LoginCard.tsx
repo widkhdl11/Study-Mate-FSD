@@ -1,12 +1,11 @@
 'use client'
 
-import LoginForm from '@/features/auth/login/ui/LoginForm'
+import { LoginForm } from '@/features/auth/login'
 import { Card } from '@/shared/shadcn/ui/card'
 import Link from 'next/link'
 
 export default function LoginCard() {
     
-
     return (
         <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4'>
             <div className='w-full max-w-md'>

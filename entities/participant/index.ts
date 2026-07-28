@@ -34,8 +34,8 @@ export {
 export type { ParticipantRepositoryError } from "./api/ParticipantRepository";
 
 // ── 읽기 (Query) ──
-export { getParticipantStatus } from "./api/query/getParticipantStatus";
-export { useParticipantStatus } from "./api/query/useParticipantStatus";
+export { queryParticipantStatus } from "./api/query/participantStatus/queryParticipantStatus";
+export { useParticipantStatus } from "./api/query/participantStatus/useParticipantStatus";
 
 // ── UI (표현) ──
 export { default as MemberRow } from "./ui/MembersRow";

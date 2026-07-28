@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 // 채팅방 생성
 export async function createChat(formData : FormData): Promise<ActionResponse<ChatRoom>> {
     const supabase = await createClient();
-    const { user } = await CustomUserAuth(supabase);
+    await CustomUserAuth(supabase);
     const {data, error} = await supabase.from("chats").insert({study_id: formData.get("study_id")as string}).select();
     if (error) {
         throw new Error("채팅방 생성에 실패했습니다.");
@@ -45,7 +45,7 @@ export async function getMyChatRooms(): Promise<ActionResponse<ChatRoom[]>> {
 // 채팅방 메시지 불러오기
 export async function getChatMessages(chatId : number): Promise<ActionResponse<ChatMessage[]>> {
     const supabase = await createClient();
-    const {user} = await CustomUserAuth(supabase);
+    const { user } = await CustomUserAuth(supabase);
 
     // 호출한 쪽에서 try/catch 필수
     const chatParticipant = await checkChatParticipant(chatId, user.id);
@@ -74,7 +74,7 @@ export async function getChatMessages(chatId : number): Promise<ActionResponse<C
 // 채팅방 참여자 불러오기
 export async function getChatParticipants(chatId : number): Promise<ActionResponse<ChatParticipant[]>> {
     const supabase = await createClient();
-    const {user} = await CustomUserAuth(supabase);
+    await CustomUserAuth(supabase);
     const {data, error} = await supabase.from("chat_participants").select("*").eq("chat_id", chatId);
     if (error) {
         throw new Error("채팅방 참여자 불러오기에 실패했습니다.");
@@ -142,7 +142,7 @@ export async function sendMessage(chatId: number, content: string) {
 export async function getChatMessagesSSR(chatId : number) {
     const supabase = await createClient();  
 
-    const {user} = await CustomUserAuth(supabase);
+    const { user } = await CustomUserAuth(supabase);
     const chatParticipant = await checkChatParticipant(chatId, user.id);
     if (!chatParticipant || chatParticipant.length === 0) {
         throw new Error("채팅방 참여자를 찾을 수 없습니다.");
@@ -159,7 +159,7 @@ export async function getChatMessagesSSR(chatId : number) {
 // 채팅방 참여자 불러오기(ssr)
 export async function getChatParticipantsSSR(ChatId : number) {
     const supabase = await createClient();
-    const {user} = await CustomUserAuth(supabase);
+    const { user } = await CustomUserAuth(supabase);
     const chatParticipant = await checkChatParticipant(ChatId, user.id);
     if (!chatParticipant || chatParticipant.length === 0) {
         throw new Error("채팅방 참여자를 찾을 수 없습니다.");
@@ -175,7 +175,7 @@ export async function getChatParticipantsSSR(ChatId : number) {
 // 채팅방 정보 불러오기(ssr)
 export async function getChatSSR(ChatId : number) {
     const supabase = await createClient();
-    const {user} = await CustomUserAuth(supabase);
+    const { user } = await CustomUserAuth(supabase);
     const chatParticipant = await checkChatParticipant(ChatId, user.id);
     if (!chatParticipant || chatParticipant.length === 0) {
         throw new Error("해당 채팅방에 참여하지 않은 유저입니다.");

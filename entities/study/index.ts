@@ -23,13 +23,15 @@ export {
 export type { StudyRepositoryError } from "./api/StudyRepository";
 
 // ── 읽기 (Query) ──
-export { queryGetMyStudies } from "./api/query/getMyStudies/queryGetMyStudies";
-export type { QueryGetMyStudiesError } from "./api/query/getMyStudies/queryGetMyStudies";
+export { queryMyStudies } from "./api/query/myStudies/queryMyStudies";
+export type { QueryGetMyStudiesError } from "./api/query/myStudies/queryMyStudies";
 export { queryStudyEditView } from "./api/query/queryStudyEditView";
 export type { StudyEditView, StudyEditViewError } from "./api/query/queryStudyEditView";
 export { queryStudyDetail } from "./api/query/studyDetail/queryStudyDetail";
 export type { QueryStudyDetailError } from "./api/query/studyDetail/queryStudyDetail";
-export type { StudyDetailView } from "./api/query/studyDetail/view";
+export type { StudyDetailView } from "./api/query/studyDetail/types";
+
+
 // ── UI  ──
 export { StudyCapacityBar } from "./ui/StudyCapacityBar";
 export { StudyCategoryBadges } from "./ui/StudyCategoryBadges";

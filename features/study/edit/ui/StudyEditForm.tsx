@@ -1,7 +1,7 @@
 'use client'
 
 import { UpdateStudyCommand, studyUpdateSchema } from "@/entities/study";
-import { StudyEditFormValues } from "@/features/study/edit/model/types";
+import { StudyEditFormValues } from "../model/types";
 import { getMainRegion, getSubRegion } from "@/shared/config/region";
 import { getCategoryCodeByValue, getDetailCategories, getMainCategories, getSubcategories } from "@/shared/config/study-category";
 import { zodResolverFirstError } from "@/shared/lib/validation";
@@ -12,7 +12,7 @@ import { Input } from "@/shared/shadcn/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/shadcn/ui/select";
 import { Textarea } from "@/shared/shadcn/ui/textarea";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState, type BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateStudy } from "../model/useUpdateStudy";
 
@@ -22,7 +22,6 @@ export default function StudyEditForm({
   initialData: StudyEditFormValues
   , studyId: string
 }) {
-   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<UpdateStudyCommand>({
     
     resolver: zodResolverFirstError(studyUpdateSchema),
@@ -36,9 +35,10 @@ export default function StudyEditForm({
   });
 
 
-  async function onSubmit() {
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
+  async function onSubmit(_data: UpdateStudyCommand, event?: BaseSyntheticEvent) {
+    const formEl = event?.target as HTMLFormElement | undefined;
+    if (!formEl) return;
+    const formData = new FormData(formEl);
     updateStudyMutation(formData);
   }
 
@@ -68,7 +68,7 @@ export default function StudyEditForm({
           </h2>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" ref={formRef}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               {/* 제목 */}
               <FormField
                 control={form.control}

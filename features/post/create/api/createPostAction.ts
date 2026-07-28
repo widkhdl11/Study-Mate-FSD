@@ -1,9 +1,8 @@
 'use server'
 
-import { createPost, CreatePostCommand, createPostSchema, PostPolicy, PostPolicyError } from "@/entities/post";
+import { createPost, CreatePostCommand, createPostSchema, PostPolicy, PostPolicyError, uploadPostImages } from "@/entities/post";
 import { findStudyById, StudyId } from "@/entities/study";
 import { UserId } from "@/entities/user";
-import { uploadPostImages } from "@/entities/post/lib/uploadPostImages";
 import { createClient } from "@/shared/api/supabase/server";
 import { ActionResponse } from "@/shared/kernel/actionType";
 import { validate } from "@/shared/lib/validate";

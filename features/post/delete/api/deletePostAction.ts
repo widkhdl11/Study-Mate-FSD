@@ -1,7 +1,6 @@
 'use server'
 
-import { deletePost, findPostById, PostId, PostPolicy, PostPolicyError } from "@/entities/post"
-import { deletePostImages } from "@/entities/post/lib/deletePostImages"
+import { deletePost, findPostById, PostId, PostPolicy, PostPolicyError, deletePostImages } from "@/entities/post"
 import { UserId } from "@/entities/user"
 import { createClient } from "@/shared/api/supabase/server"
 import { ActionResponse } from "@/shared/kernel/actionType"

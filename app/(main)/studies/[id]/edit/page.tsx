@@ -1,10 +1,9 @@
 import { FormSkeleton } from "@/components/skeleton";
 import { queryStudyEditView } from "@/entities/study";
-import { StudyEditFormValues } from "@/features/study/edit/model/types";
-import StudyEditForm from "@/features/study/edit/ui/StudyEditForm";
+import { StudyEditFormValues, StudyEditForm } from "@/features/study/edit";
+import { createClient } from "@/shared/api/supabase/server";
 import { getRegionPathByValue } from "@/shared/config/region";
 import { getCategoryPathByValue } from "@/shared/config/study-category";
-import { createClient } from "@/shared/api/supabase/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 

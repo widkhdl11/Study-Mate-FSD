@@ -4,7 +4,8 @@ import { StudySelectSkeleton } from '@/components/skeleton'
 import { CreatePostCommand, createPostSchema } from '@/entities/post'
 
 import { StudyResponse, StudySelect } from '@/entities/study'
-import { useCreatePost } from '@/features/post/create/model/useCreatePost'
+import { useCreatePost } from '../model/useCreatePost'
+import { zodResolverFirstError } from '@/shared/lib/validation'
 import { Button } from '@/shared/shadcn/ui/button'
 import {
     Form,
@@ -18,7 +19,6 @@ import {
 import { Input } from '@/shared/shadcn/ui/input'
 import { Textarea } from '@/shared/shadcn/ui/textarea'
 import { ImageUploadField } from '@/shared/ui/ImageUploadField'
-import { zodResolverFirstError } from '@/shared/lib/validation'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { useForm } from 'react-hook-form'

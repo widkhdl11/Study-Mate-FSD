@@ -1,7 +1,7 @@
 'use client'
 
 import { createClient } from '@/shared/api/supabase/client'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseRealtimeChatProps {
   roomName: string
@@ -25,7 +25,8 @@ const EVENT_MESSAGE_TYPE = 'message'
 export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
   const supabase = createClient()
   const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [channel, setChannel] = useState<ReturnType<typeof supabase.channel> | null>(null)
+  // channel은 화면에 안 쓰이고 sendMessage(핸들러)에서만 씀 → state가 아니라 ref.
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
         }
       })
 
-    setChannel(newChannel)
+    channelRef.current = newChannel
 
     return () => {
       supabase.removeChannel(newChannel)
@@ -52,7 +53,7 @@ export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
 
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!channel || !isConnected) return
+      if (!channelRef.current || !isConnected) return
 
       const message: ChatMessage = {
         id: Number(crypto.randomUUID()),
@@ -69,13 +70,13 @@ export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
       // Update local state immediately for the sender
       setMessages((current) => [...current, message])
 
-      await channel.send({
+      await channelRef.current.send({
         type: 'broadcast',
         event: EVENT_MESSAGE_TYPE,
         payload: message,
       })
     },
-    [channel, isConnected, username]
+    [isConnected, username, roomName]
   )
 
   return { messages, sendMessage, isConnected }

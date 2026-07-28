@@ -1,10 +1,10 @@
 import { AIRecommendedStudies } from '@/components/AIRecommendedStudies'
-import HomeUI from './ui'
+import { HomeWidget } from '@/widgets/home'
 
 export default function HomePage() {
     return (
         <>
-            <HomeUI />
+            <HomeWidget />
             <section className='my-8 px-4'>
                 <AIRecommendedStudies />
             </section>

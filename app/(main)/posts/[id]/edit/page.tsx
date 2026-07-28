@@ -1,7 +1,10 @@
-import { getPostDetailSSR } from "@/actions/postAction";
-import { getMyCreatedStudiesSSR } from "@/actions/studyAction";
-import PostUpdateForm from "@/features/post/edit/ui/PostUpdateForm";
+import { queryPostDetail } from "@/entities/post";
+import { queryMyStudies } from "@/entities/study";
+import { PostUpdateForm } from "@/features/post/edit";
+import { createClient } from "@/shared/api/supabase/server";
+import { CustomUserAuth } from "@/shared/lib/auth";
 import { Card } from "@/shared/shadcn/ui/card";
+import { notFound } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -10,9 +13,17 @@ interface PageProps {
 export default async function PostEditPage({ params }: PageProps) {
   const { id } = await params
 
-  const postData = await getPostDetailSSR(Number(id));
+  const supabase = await createClient();
+  const postDataResult = await queryPostDetail(supabase, Number(id));
 
-  const studiesPromise = getMyCreatedStudiesSSR();
+  if (!postDataResult.ok) notFound();
+  const postData = postDataResult.value;
+
+  const { user } = await CustomUserAuth(supabase);
+  const studiesPromise = queryMyStudies(supabase, user.id).then((res) => {
+    if (!res.ok) notFound();
+    return res.value;
+  });
 
   return (
      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 py-8">

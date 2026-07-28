@@ -1,21 +1,20 @@
-import { getMyProfileSSR } from "@/actions/profileAction";
-import MainSection from "@/components/posts/detail/MainSection";
-import { getParticipantStatus } from "@/entities/participant/api/query/getParticipantStatus";
-import { queryPostDetail } from "@/entities/post/api/query/postDetail/queryPostDetail";
-import { PostDetailView } from "@/entities/post/api/query/postDetail/view";
-import { PostsResponse } from "@/entities/post/model/types";
-import PostDetailWidget from "@/widgets/post/detail/PostDetailWidget";
-import SidebarSection from "@/widgets/post/detail/sidebar/ui/SidebarSection";
+import { queryParticipantStatus } from "@/entities/participant";
+import { queryPostDetail, PostDetailView, PostWithRelationResponse } from "@/entities/post";
+import { queryMyProfile } from "@/entities/user";
+import { createClient } from "@/shared/api/supabase/server";
+import { CustomUserAuth } from "@/shared/lib/auth";
+import { PostDetailWidget, SidebarSection, MainSection } from "@/widgets/post-detail";
 import { notFound } from "next/navigation";
 
 export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const postData = await queryPostDetail(Number(id));
+  const supabase = await createClient();
+  const postData = await queryPostDetail(supabase, Number(id));
   if (!postData.ok) {
     notFound()
   }
-  const relatedPosts: PostsResponse = [];
+  const relatedPosts: PostWithRelationResponse[] = [];
 
   return (
      <PostDetailWidget 
@@ -27,11 +26,15 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   );
 }
 async function MainSectionLoader({ postData }: { postData: PostDetailView }) {
-  const user = await getMyProfileSSR();
-  return <MainSection postData={postData} user={user} />;
+  const supabase = await createClient();
+  const { user } = await CustomUserAuth(supabase);
+  const profile = await queryMyProfile(supabase, user.id);
+
+  return <MainSection postData={postData} user={profile.ok ? profile.value : null} />;
 }
 async function SidebarSectionLoader({ postData }: { postData: PostDetailView }) {
-  const result = await getParticipantStatus(postData.study.id);
-  const participant = result.success ? result.data ?? null : null;
+  const supabase = await createClient();
+  const result = await queryParticipantStatus(supabase, postData.study.id);
+  const participant = result.ok ? result.value : null;
   return <SidebarSection postData={postData} participant={participant} />;
 }
