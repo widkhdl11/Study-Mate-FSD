@@ -1,11 +1,14 @@
 name: Security Check
 
+# 자동 실행 비활성화(배포 안정화 후 재활성 예정). 수동 실행(workflow_dispatch)만 남김.
+# 재활성: 아래 push/pull_request/schedule 트리거 주석 해제.
 on:
-    push:
-        branches: [main]
-    pull_request:
-    schedule:
-        - cron: '0 0 * * 1' # 매주 월요일 09:00 KST
+    workflow_dispatch:
+    # push:
+    #     branches: [main]
+    # pull_request:
+    # schedule:
+    #     - cron: '0 0 * * 1' # 매주 월요일 09:00 KST
 
 jobs:
     audit:
