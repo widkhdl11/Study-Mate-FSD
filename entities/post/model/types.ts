@@ -86,39 +86,6 @@ export type PostCardView = Pick<
     "id" | "title" | "content" | "imageUrl" | "createdAt" | "likesCount" | "viewsCount"
 >
 
-export type PostDetailResponse = {
-    id: number
-    title: string
-    content: string
-    author_id: string
-    likes_count: number
-    views_count: number
-    created_at: string
-    image_url: {
-        id: string
-        url: string
-        originalName: string
-        size: number
-    }[]
-    study: {
-        id: number
-        title: string
-        description: string
-        study_category: number
-        region: number
-        max_participants: number
-        current_participants: number
-        status: string
-        created_at: string
-    }
-    author: {
-        id: number
-        email: string
-        username: string
-        avatar_url: string | null
-    }
-}
-
 export type PostRecommendedResponse = {
     id: number
     title: string

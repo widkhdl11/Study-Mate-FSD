@@ -23,7 +23,7 @@ export { default as PostImageSection } from "./ui/PostImageSection";
 export type { MyPostWithStudyRow } from "./api/query/myPostsWithStudy/types";
 export type { MyPostWithStudyView } from "./api/query/myPostsWithStudy/types";
 export type { PostError } from "./model/Post"; // action 에러 번역(ACL)용
-export type { PostCardView, PostDetailResponse, PostResponse, PostWithRelationResponse, PostRecommendedResponse } from "./model/types";
+export type { PostCardView, PostResponse, PostWithRelationResponse, PostRecommendedResponse } from "./model/types";
 // ── 쓰기 (Command, use-case 진입) ──  ※ policy finalize 후 추가
 export { PostId } from "./model/PostId";
 export { PostPolicy } from "./service/Post-policy"; // createPost / updatePost / deletePost (완전 연산)
