@@ -43,7 +43,7 @@ export default async function LatestSection(
                         <Button
                             variant='outline'
                             size='lg'
-                            className='border-2 border-primary text-primary hover:bg-primary/5 bg-transparent'>
+                            className='border-2 border-primary text-primary hover:bg-primary/5 bg-transparent transition-transform active:scale-[0.96]'>
                             더 많은 모집글 보기 →
                         </Button>
                     </Link>

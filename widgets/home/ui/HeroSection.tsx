@@ -42,7 +42,7 @@ export default function HeroSection() {
                   </p>
                 </div>
 
-                <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 text-balance leading-relaxed">
+                <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 text-pretty leading-relaxed">
                   당신의 학습 목표를 달성할 수 있는 최적의 스터디를 찾아보세요.
                   같은 목표를 가진 사람들과 함께라면, 학습은 더욱 즐겁고
                   효과적입니다.
@@ -52,7 +52,7 @@ export default function HeroSection() {
                   <Link href="/studies/create">
                     <Button
                       size="lg"
-                      className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all px-8 py-6 text-lg"
+                      className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-[box-shadow,transform] active:scale-[0.96] px-8 py-6 text-lg"
                     >
                       스터디 만들기
                     </Button>
@@ -61,7 +61,7 @@ export default function HeroSection() {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="w-full sm:w-auto border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 bg-transparent font-semibold px-8 py-6 text-lg"
+                      className="w-full sm:w-auto border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 bg-transparent font-semibold px-8 py-6 text-lg transition-transform active:scale-[0.96]"
                     >
                       모집글 보기
                     </Button>
@@ -97,7 +97,7 @@ export default function HeroSection() {
               <div className="relative lg:block">
                 <div className="relative w-full max-w-lg mx-auto space-y-6">
                   {/* Feature Cards */}
-                  <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-blue-100 dark:border-blue-900/30 hover:shadow-xl transition-all animate-float">
+                  <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-blue-100 dark:border-blue-900/30 hover:shadow-xl transition-shadow animate-float">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
                         <Users className="w-6 h-6 text-white" />
@@ -115,7 +115,7 @@ export default function HeroSection() {
                   </Card>
 
                   <Card
-                    className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-purple-100 dark:border-purple-900/30 hover:shadow-xl transition-all animate-float ml-8"
+                    className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-purple-100 dark:border-purple-900/30 hover:shadow-xl transition-shadow animate-float ml-8"
                     style={{ animationDelay: "0.2s" }}
                   >
                     <div className="flex items-start gap-4">
@@ -134,7 +134,7 @@ export default function HeroSection() {
                   </Card>
 
                   <Card
-                    className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-indigo-100 dark:border-indigo-900/30 hover:shadow-xl transition-all animate-float"
+                    className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-indigo-100 dark:border-indigo-900/30 hover:shadow-xl transition-shadow animate-float"
                     style={{ animationDelay: "0.4s" }}
                   >
                     <div className="flex items-start gap-4">

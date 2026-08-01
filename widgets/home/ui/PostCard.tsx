@@ -9,6 +9,7 @@ import { formatTimeAgo } from '@/shared/lib/date'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import { Badge } from '@/shared/shadcn/ui/badge'
 import { Card } from '@/shared/shadcn/ui/card'
+import { Eye, ThumbsUp } from 'lucide-react'
 import Image from 'next/image'
 
 export default function PostCard({
@@ -110,14 +111,14 @@ export default function PostCard({
                             <span className='text-muted-foreground'>
                                 참여 인원
                             </span>
-                            <span className='font-semibold text-foreground'>
+                            <span className='font-semibold text-foreground tabular-nums'>
                                 {post.study.currentParticipants}/
                                 {post.study.maxParticipants}
                             </span>
                         </div>
                         <div className='w-full bg-muted rounded-full h-2 overflow-hidden'>
                             <div
-                                className='h-full bg-accent rounded-full transition-all duration-300'
+                                className='h-full bg-accent rounded-full transition-[width] duration-300'
                                 style={{
                                     width: `${(post.study.currentParticipants / post.study.maxParticipants) * 100}%`,
                                 }}
@@ -156,8 +157,12 @@ export default function PostCard({
                 {/* Engagement & Time */}
                 <div className='flex justify-between items-center text-xs text-muted-foreground'>
                     <div className='flex gap-3'>
-                        <span>👍 {post.likesCount}</span>
-                        <span>👁 {post.viewsCount}</span>
+                        <span className='flex items-center gap-1 tabular-nums'>
+                            <ThumbsUp className='w-3.5 h-3.5' /> {post.likesCount}
+                        </span>
+                        <span className='flex items-center gap-1 tabular-nums'>
+                            <Eye className='w-3.5 h-3.5' /> {post.viewsCount}
+                        </span>
                     </div>
                     <span>{formatTimeAgo(post.createdAt)}</span>
                 </div>

@@ -274,3 +274,14 @@
     animation-delay: 1s;
   }
 }
+
+/* 모션 민감 사용자: 무한/진입 애니메이션 중지 (접근성) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-delay-1,
+  .animate-float-delay-2,
+  .animate-pulse,
+  .animate-fade-in {
+    animation: none;
+  }
+}
