@@ -1,4 +1,4 @@
-import { FormSkeleton } from "@/components/skeleton";
+import { FormSkeleton } from "@/shared/ui/skeleton";
 import { queryStudyEditView } from "@/entities/study";
 import { StudyEditFormValues, StudyEditForm } from "@/features/study/edit";
 import { createClient } from "@/shared/api/supabase/server";

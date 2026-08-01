@@ -1,6 +1,6 @@
 'use client'
 
-import { StudySelectSkeleton } from '@/components/skeleton'
+import { StudySelectSkeleton } from '@/shared/ui/skeleton'
 import { CreatePostCommand, createPostSchema } from '@/entities/post'
 
 import { StudyResponse, StudySelect } from '@/entities/study'

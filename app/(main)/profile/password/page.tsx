@@ -1,4 +1,4 @@
-import { ProfileSkeleton } from "@/components/skeleton";
+import { ProfileSkeleton } from "@/shared/ui/skeleton";
 import { queryMyProfile } from "@/entities/user";
 import { PasswordChangeForm } from "@/features/auth/change-password";
 import { createClient } from "@/shared/api/supabase/server";

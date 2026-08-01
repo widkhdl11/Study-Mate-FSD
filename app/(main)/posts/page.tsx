@@ -1,4 +1,4 @@
-import { PostsListSkeleton } from "@/components/skeleton";
+import { PostsListSkeleton } from "@/shared/ui/skeleton";
 import { queryAllPosts } from "@/entities/post";
 import { createClient } from "@/shared/api/supabase/server";
 import { HeaderSection, MainSection } from "@/widgets/post";

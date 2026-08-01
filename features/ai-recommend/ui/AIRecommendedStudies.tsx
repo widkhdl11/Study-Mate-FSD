@@ -1,6 +1,6 @@
 "use client";
 
-import { useAIRecommendedPosts } from "@/features/ai-recommend";
+import { useAIRecommendedPosts } from "../model/useAgent";
 import { getRegionPath } from "@/shared/config/region";
 import { getCategoryPath } from "@/shared/config/study-category";
 import { Badge } from "@/shared/shadcn/ui/badge";

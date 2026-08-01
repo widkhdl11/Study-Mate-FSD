@@ -1,4 +1,4 @@
-import { StudyDetailSkeleton } from "@/components/skeleton";
+import { StudyDetailSkeleton } from "@/shared/ui/skeleton";
 import { queryStudyDetail } from "@/entities/study";
 import { queryMyProfile } from "@/entities/user";
 import { createClient } from "@/shared/api/supabase/server";

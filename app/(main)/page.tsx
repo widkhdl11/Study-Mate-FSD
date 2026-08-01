@@ -1,4 +1,4 @@
-import { AIRecommendedStudies } from '@/components/AIRecommendedStudies'
+import { AIRecommendedStudies } from '@/features/ai-recommend'
 import { HomeWidget } from '@/widgets/home'
 
 export default function HomePage() {

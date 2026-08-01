@@ -1,5 +1,5 @@
 
-import { PostDetailMainSkeleton, PostDetailSidebarSkeleton } from "@/components/skeleton";
+import { PostDetailMainSkeleton, PostDetailSidebarSkeleton } from "@/shared/ui/skeleton";
 import { PostDetailView, PostWithRelationResponse, PostImageSection } from "@/entities/post";
 import { Suspense } from "react";
 import RelationSection from "./RelationSection";
