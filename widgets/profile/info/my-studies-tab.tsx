@@ -10,12 +10,11 @@ import { Card } from "@/shared/shadcn/ui/card";
 import { TabsContent } from "@/shared/shadcn/ui/tabs";
 import { Users } from "lucide-react";
 import Link from "next/link";
+import { getStatusColor } from "../lib/tabBadgeColors";
 export default function MyStudiesTab({
   myStudies,
-  getStatusColor,
 }: {
   myStudies: StudyResponse[];
-  getStatusColor: (status: string) => string;
 }) {
   return (
     <>

@@ -21,15 +21,12 @@ import { Edit, Eye, MapPin, MoreVertical, ThumbsUp, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { getCategoryColor, getStatusColor } from '../lib/tabBadgeColors'
 
 export default function MyPostTab({
     myPosts,
-    getStatusColor,
-    getCategoryColor,
 }: {
     myPosts: MyPostWithStudyView[]
-    getStatusColor: (status: string) => string
-    getCategoryColor: (category: string) => string
 }) {
     const deleteMutation = useDeletePost()
     const router = useRouter()
