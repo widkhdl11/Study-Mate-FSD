@@ -1,5 +1,5 @@
 // entities/chat — Public API
-export type { ChatMessage, ChatParticipant, ChatRoom } from "./model/types";
+export type { ChatDetailView, ChatMessage, ChatParticipant, MyChatRoomView } from "./model/types";
 export { queryChatDetail } from "./api/query/chatDetail/queryChatDetail";
 export { queryChatParticipants } from "./api/query/chatParticipants/queryChatParticipants";
 export { queryMyChatRooms } from "./api/query/myChatRooms/queryMyChatRooms";

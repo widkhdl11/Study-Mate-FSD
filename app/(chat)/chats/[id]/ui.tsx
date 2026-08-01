@@ -7,14 +7,14 @@ import { getProfileImageUrl } from "@/shared/api/supabase/storage"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar"
 import { Button } from "@/shared/shadcn/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/shadcn/ui/sheet"
-import { ChatMessage, ChatParticipant, ChatRoom, useChatMessages } from "@/entities/chat"
+import { ChatDetailView, ChatMessage, ChatParticipant, useChatMessages } from "@/entities/chat"
 import { ArrowLeft, ImageIcon as ImageIconComponent, Menu, Send, Smile } from "lucide-react"
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 
 
 export default function ChatRoomUI({ chatParticipants, chatRoom }: 
-  { chatParticipants: ChatParticipant[], chatRoom: ChatRoom }) {
+  { chatParticipants: ChatParticipant[], chatRoom: ChatDetailView }) {
 
     const { data: user } = useCurrentUser();
     const inputRef = useRef<HTMLInputElement>(null);

@@ -1,4 +1,4 @@
-import { ChatRoom } from "@/entities/chat/model/types"
+import { ChatDetailView } from "@/entities/chat/model/types"
 import { err, ok, Result } from "@/shared/kernel/Result"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { checkChatParticipant } from "../checkChatParticipant"
@@ -13,7 +13,7 @@ export async function queryChatDetail(
     supabase: SupabaseClient,
     chatId: number,
     userId: string,
-): Promise<Result<ChatRoom, QueryChatDetailError>> {
+): Promise<Result<ChatDetailView, QueryChatDetailError>> {
     const isMember = await checkChatParticipant(supabase, chatId, userId)
     if (!isMember) {
         return err({ kind: "Forbidden", chatId })
@@ -32,5 +32,5 @@ export async function queryChatDetail(
         return err({ kind: "NotFound", chatId })
     }
 
-    return ok(data as unknown as ChatRoom)
+    return ok(data as unknown as ChatDetailView)
 }

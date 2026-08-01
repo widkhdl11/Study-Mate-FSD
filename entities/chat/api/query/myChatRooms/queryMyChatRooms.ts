@@ -1,4 +1,4 @@
-import { ChatRoom } from "@/entities/chat/model/types"
+import { MyChatRoomView } from "@/entities/chat/model/types"
 import { err, ok, Result } from "@/shared/kernel/Result"
 import { SupabaseClient } from "@supabase/supabase-js"
 
@@ -9,7 +9,7 @@ export type QueryMyChatRoomsError =
 export async function queryMyChatRooms(
     supabase: SupabaseClient,
     userId: string,
-): Promise<Result<ChatRoom[], QueryMyChatRoomsError>> {
+): Promise<Result<MyChatRoomView[], QueryMyChatRoomsError>> {
     const { data, error } = await supabase
         .from("chat_participants")
         .select(`
@@ -24,5 +24,5 @@ export async function queryMyChatRooms(
         return err({ kind: "Infra", message: error.message })
     }
 
-    return ok((data ?? []) as unknown as ChatRoom[])
+    return ok((data ?? []) as unknown as MyChatRoomView[])
 }

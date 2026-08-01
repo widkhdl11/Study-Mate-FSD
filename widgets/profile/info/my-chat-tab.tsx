@@ -4,23 +4,23 @@ import { getProfileImageUrl } from "@/shared/api/supabase/storage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
 import { Card } from "@/shared/shadcn/ui/card";
 import { TabsContent } from "@/shared/shadcn/ui/tabs";
-import { ChatRoom } from "@/entities/chat";
+import { MyChatRoomView } from "@/entities/chat";
 import { formatTimeAgo } from "@/shared/lib/date";
 import Link from "next/link";
 export default function MyChatTab({chatRooms} : {
-    chatRooms : ChatRoom[]
+    chatRooms : MyChatRoomView[]
 }) {
     return (<> {/* 채팅 탭 */}
         <TabsContent value="chats" className="space-y-4">
             <div className="space-y-3"> {
-                chatRooms.map((room : ChatRoom) => (
+                chatRooms.map((room : MyChatRoomView) => (
                 <Card key={room.chat.id}
                     className="group overflow-hidden hover:shadow-md transition-all h-full flex flex-col p-0 gap-0 min-h-[100px]">
                     <Link href={`/chats/${room.chat.id}`}>
                     <div className="flex items-start gap-4 p-4">
                         <Avatar className="h-12 w-12 flex-shrink-0">
-                            <AvatarImage src={getProfileImageUrl(room.profile.avatar_url)} alt={room.name} />
-                            <AvatarFallback className="bg-blue-600 text-white"> {room?.name|| "??"} </AvatarFallback>
+                            <AvatarImage src={getProfileImageUrl(room.profile.avatar_url)} alt={room.chat.name ?? ""} />
+                            <AvatarFallback className="bg-blue-600 text-white"> {room.chat.name || "??"} </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2 mb-1">

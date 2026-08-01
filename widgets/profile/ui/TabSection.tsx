@@ -1,6 +1,6 @@
 'use client'
 
-import { ChatRoom } from '@/entities/chat'
+import { MyChatRoomView } from '@/entities/chat'
 import { MyPostWithStudyView } from '@/entities/post'
 import { StudyResponse } from '@/entities/study'
 import { MyProfileCountResponse, ProfileResponse } from '@/entities/user'
@@ -33,7 +33,7 @@ export default function TabSection({
     currentUser,
     profilesCountData,
 }: {
-    chatRooms: ChatRoom[]
+    chatRooms: MyChatRoomView[]
     myPosts: MyPostWithStudyView[]
     myStudies: StudyResponse[] | []
     currentUser: ProfileResponse
