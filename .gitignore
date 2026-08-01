@@ -56,3 +56,7 @@ next-env.d.ts
 .types_db.ts
 
 .claude/
+
+# skills CLI (로컬 도구)
+.agents/
+skills-lock.json
