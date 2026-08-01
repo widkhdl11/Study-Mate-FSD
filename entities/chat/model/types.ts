@@ -1,9 +1,9 @@
 export interface ChatMessage {
-    id: string | null
-    chat_id: string
-    user_id: string
+    id: number
+    chat_id: number
     content: string
-    created_at: string
+    sender_id: string | null
+    created_at: string | null
     profile: {
         username: string
         avatar_url: string | null

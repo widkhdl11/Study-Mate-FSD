@@ -1,5 +1,8 @@
-import { getChatParticipantsSSR, getChatSSR } from "@/actions/chatAction";
+import { queryChatDetail, queryChatParticipants } from "@/entities/chat";
+import { createClient } from "@/shared/api/supabase/server";
+import { CustomUserAuth } from "@/shared/lib/auth";
 import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
 
 const ChatRoomUI = dynamic(
     () => import('./ui')
@@ -8,8 +11,18 @@ const ChatRoomUI = dynamic(
 export default async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
 
     const { id } = await params;
-    const chatParticipants = await getChatParticipantsSSR(Number(id));
-    const chatRoom = await getChatSSR(Number(id));
+    const chatId = Number(id);
+    const supabase = await createClient();
+    const { user } = await CustomUserAuth(supabase);
 
-    return <ChatRoomUI chatParticipants={chatParticipants} chatRoom={chatRoom} />
+    const [participantsResult, chatResult] = await Promise.all([
+        queryChatParticipants(supabase, chatId, user.id),
+        queryChatDetail(supabase, chatId, user.id),
+    ]);
+
+    if (!participantsResult.ok || !chatResult.ok) {
+        notFound();
+    }
+
+    return <ChatRoomUI chatParticipants={participantsResult.value} chatRoom={chatResult.value} />
 }

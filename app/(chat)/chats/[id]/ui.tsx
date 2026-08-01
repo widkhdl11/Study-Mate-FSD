@@ -1,14 +1,13 @@
 "use client"
 
 import { useChatScroll } from "@/shared/lib/useChatScroll"
-import { ChatMessage } from "@/hooks/use-realtime-chat"
-import { useGetChatMessages, useSendMessage } from "@/hooks/useChat"
+import { useSendMessage } from "@/features/chat/send-message"
 import { useCurrentUser } from "@/entities/user"
 import { getProfileImageUrl } from "@/shared/api/supabase/storage"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar"
 import { Button } from "@/shared/shadcn/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/shadcn/ui/sheet"
-import { ChatParticipant, ChatRoom } from "@/entities/chat"
+import { ChatMessage, ChatParticipant, ChatRoom, useChatMessages } from "@/entities/chat"
 import { ArrowLeft, ImageIcon as ImageIconComponent, Menu, Send, Smile } from "lucide-react"
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
@@ -19,7 +18,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
 
     const { data: user } = useCurrentUser();
     const inputRef = useRef<HTMLInputElement>(null);
-    const { data: messages, isLoading } = useGetChatMessages(Number(chatRoom.id));
+    const { data: messages, isLoading } = useChatMessages(Number(chatRoom.id));
     const sendMessageMutation = useSendMessage(Number(chatRoom.id));    
     const [newMessage, setNewMessage] = useState("")
     // const messagesEndRef = useRef<HTMLDivElement>(null)

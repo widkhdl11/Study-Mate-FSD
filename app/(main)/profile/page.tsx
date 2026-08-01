@@ -1,4 +1,4 @@
-import { getMyChatRoomsSSR } from "@/actions/chatAction";
+import { queryMyChatRooms } from "@/entities/chat";
 import { ProfileSection, TabSection } from "@/widgets/profile";
 import { TabSectionSkeleton } from "@/shared/ui/skeleton";
 import { queryMyPostsWithStudy } from "@/entities/post";
@@ -31,14 +31,14 @@ export default async function UserProfilePage() {
 
 async function ProfileTabsLoader({ user }: { user: ProfileResponse }) {
   const supabase = await createClient();
-  const [postsData, studiesData, chatRoomsData, profilesCountResult] = await Promise.all([
+  const [postsData, studiesData, chatRoomsResult, profilesCountResult] = await Promise.all([
     queryMyPostsWithStudy(supabase, user.id),
     queryMyStudies(supabase, user.id),
-    getMyChatRoomsSSR(),
+    queryMyChatRooms(supabase, user.id),
     queryMyProfileCount(supabase, user.id),
   ]);
 
-  if (!postsData.ok || !studiesData.ok) {
+  if (!postsData.ok || !studiesData.ok || !chatRoomsResult.ok) {
     notFound();
   }
 
@@ -53,7 +53,7 @@ async function ProfileTabsLoader({ user }: { user: ProfileResponse }) {
 
   return (
     <TabSection
-      chatRooms={chatRoomsData}
+      chatRooms={chatRoomsResult.value}
       myPosts={postsData.value}
       myStudies={studiesData.value}
       currentUser={user}
