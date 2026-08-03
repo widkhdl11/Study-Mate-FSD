@@ -31,7 +31,7 @@ import { useState } from "react";
 
 
 export default function MainSection(
-    { allPosts, search }: { allPosts: PostWithStudyView[], search?: string }
+    { allPosts, search, initialCategory }: { allPosts: PostWithStudyView[], search?: string, initialCategory?: string }
 ) {
 
     const searchProp = search ?? "";
@@ -58,7 +58,8 @@ export default function MainSection(
   };
 
   const [selectedStatus, setSelectedStatus] = useState("전체 상태");
-  const [mainCategoryValue, setMainCategoryValue] = useState("");
+  // 홈 카테고리 섹션에서 넘어온 초기 대분류(URL ?category=<value>)로 필터 시작
+  const [mainCategoryValue, setMainCategoryValue] = useState(initialCategory ?? "");
   const [subCategoryValue, setSubCategoryValue] = useState("");
   const [detailCategoryValue, setDetailCategoryValue] = useState("");
   const [mainRegionValue, setMainRegionValue] = useState("");
