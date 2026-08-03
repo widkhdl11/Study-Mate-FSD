@@ -9,7 +9,7 @@ export default function KickButton({ studyId, participant }: { studyId: number, 
         <Button
             size="sm"
             variant="outline"
-            className="text-red-600 hover:text-red-700 bg-transparent"
+            className="text-destructive hover:text-destructive/80 bg-transparent"
             onClick={() => {
                 if (
                 window.confirm(

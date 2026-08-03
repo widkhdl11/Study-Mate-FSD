@@ -38,7 +38,7 @@ export default function MemberRow({ participant, statusBadgeSlot, actionSlot }: 
               </Badge>
             )}
             {participant.role === "common" && (
-              <Badge className="bg-green-600 text-white text-xs">
+              <Badge className="bg-success text-white text-xs">
                 멤버
               </Badge>
             )}

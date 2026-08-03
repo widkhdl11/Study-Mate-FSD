@@ -12,7 +12,7 @@ export default function SignupCard() {
     <>
         {/* 회원가입 폼 카드 */}
         <Card className="p-6">
-          <h2 className="mb-6 text-xl font-semibold text-slate-900 dark:text-white">
+          <h2 className="mb-6 text-xl font-semibold text-foreground">
             회원가입
           </h2>
 
@@ -21,7 +21,7 @@ export default function SignupCard() {
 
         {/* 로그인 링크 */}
         <div className="mt-6 text-center">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm text-muted-foreground">
             이미 회원이신가요?{" "}
             <Link
               href="/auth/login"

@@ -29,7 +29,7 @@ export default function MyChatTab({chatRooms} : {
                                 } </h3>
                                 {/* 읽지 않은 메세지 */}
                                 {/* {
-                                room.unreadCount > 0 && (<Badge className="bg-red-500 text-white"> {
+                                room.unreadCount > 0 && (<Badge className="bg-destructive text-white"> {
                                     room.unreadCount
                                 } </Badge>)
                             }  */}

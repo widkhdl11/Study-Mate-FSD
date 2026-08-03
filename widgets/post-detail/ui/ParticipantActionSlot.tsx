@@ -20,7 +20,7 @@ export function ParticipantActionSlot({ status, studyId }: Props) {
         return (
           <Button
             disabled
-            className="w-full py-6 text-lg bg-yellow-600 hover:bg-yellow-700"
+            className="w-full py-6 text-lg bg-warning hover:bg-warning/90"
           >
             수락 대기중
           </Button>

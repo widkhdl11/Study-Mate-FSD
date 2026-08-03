@@ -68,7 +68,7 @@ export default function StudySelect({
             ) : (
                 <div className='flex flex-col items-center justify-center'>
                     <div className='flex flex-col items-center justify-between h-full w-full'>
-                        <p className='text-sm text-slate-500 dark:text-slate-400'>
+                        <p className='text-sm text-muted-foreground'>
                             스터디가 없습니다
                         </p>
                         <Link
@@ -82,11 +82,11 @@ export default function StudySelect({
 
             {selectedStudy && (
                 <div className='mt-3 rounded-lg border border-primary/20 bg-primary/5 p-4'>
-                    <h4 className='text-sm font-semibold text-slate-900 dark:text-white mb-3'>
+                    <h4 className='text-sm font-semibold text-foreground mb-3'>
                         {selectedStudy.title}
                     </h4>
                     <div className='grid grid-cols-2 gap-3'>
-                        <div className='flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400'>
+                        <div className='flex items-center gap-2 text-sm text-muted-foreground'>
                             <Tag className='w-4 h-4 text-primary shrink-0' />
                             <span className='shrink-0'>카테고리</span>
                             <div className='flex items-center pr-2'>
@@ -102,7 +102,7 @@ export default function StudySelect({
                                 ))}
                             </div>
                         </div>
-                        <div className='flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 w-full'>
+                        <div className='flex items-center gap-2 text-sm text-muted-foreground w-full'>
                             <MapPin className='w-4 h-4 text-primary shrink-0' />
                             <span className='shrink-0'>지역</span>
                             <div className='w-full flex justify-start shrink-1'>
@@ -118,10 +118,10 @@ export default function StudySelect({
                                 ))}
                             </div>
                         </div>
-                        <div className='flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 col-span-2'>
+                        <div className='flex items-center gap-2 text-sm text-muted-foreground col-span-2'>
                             <Users className='w-4 h-4 text-primary' />
                             <span>모집 인원</span>
-                            <span className='font-medium text-slate-900 dark:text-white'>
+                            <span className='font-medium text-foreground'>
                                 {selectedStudy.currentParticipants}/
                                 {selectedStudy.maxParticipants}명
                             </span>

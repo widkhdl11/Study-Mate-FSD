@@ -24,7 +24,7 @@ async function ProfileEditLoader() {
     redirect("/login");
   }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-muted/30 to-background px-4 py-12">
       <div className="w-full max-w-2xl">
         {/* 헤더 */}
         <div className="mb-8">
@@ -34,8 +34,8 @@ async function ProfileEditLoader() {
               프로필로 돌아가기
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mx-2">프로필 수정</h1>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 mx-4">회원 정보를 수정할 수 있습니다</p>
+          <h1 className="text-3xl font-bold text-foreground mx-2">프로필 수정</h1>
+          <p className="mt-2 text-sm text-muted-foreground mx-4">회원 정보를 수정할 수 있습니다</p>
         </div>
         <ProfileUpdateForm useData={currentUser.value} />
       </div>

@@ -63,7 +63,7 @@ export default function StudyEditForm({
   const detailRegions = getSubRegion(mainRegionValue)
   return (
         <Card className="p-6 md:p-8">
-          <h2 className="mb-6 text-2xl font-semibold text-slate-900 dark:text-white">
+          <h2 className="mb-6 text-2xl font-semibold text-foreground">
             스터디 수정하기
           </h2>
 

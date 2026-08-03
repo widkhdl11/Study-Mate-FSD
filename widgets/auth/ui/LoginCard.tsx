@@ -7,7 +7,7 @@ import Link from 'next/link'
 export default function LoginCard() {
     
     return (
-        <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4'>
+        <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-muted/30 to-background px-4'>
             <div className='w-full max-w-md'>
                 {/* 로고 및 제목 */}
                 <div className='mb-8 text-center'>
@@ -18,17 +18,17 @@ export default function LoginCard() {
                             </span>
                         </div>
                     </div>
-                    <h1 className='text-3xl font-bold text-slate-900 dark:text-white'>
+                    <h1 className='text-3xl font-bold text-foreground'>
                         Study Mate
                     </h1>
-                    <p className='mt-2 text-sm text-slate-600 dark:text-slate-400'>
+                    <p className='mt-2 text-sm text-muted-foreground'>
                         함께 성장하는 스터디 문화
                     </p>
                 </div>
 
                 {/* 로그인 폼 카드 */}
                 <Card className='p-6'>
-                    <h2 className='mb-6 text-xl font-semibold text-slate-900 dark:text-white'>
+                    <h2 className='mb-6 text-xl font-semibold text-foreground'>
                         로그인
                     </h2>
 
@@ -37,7 +37,7 @@ export default function LoginCard() {
 
                 {/* 회원가입 링크 */}
                 <div className='mt-6 text-center'>
-                    <p className='text-sm text-slate-600 dark:text-slate-400'>
+                    <p className='text-sm text-muted-foreground'>
                         아직 회원이 아니신가요?{' '}
                         <Link
                             href='/auth/signup'

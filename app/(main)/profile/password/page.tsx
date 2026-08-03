@@ -24,7 +24,7 @@ async function PasswordChangeLoader() {
     redirect("/login");
   }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-muted/30 to-background px-4 py-12">
       <div className="w-full max-w-md">
         {/* 헤더 */}
         <div className="mb-8">
@@ -38,9 +38,9 @@ async function PasswordChangeLoader() {
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
               <Lock className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">비밀번호 변경</h1>
+            <h1 className="text-3xl font-bold text-foreground">비밀번호 변경</h1>
           </div>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 mx-4">
+          <p className="mt-2 text-sm text-muted-foreground mx-4">
             보안을 위해 정기적으로 비밀번호를 변경해주세요
           </p>
         </div>

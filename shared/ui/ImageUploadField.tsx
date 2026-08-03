@@ -76,9 +76,9 @@ export function ImageUploadField<T extends FieldValues>({
                         <FormDescription>{description}</FormDescription>
                         <FormControl>
                             <div className='space-y-4'>
-                                <label className='relative flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg p-8 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer dark:border-slate-700 dark:hover:bg-slate-800/50'>
+                                <label className='relative flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-8 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer dark:hover:bg-muted/50'>
                                     <svg
-                                        className='w-10 h-10 text-slate-400 mb-2'
+                                        className='w-10 h-10 text-muted-foreground mb-2'
                                         fill='none'
                                         stroke='currentColor'
                                         viewBox='0 0 24 24'>
@@ -89,11 +89,11 @@ export function ImageUploadField<T extends FieldValues>({
                                             d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
                                         />
                                     </svg>
-                                    <p className='text-sm font-medium text-slate-700 dark:text-slate-300'>
+                                    <p className='text-sm font-medium text-foreground'>
                                         이미지를 클릭하거나 드래그해서
                                         업로드하세요
                                     </p>
-                                    <p className='text-xs text-slate-500 dark:text-slate-400 mt-1'>
+                                    <p className='text-xs text-muted-foreground mt-1'>
                                         PNG, JPG, GIF (최대 10MB)
                                     </p>
                                     <input
@@ -123,7 +123,7 @@ export function ImageUploadField<T extends FieldValues>({
                                                     onClick={() =>
                                                         removeImage(index)
                                                     }
-                                                    className='absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'
+                                                    className='absolute -top-2 -right-2 bg-destructive text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'
                                                     disabled={disabled}>
                                                     ×
                                                 </button>
