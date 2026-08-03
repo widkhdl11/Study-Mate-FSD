@@ -71,7 +71,7 @@ export function AIRecommendedStudies() {
                     <Badge variant="secondary" className="text-xs">
                       #{index + 1} 추천
                     </Badge>
-                    {getCategoryPath(Number(rec.study?.study_category)).labels.map((category) => (
+                    {getCategoryPath(Number(rec.study?.studyCategory)).labels.map((category) => (
                         <Badge key={category} variant="outline" className={`text-xs font-normal`}>
                           {category}
                         </Badge>  

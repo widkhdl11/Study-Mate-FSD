@@ -1,7 +1,7 @@
 "use server";
 
-import { PostRecommendedResponse } from "@/entities/post";
 import { StudyRecommendationView } from "@/entities/study";
+import { PostRecommendedRow, toPostRecommendedView } from "../model/types";
 import { createClient } from "@/shared/api/supabase/server";
 import { GoogleGenAI } from "@google/genai";
 
@@ -226,9 +226,9 @@ JSON 배열로만 응답하세요. 다른 텍스트 없이.
       return { success: false, error: { message: "AI 응답이 없습니다" } };
     }
 
-    const result: PostRecommendedResponse[] = JSON.parse(content);
-
-    // 4, 5번 — DB 재조회 + 합치기 부분도 OpenAI 버전과 완전히 동일
+    // Gemini raw JSON(snake) = Row → 경계에서 camel View로 매핑
+    const rows = JSON.parse(content) as PostRecommendedRow[];
+    const result = rows.map(toPostRecommendedView);
 
     return { success: true, data: result };
   } catch {

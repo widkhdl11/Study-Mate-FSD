@@ -19,22 +19,22 @@ export type PostWithRelationResponse = {
     updatedAt: string
 
 
-    // JOIN된 데이터
+    // JOIN된 데이터 (camel View — 경계에서 매핑된 shape)
     study: {
         id: number
         title: string
         description: string
-        study_category: number
+        studyCategory: number
         region: number
-        max_participants: number
-        current_participants: number
+        maxParticipants: number
+        currentParticipants: number
         status: string
-        created_at: string
+        createdAt: string
         creator: {
             id: number
             username: string
             email: string
-            avatar_url: string
+            avatarUrl: string
         }
     }
 
@@ -42,7 +42,7 @@ export type PostWithRelationResponse = {
         id: number
         email: string
         username: string
-        avatar_url: string | null
+        avatarUrl: string | null
     }
 }
 
@@ -86,26 +86,3 @@ export type PostCardView = Pick<
     "id" | "title" | "content" | "imageUrl" | "createdAt" | "likesCount" | "viewsCount"
 >
 
-export type PostRecommendedResponse = {
-    id: number
-    title: string
-    content: string
-    study_id: number
-    image_url: string
-    study: {
-        id: number
-        title: string
-        description: string
-        study_category: number
-        region: number
-        max_participants: number
-        current_participants: number
-        status: string
-        created_at: string
-    }
-    author: {
-        id: number
-        username: string
-        avatar_url: string
-    }
-}
