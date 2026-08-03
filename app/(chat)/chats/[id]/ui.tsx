@@ -92,7 +92,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                         src={getProfileImageUrl(member.profile?.avatar_url)}
                         alt={member.profile?.username || "사용자"} 
                       />
-                      <AvatarFallback className="bg-blue-600 text-white">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
                         {member.profile?.username?.substring(0, 2) || "??"}
                       </AvatarFallback>
                     </Avatar>
@@ -124,7 +124,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                     src={getProfileImageUrl(message.profile?.avatar_url)}
                     alt={message.profile?.username || "사용자"} 
                   />
-                  <AvatarFallback className="bg-blue-600 text-white text-xs">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                     {message.profile?.username?.substring(0, 2) || "??"}
                   </AvatarFallback>
                 </Avatar>
@@ -137,7 +137,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                 )}
                 <div
                   className={`px-4 py-2 rounded-2xl ${
-                    isMe ? "bg-blue-600 text-white" : "bg-muted text-foreground"
+                    isMe ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
@@ -181,7 +181,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
           </div>
           <Button
             onClick={handleSendMessage}
-            className="bg-blue-600 hover:bg-blue-700 rounded-full h-10 w-10 p-0 flex-shrink-0"
+            className="bg-primary hover:bg-primary/90 rounded-full h-10 w-10 p-0 flex-shrink-0"
             disabled={newMessage.trim() === "" || sendMessageMutation.isPending}
           >
             <Send className="w-5 h-5" />

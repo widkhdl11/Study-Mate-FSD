@@ -125,7 +125,7 @@ export default function PostCreateForm({ studiesPromise }: { studiesPromise: Pro
                 <div className='flex gap-3 pt-4'>
                     <Button
                         type='submit'
-                        className='flex-1 bg-blue-600 hover:bg-blue-700 text-white'
+                        className='flex-1 bg-primary hover:bg-primary/90 text-primary-foreground'
                         disabled={isLoading}>
                         {isLoading ? '작성 중...' : '모집글 작성'}
                     </Button>

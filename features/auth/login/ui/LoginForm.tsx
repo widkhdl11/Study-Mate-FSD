@@ -81,7 +81,7 @@ export default function LoginForm() {
                 {/* 로그인 버튼 */}
                 <Button
                     type='submit'
-                    className='mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white'
+                    className='mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground'
                     disabled={loginMutation.isPending}>
                     {loginMutation.isPending
                         ? '로그인 중...'

@@ -37,7 +37,7 @@ export default function ProfileSection({
     }, [profileImage])
 
     return (
-        <section className='border-b border-border bg-linear-to-br from-blue-50 to-slate-50 dark:from-slate-900 dark:to-slate-800 py-10'>
+        <section className='border-b border-border bg-linear-to-br from-primary/5 to-muted/40 py-10'>
             <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex flex-col sm:flex-row sm:items-start sm:gap-8'>
                     <div className='relative shrink-0'>
@@ -56,7 +56,7 @@ export default function ProfileSection({
 
                         <label
                             htmlFor='profile-image-upload'
-                            className='absolute bottom-0 right-0 bg-gray-600 hover:bg-blue-700 text-white rounded-full p-2 cursor-pointer shadow-lg transition-all hover:scale-110'
+                            className='absolute bottom-0 right-0 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-lg transition-all hover:scale-110'
                             title='프로필 이미지 변경'>
                             <Settings className='w-4 h-4' />
                         </label>
@@ -80,7 +80,7 @@ export default function ProfileSection({
                                     {currentUser?.email || ''}
                                 </p>
                             </div>
-                            <Badge className='bg-blue-600 text-white w-fit'>
+                            <Badge className='bg-primary text-primary-foreground w-fit'>
                                 {currentUser?.points || ''}
                             </Badge>
                         </div>
@@ -91,7 +91,7 @@ export default function ProfileSection({
 
                         <div className='flex flex-wrap gap-3'>
                             <Link href='/profile/edit'>
-                                <Button className='bg-blue-600 hover:bg-blue-700 gap-2'>
+                                <Button className='bg-primary hover:bg-primary/90 gap-2'>
                                     <Edit className='w-4 h-4' />
                                     프로필 수정
                                 </Button>

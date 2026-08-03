@@ -23,7 +23,7 @@ export default function MemberRow({ participant, statusBadgeSlot, actionSlot }: 
             src={getProfileImageUrl(participant?.avatarUrl || "")}
             alt={participant.username}
           />
-          <AvatarFallback className="bg-blue-600 text-white text-lg">
+          <AvatarFallback className="bg-primary text-primary-foreground text-lg">
             {participant.username}
           </AvatarFallback>
         </Avatar>
@@ -33,7 +33,7 @@ export default function MemberRow({ participant, statusBadgeSlot, actionSlot }: 
               {participant.username}
             </p>
             {participant.role === "host" && (
-              <Badge className="bg-blue-600 text-white text-xs">
+              <Badge className="bg-primary text-primary-foreground text-xs">
                 호스트
               </Badge>
             )}

@@ -12,7 +12,7 @@ export default function LoginCard() {
                 {/* 로고 및 제목 */}
                 <div className='mb-8 text-center'>
                     <div className='mb-4 flex items-center justify-center'>
-                        <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600'>
+                        <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-primary'>
                             <span className='text-lg font-bold text-white'>
                                 S
                             </span>
@@ -41,7 +41,7 @@ export default function LoginCard() {
                         아직 회원이 아니신가요?{' '}
                         <Link
                             href='/auth/signup'
-                            className='font-semibold text-blue-600 hover:text-blue-700'>
+                            className='font-semibold text-primary hover:text-primary/80'>
                             회원가입하기
                         </Link>
                     </p>

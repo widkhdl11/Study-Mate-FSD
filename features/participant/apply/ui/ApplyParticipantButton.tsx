@@ -9,7 +9,7 @@ export function ApplyParticipantButton({studyId }: {studyId: number}) {
     const { mutate: applyMutation, isPending: isApplying } = useApplyParticipant(studyId);
     return (
         <Button
-            className="w-full py-6 text-lg bg-blue-600 hover:bg-blue-700"
+            className="w-full py-6 text-lg bg-primary hover:bg-primary/90"
             onClick={() => applyMutation()}
             disabled={isApplying}
         >

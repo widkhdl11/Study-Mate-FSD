@@ -42,7 +42,7 @@ export default function RelationSection({ relatedPosts }: { relatedPosts: PostWi
                       </div>
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-0 h-auto text-blue-600"
+                        className="w-full justify-start p-0 h-auto text-primary"
                       >
                         → 상세보기
                       </Button>

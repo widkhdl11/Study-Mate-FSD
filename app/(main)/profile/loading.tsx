@@ -7,7 +7,7 @@ export default function ProfileLoading() {
 
       <main className="flex-1">
         {/* 프로필 헤더 스켈레톤 */}
-        <section className="border-b border-border bg-gradient-to-br from-blue-50 to-slate-50 dark:from-slate-900 dark:to-slate-800 py-10">
+        <section className="border-b border-border bg-gradient-to-br from-primary/5 to-muted/40 py-10">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-start sm:gap-8">
               {/* 아바타 스켈레톤 */}

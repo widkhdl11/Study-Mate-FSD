@@ -13,7 +13,7 @@ export function StudyCategoryBadges({categoryPath}: {categoryPath: CategoryPath}
             <Badge
             variant="outline"
             key={i}
-            className="bg-blue-100 text-blue-700 border-blue-200"
+            className="bg-muted text-muted-foreground border-0"
             >
                     {category}
                 </Badge>

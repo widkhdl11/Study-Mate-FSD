@@ -103,11 +103,11 @@ export function PasswordChangeForm() {
           />
 
           {/* 안내 메시지 */}
-          <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
+          <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <p className="text-sm text-foreground">
               <strong>비밀번호 보안 팁:</strong>
             </p>
-            <ul className="mt-2 text-xs text-blue-700 dark:text-blue-300 space-y-1 list-disc list-inside">
+            <ul className="mt-2 text-xs text-muted-foreground space-y-1 list-disc list-inside">
               <li>최소 6자 이상의 비밀번호를 사용하세요</li>
               <li>영문, 숫자, 특수문자를 조합하면 더 안전합니다</li>
               <li>다른 사이트와 동일한 비밀번호를 사용하지 마세요</li>
@@ -118,7 +118,7 @@ export function PasswordChangeForm() {
           <div className="flex gap-3 pt-4">
             <Button
               type="submit"
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
               disabled={isPending}
             >
               {isPending ? "변경 중..." : "비밀번호 변경"}

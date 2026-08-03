@@ -25,7 +25,7 @@ export default function SignupCard() {
             이미 회원이신가요?{" "}
             <Link
               href="/auth/login"
-              className="font-semibold text-blue-600 hover:text-blue-700"
+              className="font-semibold text-primary hover:text-primary/80"
             >
               로그인하기
             </Link>

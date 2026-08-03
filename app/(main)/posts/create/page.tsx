@@ -17,7 +17,7 @@ export default async function PostCreatePage() {
             <div className='w-full max-w-2xl'>
                 <div className='mb-8 text-center'>
                     <div className='mb-4 flex items-center justify-center'>
-                        <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600'>
+                        <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-primary'>
                             <span className='text-lg font-bold text-white'>
                                 S
                             </span>

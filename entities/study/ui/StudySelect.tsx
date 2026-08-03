@@ -73,7 +73,7 @@ export default function StudySelect({
                         </p>
                         <Link
                             href='/studies/create'
-                            className='text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'>
+                            className='text-sm text-primary hover:text-primary/80'>
                             스터디 만들기
                         </Link>
                     </div>
@@ -81,13 +81,13 @@ export default function StudySelect({
             )}
 
             {selectedStudy && (
-                <div className='mt-3 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/30'>
+                <div className='mt-3 rounded-lg border border-primary/20 bg-primary/5 p-4'>
                     <h4 className='text-sm font-semibold text-slate-900 dark:text-white mb-3'>
                         {selectedStudy.title}
                     </h4>
                     <div className='grid grid-cols-2 gap-3'>
                         <div className='flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400'>
-                            <Tag className='w-4 h-4 text-blue-600 shrink-0' />
+                            <Tag className='w-4 h-4 text-primary shrink-0' />
                             <span className='shrink-0'>카테고리</span>
                             <div className='flex items-center pr-2'>
                                 {getCategoryPath(
@@ -103,7 +103,7 @@ export default function StudySelect({
                             </div>
                         </div>
                         <div className='flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 w-full'>
-                            <MapPin className='w-4 h-4 text-blue-600 shrink-0' />
+                            <MapPin className='w-4 h-4 text-primary shrink-0' />
                             <span className='shrink-0'>지역</span>
                             <div className='w-full flex justify-start shrink-1'>
                                 {getRegionPath(
@@ -119,7 +119,7 @@ export default function StudySelect({
                             </div>
                         </div>
                         <div className='flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 col-span-2'>
-                            <Users className='w-4 h-4 text-blue-600' />
+                            <Users className='w-4 h-4 text-primary' />
                             <span>모집 인원</span>
                             <span className='font-medium text-slate-900 dark:text-white'>
                                 {selectedStudy.currentParticipants}/

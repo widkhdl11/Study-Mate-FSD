@@ -168,7 +168,7 @@ export default function SignupForm() {
               {/* 회원가입 버튼 */}
               <Button
                 type="submit"
-                className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white"
+                className="mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 disabled={signupMutation.isPending}
               >
                 {signupMutation.isPending ? "회원가입 중..." : "회원가입"}

@@ -71,7 +71,7 @@ export default function TabSection(
                         src={getProfileImageUrl(study.creator.avatarUrl)}
                         alt={study.creator.email || ""}
                       />
-                      <AvatarFallback className="bg-blue-600 text-white text-lg">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-lg">
                         {study.creator.email}
                       </AvatarFallback>
                     </Avatar>

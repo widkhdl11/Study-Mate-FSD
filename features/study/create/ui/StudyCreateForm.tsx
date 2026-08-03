@@ -325,7 +325,7 @@ export default function StudyCreateForm() {
               <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                   disabled={isPending}
                 >
                   {isPending ? "만드는 중..." : "스터디 만들기"}

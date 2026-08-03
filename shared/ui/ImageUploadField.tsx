@@ -76,7 +76,7 @@ export function ImageUploadField<T extends FieldValues>({
                         <FormDescription>{description}</FormDescription>
                         <FormControl>
                             <div className='space-y-4'>
-                                <label className='relative flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg p-8 hover:border-blue-600 hover:bg-blue-50 transition-all cursor-pointer dark:border-slate-700 dark:hover:bg-slate-800/50'>
+                                <label className='relative flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg p-8 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer dark:border-slate-700 dark:hover:bg-slate-800/50'>
                                     <svg
                                         className='w-10 h-10 text-slate-400 mb-2'
                                         fill='none'

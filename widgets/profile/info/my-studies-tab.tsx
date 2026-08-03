@@ -82,7 +82,7 @@ export default function MyStudiesTab({
           <Card className="p-12 text-center">
             <p className="text-muted-foreground">참여중인 스터디가 없습니다.</p>
             <Link href="/studies/create">
-              <Button className="mt-4 bg-blue-600 hover:bg-blue-700">
+              <Button className="mt-4 bg-primary hover:bg-primary/90">
                 스터디 만들기
               </Button>
             </Link>

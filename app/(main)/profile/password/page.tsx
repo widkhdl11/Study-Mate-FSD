@@ -35,7 +35,7 @@ async function PasswordChangeLoader() {
             </Button>
           </Link>
           <div className="flex items-center gap-3 mx-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
               <Lock className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">비밀번호 변경</h1>

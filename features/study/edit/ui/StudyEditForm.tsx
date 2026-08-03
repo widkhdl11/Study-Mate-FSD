@@ -341,7 +341,7 @@ export default function StudyEditForm({
               <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                   disabled={isPending}
                 >
                   {isPending ? "저장 중..." : "수정 완료"}

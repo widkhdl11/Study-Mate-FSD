@@ -69,9 +69,9 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
                     size="sm"
                     onClick={() => handleLikeClick()}
                     disabled={isTogglingLike}
-                    className={`gap-2 ${isLiked ? "bg-blue-50 border-blue-600 text-blue-600" : ""}`}
+                    className={`gap-2 ${isLiked ? "bg-primary/5 border-primary text-primary" : ""}`}
                   >
-                    <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-blue-600" : ""}`} />
+                    <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-primary" : ""}`} />
                     <span className="font-semibold">{post.likesCount}</span>
                   </Button>
                   {/* <span className="text-sm text-muted-foreground">👁 {post.viewsCount + (shouldAddView ? 1 : 0)}</span> */}

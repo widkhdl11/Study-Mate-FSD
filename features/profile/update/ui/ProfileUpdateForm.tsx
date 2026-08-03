@@ -135,7 +135,7 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
           <div className="flex gap-3 pt-4">
             <Button
               type="submit"
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
               disabled={isPending}
             >
               {isPending ? "수정 중..." : "수정하기"}
