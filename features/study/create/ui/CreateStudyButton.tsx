@@ -1,8 +1,15 @@
 'use client'
 
+import { cn } from '@/shared/lib/cn'
 import { useRouter } from 'next/navigation'
 
-export default function CreateStudyButton({ isLoggedIn }: { isLoggedIn: boolean }) {
+export default function CreateStudyButton({
+    isLoggedIn,
+    className,
+}: {
+    isLoggedIn: boolean
+    className?: string
+}) {
     const router = useRouter()
 
     const handleClick = () => {
@@ -16,7 +23,10 @@ export default function CreateStudyButton({ isLoggedIn }: { isLoggedIn: boolean 
     return (
         <button
             onClick={handleClick}
-            className='text-foreground hover:text-accent transition-colors font-medium'>
+            className={cn(
+                'text-foreground hover:text-accent transition-colors font-medium',
+                className
+            )}>
             스터디 만들기
         </button>
     )
