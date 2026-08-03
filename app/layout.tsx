@@ -11,6 +11,23 @@ const GeistSans = localFont({
   display: "swap",
 });
 
+// 케빈스룸 디자인 언어: 본문 기본 폰트를 Pretendard Variable로 전환.
+// 자가호스팅(레이아웃 시프트/외부 요청 없음) + 한글 폴백 체인 유지.
+const pretendard = localFont({
+  src: "../public/fonts/pretendard/PretendardVariable.woff2",
+  variable: "--font-pretendard",
+  display: "swap",
+  weight: "45 920",
+  fallback: [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "sans-serif",
+  ],
+});
+
 export const metadata: Metadata = {
   title: "Study Mate - 함께 성장하는 스터디 문화",
   description:
@@ -41,7 +58,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${GeistSans.variable}`}>
+    <html lang="ko" className={`${pretendard.variable} ${GeistSans.variable}`}>
       <head>
         <meta name="naver-site-verification" content="8699548ac724e7466db107bc0072bc6894628fac" />
       </head>

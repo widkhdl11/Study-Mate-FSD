@@ -83,9 +83,9 @@
 }
 
 @theme inline {
-  /* --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback"; */
-  --font-sans: var(--font-geist-sans);
+  /* 케빈스룸 디자인 언어: 본문 기본 폰트 Pretendard Variable (한글 최적)
+     --font-pretendard 미로드 시 Geist → 시스템 폰트로 폴백 */
+  --font-sans: var(--font-pretendard), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-pixel-square: var(--font-geist-pixel-square);
   --font-pixel-grid: var(--font-geist-pixel-grid);
