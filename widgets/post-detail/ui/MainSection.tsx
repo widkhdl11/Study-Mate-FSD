@@ -3,12 +3,13 @@
 import { usePostDetail, PostDetailView, useIsLiked } from "@/entities/post";
 import { ProfileResponse } from "@/entities/user";
 import { useToggleLike } from "@/features/post/like";
+import { useTrackPostView } from "@/features/post/track-view";
 import { getProfileImageUrl } from "@/shared/api/supabase/storage";
 import TimeAgo from "@/shared/common/FormatTimeAgo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
 import { Button } from "@/shared/shadcn/ui/button";
 import PostOwnerActions from "./PostOwnerActions";
-import { ThumbsUp } from "lucide-react";
+import { Eye, ThumbsUp } from "lucide-react";
 import { useRef } from "react";
 
 export default function MainSection({ postData,user }: { postData: PostDetailView, user: ProfileResponse | null }) {
@@ -18,7 +19,7 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
 
     const { data: isLikedData } = useIsLiked(post.id);
     const isLiked = isLikedData || false;
-    // const { shouldAddView } = useTrackPostView(post.id);
+    const { shouldAddView } = useTrackPostView(post.id);
 
     const isProcessingRef = useRef(false);
 
@@ -74,8 +75,10 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
                     <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-primary" : ""}`} />
                     <span className="font-semibold">{post.likesCount}</span>
                   </Button>
-                  {/* <span className="text-sm text-muted-foreground">👁 {post.viewsCount + (shouldAddView ? 1 : 0)}</span> */}
-                  <span className="text-sm text-muted-foreground">� {post.likesCount}</span>
+                  <span className="flex items-center gap-1 text-sm text-muted-foreground tabular-nums">
+                    <Eye className="h-4 w-4" />
+                    {post.viewsCount + (shouldAddView ? 1 : 0)}
+                  </span>
                   {user?.id === post.author?.id && (
                     <PostOwnerActions postId={post.id} />
                   )}
