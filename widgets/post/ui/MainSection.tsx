@@ -47,13 +47,13 @@ export default function MainSection(
     const getStatusColor = (status: string) => {
     switch (status) {
       case "모집중":
-        return "bg-green-500 hover:bg-green-600 text-white";
+        return "bg-success hover:bg-success/90 text-white";
       case "마감":
-        return "bg-red-500 hover:bg-red-600 text-white";
+        return "bg-danger hover:bg-danger/90 text-white";
       case "수락 대기중":
-        return "bg-yellow-500 hover:bg-yellow-600 text-white";
+        return "bg-warning hover:bg-warning/90 text-white";
       default:
-        return "bg-slate-500 text-white";
+        return "bg-muted text-muted-foreground";
     }
   };
 
