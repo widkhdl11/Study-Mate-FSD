@@ -36,6 +36,10 @@ export function useTrackPostView(postId: number) {
 
   useEffect(() => {
     if (!countsThisMount) return; // 이미 본 글이면 아무것도 안 함
+    // Strict Mode의 이중 이펙트(setup→cleanup→setup)나 재마운트로 RPC가 중복 호출돼
+    // 조회수가 +2 되는 것을 방지. store를 진실로 재확인 — markAsViewed가 동기라
+    // 두 번째 실행은 여기서 걸러진다.
+    if (hasViewed(postId)) return;
 
     markAsViewed(postId); // 로컬 스토리지에 post id 추가(낙관적)
     increaseViewCount(postId).catch(() => {
@@ -43,7 +47,7 @@ export function useTrackPostView(postId: number) {
       setCountsThisMount(false);
       useViewCountStore.getState().viewedPostIds.delete(postId);
     });
-  }, [postId, countsThisMount, markAsViewed]);
+  }, [postId, countsThisMount, hasViewed, markAsViewed]);
 
   const shouldAddView = mounted && countsThisMount; // 마운트 후에만 유효, hydration 일치 위해
   return { shouldAddView };
