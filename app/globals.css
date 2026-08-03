@@ -87,6 +87,10 @@
      --font-pretendard 미로드 시 Geist → 시스템 폰트로 폴백 */
   --font-sans: var(--font-pretendard), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* 케빈스룸 본문 타이포 토큰: text-base = 17px / 행간 1.7 (spacing 불변) */
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.7;
   --font-pixel-square: var(--font-geist-pixel-square);
   --font-pixel-grid: var(--font-geist-pixel-grid);
   --font-pixel-circle: var(--font-geist-pixel-circle);
@@ -227,6 +231,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* 케빈스룸 본문 타이포: 17px / 행간 1.7 (명시적 text-* 없는 기본 텍스트 기준) */
+    font-size: 1.0625rem; /* 17px @ root 16px */
+    line-height: 1.7;
   }
 
   /* 드롭다운 메뉴 애니메이션 */
