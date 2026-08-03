@@ -1,20 +1,14 @@
 // 프로필 탭 뱃지 색상 매핑 (모집글/스터디 탭 공용)
+// 케빈스룸 단일 블루 정체성: 카테고리는 중립 배지, 상태는 의미 토큰(success/danger)
 
 const STATUS_COLORS: Record<string, string> = {
-    '모집중': 'bg-green-500 text-white',
-    '마감': 'bg-red-500 text-white',
-}
-
-const CATEGORY_COLORS: Record<string, string> = {
-    프론트엔드: 'bg-blue-100 text-blue-700 border-blue-200',
-    백엔드: 'bg-purple-100 text-purple-700 border-purple-200',
-    AI: 'bg-amber-100 text-amber-700 border-amber-200',
-    모바일: 'bg-green-100 text-green-700 border-green-200',
-    디자인: 'bg-pink-100 text-pink-700 border-pink-200',
+    '모집중': 'bg-success text-white',
+    '마감': 'bg-danger text-white',
 }
 
 export const getStatusColor = (status: string) =>
-    STATUS_COLORS[status] || 'bg-slate-500 text-white'
+    STATUS_COLORS[status] || 'bg-muted text-muted-foreground'
 
-export const getCategoryColor = (category: string) =>
-    CATEGORY_COLORS[category] || 'bg-slate-100 text-slate-700 border-slate-200'
+// 카테고리는 단일 블루 정체성 유지를 위해 색으로 구분하지 않고 중립 배지로 통일
+export const getCategoryColor = (_category: string) =>
+    'bg-muted text-muted-foreground border-0'
