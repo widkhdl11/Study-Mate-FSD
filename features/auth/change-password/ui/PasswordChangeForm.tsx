@@ -8,15 +8,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/shared/shadcn/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useRef } from "react"
 import { useForm } from "react-hook-form"
 
 
 
 export function PasswordChangeForm() {
-  const formRef = useRef<HTMLFormElement>(null)
-
-
   const form = useForm<ChangePasswordCommand>({
     resolver: zodResolver(passwordChangeSchema),
     defaultValues: {
@@ -41,7 +37,7 @@ export function PasswordChangeForm() {
 
     <Card className="p-6">
       <Form {...form}>
-        <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" >
           {/* 현재 비밀번호 필드 */}
           <FormField
             control={form.control}

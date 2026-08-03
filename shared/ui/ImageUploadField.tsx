@@ -8,7 +8,7 @@ import {
     FormItem,
     FormLabel,
 } from '@/shared/shadcn/ui/form'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { type Control, type FieldValues, type Path } from 'react-hook-form'
 
 type ImageUploadFieldProps<T extends FieldValues> = {
@@ -39,7 +39,22 @@ export function ImageUploadField<T extends FieldValues>({
     }, [existingImages])
 
     const [previewUrls, setPreviewUrls] = useState<string[]>(existingPreviewUrls)
-    
+
+    // 언마운트 시 남은 blob: 미리보기 URL 해제 (메모리 누수 방지).
+    // 기존 이미지의 https URL은 revoke 대상이 아니므로 blob:만 골라 해제.
+    // 최신 previewUrls를 ref로 참조해 언마운트 클린업이 stale 값을 보지 않게 함.
+    const previewUrlsRef = useRef<string[]>(previewUrls)
+    useEffect(() => {
+        previewUrlsRef.current = previewUrls
+    }, [previewUrls])
+    useEffect(() => {
+        return () => {
+            previewUrlsRef.current.forEach((url) => {
+                if (url.startsWith('blob:')) URL.revokeObjectURL(url)
+            })
+        }
+    }, [])
+
 
     return (
         <FormField
