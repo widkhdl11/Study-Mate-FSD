@@ -1,10 +1,45 @@
 import { Badge } from "@/shared/shadcn/ui/badge"
 import { Button } from "@/shared/shadcn/ui/button"
 import { Card } from "@/shared/shadcn/ui/card"
-import { BookOpen, Sparkles, Target, Users } from "lucide-react"
+import { BookOpen, Sparkles, Target, Users, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
 import HeroStats, { HeroStatsSkeleton } from "./HeroStats"
+
+// 우측 플로팅 피처 카드 — 블루 단일 계열 아이콘 타일 + float 딜레이 스태거
+const FEATURE_CARDS: {
+  icon: LucideIcon
+  title: string
+  desc: string
+  gradient: string
+  indent: boolean
+  delay: string
+}[] = [
+  {
+    icon: Users,
+    title: "다양한 스터디",
+    desc: "프론트엔드, 백엔드, AI, 디자인 등 다양한 분야의 스터디를 만나보세요",
+    gradient: "from-[#2F58E0] to-[#1D40B4]",
+    indent: false,
+    delay: "0s",
+  },
+  {
+    icon: BookOpen,
+    title: "체계적인 학습",
+    desc: "함께 공부하며 서로의 성장을 돕는 효과적인 학습 경험",
+    gradient: "from-[#1D40B4] to-[#0E44B7]",
+    indent: true,
+    delay: "0.2s",
+  },
+  {
+    icon: Target,
+    title: "목표 달성",
+    desc: "같은 목표를 가진 동료들과 함께 학습 목표를 이루세요",
+    gradient: "from-[#0E44B7] to-[#002AA1]",
+    indent: false,
+    delay: "0.4s",
+  },
+]
 
 export default function HeroSection() {
   return (
@@ -78,61 +113,27 @@ export default function HeroSection() {
               {/* Right decorative cards — 블루 위 흰 카드, 아이콘 타일 블루 단일 계열 */}
               <div className="relative lg:block">
                 <div className="relative w-full max-w-lg mx-auto space-y-6">
-                  {/* Feature Cards */}
-                  <Card className="p-6 bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow animate-float">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#2F58E0] to-[#1D40B4] rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                        <Users className="w-6 h-6 text-white" />
+                  {FEATURE_CARDS.map((card) => (
+                    <Card
+                      key={card.title}
+                      className={`p-6 bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow animate-float ${card.indent ? "ml-8" : ""}`}
+                      style={{ animationDelay: card.delay }}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-xl flex items-center justify-center flex-shrink-0 shadow-md`}>
+                          <card.icon className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg text-foreground mb-1">
+                            {card.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {card.desc}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg text-foreground mb-1">
-                          다양한 스터디
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          프론트엔드, 백엔드, AI, 디자인 등 다양한 분야의
-                          스터디를 만나보세요
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  <Card
-                    className="p-6 bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow animate-float ml-8"
-                    style={{ animationDelay: "0.2s" }}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#1D40B4] to-[#0E44B7] rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                        <BookOpen className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg text-foreground mb-1">
-                          체계적인 학습
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          함께 공부하며 서로의 성장을 돕는 효과적인 학습 경험
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  <Card
-                    className="p-6 bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow animate-float"
-                    style={{ animationDelay: "0.4s" }}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#0E44B7] to-[#002AA1] rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                        <Target className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg text-foreground mb-1">
-                          목표 달성
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          같은 목표를 가진 동료들과 함께 학습 목표를 이루세요
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
+                    </Card>
+                  ))}
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { PostWithStudyView } from '@/entities/post'
 import { getImageUrl, getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { getRegionPath } from '@/shared/config/region'
 import { getCategoryPath } from '@/shared/config/study-category'
-import { studyStatusConversion } from '@/shared/lib/conversion/study'
+import { getStudyStatusColor, studyStatusConversion } from '@/shared/lib/conversion/study'
 import { formatTimeAgo } from '@/shared/lib/date'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import { Badge } from '@/shared/shadcn/ui/badge'
@@ -18,22 +18,7 @@ export default function PostCard({
 }: {
     post: PostWithStudyView
     priority?: boolean
-
 }) {
-
-        const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'recruiting':
-                return 'bg-success text-white'
-            case 'closed':
-                return 'bg-danger text-white'
-            case 'pending':
-                return 'bg-warning text-foreground'
-            default:
-                return 'bg-muted text-muted-foreground'
-        }
-    }
-
     return (
         <Card className='overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full flex flex-col cursor-pointer hover:border-accent/50'>
             {/* Thumbnail Image */}
@@ -118,8 +103,8 @@ export default function PostCard({
                             {post.study.createdAt}
                         </span>
                         <Badge
-                            className={`${getStatusColor(post.study.status)} border-0 text-xs`}>
-                            {studyStatusConversion(post.study.status) }
+                            className={`${getStudyStatusColor(post.study.status)} border-0 text-xs`}>
+                            {studyStatusConversion(post.study.status)}
                         </Badge>
                     </div>
                 </div>
