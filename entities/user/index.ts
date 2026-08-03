@@ -11,6 +11,7 @@ export type { UserIdError } from "./model/UserId";
 // ── 읽기 (Query / 현재 유저) ──
 export { queryMyProfile } from "./api/query/myProfile/queryMyProfile";
 export { queryMyProfileCount } from "./api/query/myProfileCount/queryMyProfileCount";
+export { queryMembersCount } from "./api/query/membersCount/queryMembersCount";
 export { queryCurrentUser } from "./api/query/currentUser/queryCurrentUser";
 export { useCurrentUser } from "./api/query/currentUser/useCurrentUser";
 export type { CurrentUserResponse } from "./api/query/currentUser/types";

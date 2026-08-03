@@ -3,6 +3,8 @@ import { Button } from "@/shared/shadcn/ui/button"
 import { Card } from "@/shared/shadcn/ui/card"
 import { BookOpen, Sparkles, Target, Users } from "lucide-react"
 import Link from "next/link"
+import { Suspense } from "react"
+import HeroStats, { HeroStatsSkeleton } from "./HeroStats"
 
 export default function HeroSection() {
   return (
@@ -67,29 +69,10 @@ export default function HeroSection() {
                   </Link>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-3 gap-6 pt-8">
-                  <div className="text-center lg:text-left space-y-1">
-                    <div className="text-3xl md:text-4xl font-bold text-white tabular-nums">
-                      2,340+
-                    </div>
-                    <div className="text-sm text-white/70">
-                      활성 스터디
-                    </div>
-                  </div>
-                  <div className="text-center lg:text-left space-y-1">
-                    <div className="text-3xl md:text-4xl font-bold text-white tabular-nums">
-                      15,680+
-                    </div>
-                    <div className="text-sm text-white/70">멤버</div>
-                  </div>
-                  <div className="text-center lg:text-left space-y-1">
-                    <div className="text-3xl md:text-4xl font-bold text-white tabular-nums">
-                      98%
-                    </div>
-                    <div className="text-sm text-white/70">만족도</div>
-                  </div>
-                </div>
+                {/* Stats — 실데이터, Suspense로 스트리밍 (히어로 페인트 비차단) */}
+                <Suspense fallback={<HeroStatsSkeleton />}>
+                  <HeroStats />
+                </Suspense>
               </div>
 
               {/* Right decorative cards — 블루 위 흰 카드, 아이콘 타일 블루 단일 계열 */}

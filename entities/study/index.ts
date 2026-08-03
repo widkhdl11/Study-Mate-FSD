@@ -27,6 +27,7 @@ export { queryMyStudies } from "./api/query/myStudies/queryMyStudies";
 export type { QueryGetMyStudiesError } from "./api/query/myStudies/queryMyStudies";
 export { queryStudyEditView } from "./api/query/queryStudyEditView";
 export type { StudyEditView, StudyEditViewError } from "./api/query/queryStudyEditView";
+export { queryRecruitingStudiesCount } from "./api/query/recruitingStudiesCount/queryRecruitingStudiesCount";
 export { queryStudyDetail } from "./api/query/studyDetail/queryStudyDetail";
 export type { QueryStudyDetailError } from "./api/query/studyDetail/queryStudyDetail";
 export type { StudyDetailView } from "./api/query/studyDetail/types";
