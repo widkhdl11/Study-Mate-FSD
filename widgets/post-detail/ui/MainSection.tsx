@@ -19,7 +19,7 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
 
     const { data: isLikedData } = useIsLiked(post.id);
     const isLiked = isLikedData || false;
-    const { shouldAddView } = useTrackPostView(post.id);
+    useTrackPostView(post.id); // 조회수 +1 (React Query 캐시에 반영)
 
     const isProcessingRef = useRef(false);
 
@@ -77,7 +77,7 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
                   </Button>
                   <span className="flex items-center gap-1 text-sm text-muted-foreground tabular-nums">
                     <Eye className="h-4 w-4" />
-                    {post.viewsCount + (shouldAddView ? 1 : 0)}
+                    {post.viewsCount}
                   </span>
                   {user?.id === post.author?.id && (
                     <PostOwnerActions postId={post.id} />
