@@ -59,7 +59,10 @@ function AvatarImage({
   if (!src) return null   // src 없으면 바로 null (Fallback 뜸)
 
   return (
-    <AvatarPrimitive.Image asChild>
+    // src를 AvatarPrimitive.Image에도 전달해야 Radix가 로딩 상태를 추적한다.
+    // (자식 next/image에만 주면 Radix는 src=undefined로 보고 항상 error 처리 →
+    //  이미지를 안 그리고 Fallback만 떠서 모든 아바타가 이니셜로 표시되던 버그)
+    <AvatarPrimitive.Image asChild src={src}>
       <Image
         data-slot="avatar-image"
         src={src}
