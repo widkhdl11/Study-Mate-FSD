@@ -62,3 +62,7 @@ next-env.d.ts
 skills-lock.json
 
 /public/test-images/
+
+# 일회성 로컬 DB 유틸 스크립트 (.env secret 사용, 레포에 올리지 않음)
+cleanup-test-posts.mjs
+tmp_*.mjs
