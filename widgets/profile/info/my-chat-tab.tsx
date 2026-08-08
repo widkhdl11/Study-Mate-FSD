@@ -6,16 +6,26 @@ import { Card } from "@/shared/shadcn/ui/card";
 import { TabsContent } from "@/shared/shadcn/ui/tabs";
 import { MyChatRoomView } from "@/entities/chat";
 import { formatTimeAgo } from "@/shared/lib/date";
+import { EmptyState } from "@/shared/ui/EmptyState";
+import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 export default function MyChatTab({chatRooms} : {
     chatRooms : MyChatRoomView[]
 }) {
     return (<> {/* 채팅 탭 */}
         <TabsContent value="chats" className="space-y-4">
+            {chatRooms.length === 0 ? (
+                <EmptyState
+                    icon={MessageCircle}
+                    title="아직 참여 중인 채팅방이 없어요"
+                    description="스터디에 참여하면 팀원들과 바로 대화할 수 있어요."
+                    action={{ label: "스터디 찾아보기", href: "/posts" }}
+                />
+            ) : (
             <div className="space-y-3"> {
                 chatRooms.map((room : MyChatRoomView) => (
                 <Card key={room.chat.id}
-                    className="group overflow-hidden hover:shadow-md transition-all h-full flex flex-col p-0 gap-0 min-h-[100px]">
+                    className="group overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col p-0 gap-0 min-h-[100px]">
                     <Link href={`/chats/${room.chat.id}`}>
                     <div className="flex items-start gap-4 p-4">
                         <Avatar className="h-12 w-12 flex-shrink-0">
@@ -46,6 +56,7 @@ export default function MyChatTab({chatRooms} : {
                 </Card>
                 ))
             } </div>
+            )}
         </TabsContent>
     </>);
 }

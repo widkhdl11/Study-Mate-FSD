@@ -6,7 +6,7 @@ import { getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import { Badge } from '@/shared/shadcn/ui/badge'
 import { Button } from '@/shared/shadcn/ui/button'
-import { Edit, Lock, Settings } from 'lucide-react'
+import { Camera, Edit, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -37,7 +37,7 @@ export default function ProfileSection({
     }, [profileImage])
 
     return (
-        <section className='border-b border-border bg-linear-to-br from-primary/5 to-muted/40 py-10'>
+        <section className='border-b border-border bg-muted/30 py-10'>
             <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex flex-col sm:flex-row sm:items-start sm:gap-8'>
                     <div className='relative shrink-0'>
@@ -56,15 +56,17 @@ export default function ProfileSection({
 
                         <label
                             htmlFor='profile-image-upload'
-                            className='absolute bottom-0 right-0 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-lg transition-all hover:scale-110'
+                            className='absolute bottom-0 right-0 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-sm transition-all hover:scale-110'
                             title='프로필 이미지 변경'>
-                            <Settings className='w-4 h-4' />
+                            <Camera className='w-4 h-4' aria-hidden='true' />
+                            <span className='sr-only'>프로필 이미지 변경</span>
                         </label>
 
                         <input
                             id='profile-image-upload'
                             type='file'
                             accept='image/*'
+                            aria-label='프로필 이미지 변경'
                             onChange={handleImageChange}
                             className='sr-only'
                         />

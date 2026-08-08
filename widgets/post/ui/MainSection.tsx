@@ -11,7 +11,7 @@ import {
   getSubcategories,
 } from "@/shared/config/study-category";
 import { STUDY_STATUS } from "@/shared/config/study-status";
-import { getStudyStatusExistValue, studyStatusConversion } from "@/shared/lib/conversion/study";
+import { getStudyStatusColor, getStudyStatusExistValue, studyStatusConversion } from "@/shared/lib/conversion/study";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
 import { Badge } from "@/shared/shadcn/ui/badge";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -44,20 +44,11 @@ export default function MainSection(
         setSearchQuery(searchProp);
     }
 
-    const getStatusColor = (status: string) => {
-    switch (status) {
-      case "모집중":
-        return "bg-success hover:bg-success/90 text-white";
-      case "마감":
-        return "bg-danger hover:bg-danger/90 text-white";
-      case "수락 대기중":
-        return "bg-warning hover:bg-warning/90 text-white";
-      default:
-        return "bg-muted text-muted-foreground";
-    }
-  };
-
   const [selectedStatus, setSelectedStatus] = useState("전체 상태");
+  const [sortBy, setSortBy] = useState("latest");
+  const PAGE_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [prevFilterSig, setPrevFilterSig] = useState("");
   // 홈 카테고리 섹션에서 넘어온 초기 대분류(URL ?category=<value>)로 필터 시작
   const [mainCategoryValue, setMainCategoryValue] = useState(initialCategory ?? "");
   const [subCategoryValue, setSubCategoryValue] = useState("");
@@ -126,6 +117,33 @@ export default function MainSection(
 
      return matchesSearch && matchesCategory && matchesRegion && matchesStatus;
   });
+
+  // 필터링된 결과에 정렬 적용 (전량 클라이언트 로드이므로 여기서 정렬)
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    switch (sortBy) {
+      case "members":
+        return (b.study?.currentParticipants || 0) - (a.study?.currentParticipants || 0);
+      case "popular":
+        return (
+          (b.likesCount || 0) - (a.likesCount || 0) ||
+          (b.viewsCount || 0) - (a.viewsCount || 0)
+        );
+      case "latest":
+      default:
+        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+    }
+  });
+
+  // 필터/정렬이 바뀌면 "더 보기" 개수를 처음으로 되돌린다 (in-render 리셋 — 이 파일의 prevSearch 패턴과 동일)
+  const filterSignature = [
+    searchQuery, mainCategoryValue, subCategoryValue, detailCategoryValue,
+    mainRegionValue, detailRegionValue, selectedStatus, sortBy,
+  ].join("|");
+  if (filterSignature !== prevFilterSig) {
+    setPrevFilterSig(filterSignature);
+    setVisibleCount(PAGE_SIZE);
+  }
+  const visiblePosts = sortedPosts.slice(0, visibleCount);
 
     return (
         <section className="py-8 px-4 sm:px-6 lg:px-8">
@@ -340,23 +358,33 @@ export default function MainSection(
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-hover:text-primary transition-colors" />
                 </div>
 
-                {/* Results Counter */}
-                <div className="flex items-center justify-between pt-2">
+                {/* Results Counter + Sort */}
+                <div className="flex items-center justify-between gap-3 pt-2">
                   <p className="text-sm text-muted-foreground">
                     총{" "}
                     <span className="font-bold text-foreground">
-                      {filteredPosts.length}
+                      {sortedPosts.length}
                     </span>
-                    개의 스터디가 모집중입니다
+                    개의 스터디
                   </p>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger id="sort" className="w-36 bg-background" aria-label="정렬 기준">
+                      <SelectValue placeholder="정렬" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="latest">최신순</SelectItem>
+                      <SelectItem value="members">참여 인원순</SelectItem>
+                      <SelectItem value="popular">인기순</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* Posts Grid */}
-                {filteredPosts.length > 0 ? (
+                {sortedPosts.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredPosts.map((post) => (
+                    {visiblePosts.map((post) => (
                       <Link key={post.id} href={`/posts/${post.id}`}>
-                        <Card className="group overflow-hidden hover:shadow-md transition-all duration-300 h-full flex flex-col cursor-pointer border-border/60 hover:border-primary/50 p-0 gap-0">
+                        <Card className="group overflow-hidden transition-all duration-300 h-full flex flex-col cursor-pointer border-border/60 hover:border-primary/50 p-0 gap-0">
                           {/* Thumbnail Image */}
                           <div className="relative w-full h-48 bg-muted overflow-hidden">
                             <Image
@@ -370,7 +398,7 @@ export default function MainSection(
                             />
                             <div className="absolute top-3 right-3">
                               <Badge
-                                className={`${getStatusColor(
+                                className={`${getStudyStatusColor(
                                   post.study?.status || ""
                                 )} border-0 shadow-sm`}
                               >
@@ -438,8 +466,10 @@ export default function MainSection(
                                   className="h-full bg-primary rounded-full transition-all duration-500"
                                   style={{
                                     width: `${
-                                      (post.study?.currentParticipants || 0) > 0 ? (post.study?.currentParticipants || 0) /
-                                        (post.study?.maxParticipants || 0) * 100 : 0
+                                      (post.study?.maxParticipants || 0) > 0
+                                        ? Math.min(100, (post.study?.currentParticipants || 0) /
+                                          (post.study?.maxParticipants || 0) * 100)
+                                        : 0
                                     }%`,
                                   }}
                                 />
@@ -454,7 +484,7 @@ export default function MainSection(
                                     src={getProfileImageUrl(post.author?.avatarUrl)}
                                     alt={post.author?.email || ""}
                                   />
-                                  <AvatarFallback className="text-[10px] bg-secondary">
+                                  <AvatarFallback className="text-xs bg-secondary">
                                     {post.author?.email?.[0] || ""}
                                   </AvatarFallback>
                                 </Avatar>
@@ -506,14 +536,15 @@ export default function MainSection(
                   </div>
                 )}
 
-                {/* Infinite Scroll Indicator */}
-                {filteredPosts.length > 0 && (
+                {/* 더 보기 — 클라이언트 페이지네이션(한 번에 PAGE_SIZE개씩 렌더해 대량 목록 성능 확보) */}
+                {visibleCount < sortedPosts.length && (
                   <div className="flex justify-center py-8">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-muted/30 rounded-full">
-                      <div className="w-2 h-2 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]"></div>
-                      <div className="w-2 h-2 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]"></div>
-                      <div className="w-2 h-2 rounded-full bg-primary animate-bounce"></div>
-                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                    >
+                      더 보기 ({sortedPosts.length - visibleCount}개 남음)
+                    </Button>
                   </div>
                 )}
               </div>

@@ -17,7 +17,8 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/shadcn/ui/dropdown-menu'
 import { TabsContent } from '@/shared/shadcn/ui/tabs'
-import { Edit, Eye, MapPin, MoreVertical, ThumbsUp, Trash2 } from 'lucide-react'
+import { EmptyState } from '@/shared/ui/EmptyState'
+import { Edit, Eye, FileText, MapPin, MoreVertical, ThumbsUp, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -53,7 +54,7 @@ export default function MyPostTab({
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                     {myPosts.map((item, index) => (
                         <div key={item.id} className='relative'>
-                            <Card className='group overflow-hidden hover:shadow-md transition-all h-full flex flex-col p-0 gap-0'>
+                            <Card className='group overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col p-0 gap-0'>
                                 <Link href={`/posts/${item.id}`}>
                                     <div className='relative w-full h-40 bg-muted overflow-hidden cursor-pointer'>
                                         <Image
@@ -174,11 +175,12 @@ export default function MyPostTab({
                     ))}
                 </div>
             ) : (
-                <Card className='p-12 text-center'>
-                    <p className='text-muted-foreground'>
-                        작성한 모집글이 없습니다.
-                    </p>
-                </Card>
+                <EmptyState
+                    icon={FileText}
+                    title='아직 작성한 모집글이 없어요'
+                    description='모집글을 올려 함께할 스터디원을 모아보세요.'
+                    action={{ label: '모집글 작성하기', href: '/posts/create' }}
+                />
             )}
         </TabsContent>
     )

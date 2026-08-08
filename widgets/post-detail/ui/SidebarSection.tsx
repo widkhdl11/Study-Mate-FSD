@@ -11,8 +11,8 @@ import { Badge } from "@/shared/shadcn/ui/badge"
 import { Card } from "@/shared/shadcn/ui/card"
 import { ParticipantActionSlot } from "./ParticipantActionSlot"
 
-export default function SidebarSection({ postData, participant }: { 
-  postData: PostDetailView, participant: ParticipantResponse | null
+export default function SidebarSection({ postData, participant, isOwner = false, chatRoomId = null }: {
+  postData: PostDetailView, participant: ParticipantResponse | null, isOwner?: boolean, chatRoomId?: number | null
 }) {
 
     const { data: post } = usePostDetail(postData)
@@ -23,14 +23,14 @@ export default function SidebarSection({ postData, participant }: {
     return (
          <div className="lg:col-span-1">
               {/* 스터디 정보 카드 */}
-              <Card className="p-6 sticky top-20 shadow-md">
+              <Card className="p-6 sticky top-20 shadow-sm">
                 {/* 상태 배지 */}
                 <div className="mb-4">
                   <Badge
                     className={`text-white ${
-                      status === "모집중"
+                      status === "모집중" || status === "참여중"
                         ? "bg-success"
-                        : status === "스터디 종료"
+                        : status === "신청 거절됨"
                         ? "bg-danger"
                         : "bg-warning"
                     }`}
@@ -63,9 +63,16 @@ export default function SidebarSection({ postData, participant }: {
                       {post.study.maxParticipants}
                     </span>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-2">
+                  <div
+                    className="w-full bg-muted rounded-full h-2"
+                    role="progressbar"
+                    aria-label="참여 인원"
+                    aria-valuemin={0}
+                    aria-valuemax={post.study.maxParticipants}
+                    aria-valuenow={post.study.currentParticipants || 0}
+                  >
                     <div
-                      className="bg-success h-2 rounded-full"
+                      className="bg-primary h-2 rounded-full"
                       style={{
                         width: `${
                           ((post.study.currentParticipants || 0) /
@@ -105,8 +112,10 @@ export default function SidebarSection({ postData, participant }: {
 
                 {/* 액션 버튼 */}
                 <ParticipantActionSlot
-                  status={status} 
+                  status={status}
                   studyId={post.study.id}
+                  isOwner={isOwner}
+                  chatRoomId={chatRoomId}
                 />
               </Card>
             </div>

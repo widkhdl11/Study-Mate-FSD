@@ -3,7 +3,7 @@ import { Card } from "@/shared/shadcn/ui/card";
 export default function SidebarSkeleton() {
   return (
     <div className="lg:col-span-1">
-      <Card className="p-6 sticky top-20 shadow-md animate-pulse">
+      <Card className="p-6 sticky top-20 shadow-sm animate-pulse">
         <div className="space-y-4">
           <div className="h-6 w-20 bg-muted rounded" />
           <div className="h-6 w-3/4 bg-muted rounded" />

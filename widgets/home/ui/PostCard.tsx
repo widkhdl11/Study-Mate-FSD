@@ -5,11 +5,9 @@ import { getImageUrl, getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { getRegionPath } from '@/shared/config/region'
 import { getCategoryPath } from '@/shared/config/study-category'
 import { getStudyStatusColor, studyStatusConversion } from '@/shared/lib/conversion/study'
-import { formatTimeAgo } from '@/shared/lib/date'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import { Badge } from '@/shared/shadcn/ui/badge'
 import { Card } from '@/shared/shadcn/ui/card'
-import { Eye, ThumbsUp } from 'lucide-react'
 import Image from 'next/image'
 
 export default function PostCard({
@@ -20,7 +18,7 @@ export default function PostCard({
     priority?: boolean
 }) {
     return (
-        <Card className='overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full flex flex-col cursor-pointer hover:border-accent/50'>
+        <Card className='overflow-hidden transition-colors duration-300 h-full flex flex-col cursor-pointer hover:border-accent/50'>
             {/* Thumbnail Image */}
             <div className='relative w-full h-48 bg-muted overflow-hidden'>
                 <Image
@@ -38,7 +36,7 @@ export default function PostCard({
             </div>
 
             <div className='p-5 flex-1 flex flex-col space-y-4'>
-                {/* Post Title */}
+                {/* Title + brief content */}
                 <div>
                     <h3 className='font-semibold text-foreground line-clamp-2 hover:text-accent transition-colors'>
                         {post.title}
@@ -48,69 +46,48 @@ export default function PostCard({
                     </p>
                 </div>
 
-                {/* Study Info Section */}
-                <div className='space-y-3 border-t border-border pt-3'>
-                    {/* Study Title */}
-                    <div>
-                        <p className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>
-                            스터디
-                        </p>
-                        <p className='font-medium text-foreground text-sm'>
-                            {post.study.title}
-                        </p>
-                    </div>
-
-                    {/* Category & Location */}
-                    <div className='flex flex-wrap gap-2'>
-                        {getCategoryPath(Number(post.study.studyCategory)).labels.map((category) => (
-                            <Badge
-                                key={category}
-                                className='bg-muted text-muted-foreground border-0'>
-                                {category}
-                            </Badge>
-                        ))}
-                        <Badge variant='outline' className='text-xs'>
-                            {getRegionPath(Number(post.study.region)).labels.map((region) => (
-                                <span key={region}>{region}</span>
-                            ))}
-                        </Badge>
-                    </div>
-
-                    {/* Participants Progress */}
-                    <div className='space-y-1'>
-                        <div className='flex justify-between items-center text-xs'>
-                            <span className='text-muted-foreground'>
-                                참여 인원
-                            </span>
-                            <span className='font-semibold text-foreground tabular-nums'>
-                                {post.study.currentParticipants}/
-                                {post.study.maxParticipants}
-                            </span>
-                        </div>
-                        <div className='w-full bg-muted rounded-full h-2 overflow-hidden'>
-                            <div
-                                className='h-full bg-accent rounded-full transition-[width] duration-300'
-                                style={{
-                                    width: `${(post.study.currentParticipants / post.study.maxParticipants) * 100}%`,
-                                }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Meeting Date & Status */}
-                    <div className='flex justify-between items-center'>
-                        <span className='text-xs text-muted-foreground'>
-                            {post.study.createdAt}
-                        </span>
+                {/* 핵심: 카테고리 · 지역 · 상태 */}
+                <div className='flex flex-wrap items-center gap-2'>
+                    {getCategoryPath(Number(post.study.studyCategory)).labels.map((category) => (
                         <Badge
-                            className={`${getStudyStatusColor(post.study.status)} border-0 text-xs`}>
-                            {studyStatusConversion(post.study.status)}
+                            key={category}
+                            className='bg-muted text-muted-foreground border-0'>
+                            {category}
                         </Badge>
+                    ))}
+                    <Badge variant='outline' className='text-xs'>
+                        {getRegionPath(Number(post.study.region)).labels.join(' ')}
+                    </Badge>
+                    <Badge
+                        className={`${getStudyStatusColor(post.study.status)} border-0 text-xs`}>
+                        {studyStatusConversion(post.study.status)}
+                    </Badge>
+                </div>
+
+                {/* 핵심: 참여 인원 */}
+                <div className='space-y-1 border-t border-border pt-3'>
+                    <div className='flex justify-between items-center text-xs'>
+                        <span className='text-muted-foreground'>참여 인원</span>
+                        <span className='font-semibold text-foreground tabular-nums'>
+                            {post.study.currentParticipants}/{post.study.maxParticipants}
+                        </span>
+                    </div>
+                    <div className='w-full bg-muted rounded-full h-2 overflow-hidden'>
+                        <div
+                            className='h-full bg-accent rounded-full transition-[width] duration-300'
+                            style={{
+                                width: `${
+                                    post.study.maxParticipants > 0
+                                        ? Math.min(100, (post.study.currentParticipants / post.study.maxParticipants) * 100)
+                                        : 0
+                                }%`,
+                            }}
+                        />
                     </div>
                 </div>
 
-                {/* Author Info */}
-                <div className='flex items-center gap-2 border-t border-border pt-3'>
+                {/* 호스트 */}
+                <div className='flex items-center gap-2 border-t border-border pt-3 mt-auto'>
                     <Avatar className='h-7 w-7'>
                         <AvatarImage
                             src={getProfileImageUrl(post.author.avatarUrl)}
@@ -123,19 +100,6 @@ export default function PostCard({
                     <span className='text-sm font-medium text-foreground'>
                         {post.author.username}
                     </span>
-                </div>
-
-                {/* Engagement & Time */}
-                <div className='flex justify-between items-center text-xs text-muted-foreground'>
-                    <div className='flex gap-3'>
-                        <span className='flex items-center gap-1 tabular-nums'>
-                            <ThumbsUp className='w-3.5 h-3.5' /> {post.likesCount}
-                        </span>
-                        <span className='flex items-center gap-1 tabular-nums'>
-                            <Eye className='w-3.5 h-3.5' /> {post.viewsCount}
-                        </span>
-                    </div>
-                    <span>{formatTimeAgo(post.createdAt)}</span>
                 </div>
             </div>
         </Card>

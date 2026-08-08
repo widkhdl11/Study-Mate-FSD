@@ -16,7 +16,7 @@ export function AIRecommendedStudies() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-yellow-500" />
+            <Sparkles className="w-5 h-5 text-primary" />
             AI 추천 스터디
           </CardTitle>
         </CardHeader>
@@ -28,22 +28,9 @@ export function AIRecommendedStudies() {
     );
   }
 
-  if (error || !recommendationsPosts) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-yellow-500" />
-            AI 추천 스터디
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-center py-4">
-            추천할 스터디를 찾지 못했어요
-          </p>
-        </CardContent>
-      </Card>
-    );
+  // 프로필이 없거나(신규 유저) 추천이 없으면 죽은 카드 대신 섹션 자체를 숨긴다.
+  if (error || !recommendationsPosts || recommendationsPosts.length === 0) {
+    return null;
   }
 
   return (

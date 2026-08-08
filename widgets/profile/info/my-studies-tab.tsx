@@ -5,9 +5,9 @@ import { StudyCategoryBadges, StudyRegionLabel } from "@/entities/study";
 import { getCategoryPathByValue } from "@/shared/config/study-category";
 import { studyStatusConversion } from "@/shared/lib/conversion/study";
 import { Badge } from "@/shared/shadcn/ui/badge";
-import { Button } from "@/shared/shadcn/ui/button";
 import { Card } from "@/shared/shadcn/ui/card";
 import { TabsContent } from "@/shared/shadcn/ui/tabs";
+import { EmptyState } from "@/shared/ui/EmptyState";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import { getStatusColor } from "../lib/tabBadgeColors";
@@ -23,7 +23,7 @@ export default function MyStudiesTab({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {myStudies.map((study: StudyResponse) => (
               <Link key={study.id} href={`/studies/${study.id}`}>
-                <Card className="group overflow-hidden hover:shadow-md transition-all h-full cursor-pointer p-6 space-y-4">
+                <Card className="group overflow-hidden hover:border-primary/50 transition-colors h-full cursor-pointer p-6 space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
@@ -79,14 +79,12 @@ export default function MyStudiesTab({
             ))}
           </div>
         ) : (
-          <Card className="p-12 text-center">
-            <p className="text-muted-foreground">참여중인 스터디가 없습니다.</p>
-            <Link href="/studies/create">
-              <Button className="mt-4 bg-primary hover:bg-primary/90">
-                스터디 만들기
-              </Button>
-            </Link>
-          </Card>
+          <EmptyState
+            icon={Users}
+            title="아직 참여 중인 스터디가 없어요"
+            description="관심 있는 스터디를 찾거나 직접 만들어보세요."
+            action={{ label: "스터디 만들기", href: "/studies/create" }}
+          />
         )}
       </TabsContent>
     </>

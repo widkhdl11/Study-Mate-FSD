@@ -47,7 +47,7 @@ export default function CategorySection() {
                             <Link
                                 key={cat.value}
                                 href={`/posts?category=${cat.value}`}>
-                                <Card className="group flex items-center gap-4 p-5 h-full hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.98] cursor-pointer">
+                                <Card className="group flex items-center gap-4 p-5 h-full hover:border-primary/50 transition-all active:scale-[0.98] cursor-pointer">
                                     <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                         <Icon className="w-5 h-5" />
                                     </div>

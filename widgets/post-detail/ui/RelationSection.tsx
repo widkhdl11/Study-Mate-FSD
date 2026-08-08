@@ -15,7 +15,7 @@ export default function RelationSection({ relatedPosts }: { relatedPosts: PostWi
                 {relatedPosts.map((relatedPost) => (
                   <Card
                     key={relatedPost.id}
-                    className="overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                    className="overflow-hidden shadow-sm hover:border-primary/50 transition-colors"
                   >
                     <div className="relative w-full h-40">
                       <Image

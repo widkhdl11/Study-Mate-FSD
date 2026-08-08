@@ -4,4 +4,5 @@ export { queryChatDetail } from "./api/query/chatDetail/queryChatDetail";
 export { queryChatParticipants } from "./api/query/chatParticipants/queryChatParticipants";
 export { queryMyChatRooms } from "./api/query/myChatRooms/queryMyChatRooms";
 export { queryChatMessages } from "./api/query/chatMessages/queryChatMessages";
+export { queryStudyChatRoom } from "./api/query/studyChatRoom/queryStudyChatRoom";
 export { useChatMessages } from "./api/query/chatMessages/useChatMessages";

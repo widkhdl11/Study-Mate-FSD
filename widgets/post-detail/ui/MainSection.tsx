@@ -70,9 +70,11 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
                     size="sm"
                     onClick={() => handleLikeClick()}
                     disabled={isTogglingLike}
+                    aria-pressed={isLiked}
+                    aria-label={isLiked ? "좋아요 취소" : "좋아요"}
                     className={`gap-2 ${isLiked ? "bg-primary/5 border-primary text-primary" : ""}`}
                   >
-                    <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-primary" : ""}`} />
+                    <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-primary" : ""}`} aria-hidden="true" />
                     <span className="font-semibold">{post.likesCount}</span>
                   </Button>
                   <span className="flex items-center gap-1 text-sm text-muted-foreground tabular-nums">

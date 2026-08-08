@@ -66,7 +66,7 @@ function AvatarImage({
       <Image
         data-slot="avatar-image"
         src={src}
-        alt={alt}
+        alt={alt ?? ""}
         width={width}
         height={height}
         className={cn("aspect-square size-full object-cover", className)}

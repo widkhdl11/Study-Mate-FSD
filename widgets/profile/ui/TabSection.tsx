@@ -49,33 +49,6 @@ export default function TabSection({
     return (
         <section className='py-8 px-4 sm:px-6 lg:px-8'>
             <div className='max-w-5xl mx-auto'>
-                {/* <div className='grid grid-cols-3 gap-4 mb-6'>
-                    <div className='text-center p-3 bg-muted/50 rounded-lg'>
-                        <p className='text-2xl font-bold text-foreground'>
-                            {profilesCountData.myParticipatedStudiesCount}
-                        </p>
-                        <p className='text-xs text-muted-foreground'>
-                            내 스터디
-                        </p>
-                    </div>
-                    <div className='text-center p-3 bg-muted/50 rounded-lg'>
-                        <p className='text-2xl font-bold text-foreground'>
-                            {profilesCountData.myPostsCount}
-                        </p>
-                        <p className='text-xs text-muted-foreground'>
-                            모집글 ({profilesCountData.myPostsCount})
-                        </p>
-                    </div>
-                    <div className='text-center p-3 bg-muted/50 rounded-lg'>
-                        <p className='text-2xl font-bold text-foreground'>
-                            {profilesCountData.myParticipatedChatRoomsCount}
-                        </p>
-                        <p className='text-xs text-muted-foreground'>
-                            포인트
-                        </p>
-                    </div>
-                </div> */}
-
                 <Tabs
                     value={currentTab}
                     onValueChange={handleTabChange}

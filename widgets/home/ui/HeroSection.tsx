@@ -85,21 +85,21 @@ export default function HeroSection() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-                  <Link href="/studies/create">
+                  <Link href="/posts">
                     <Button
                       size="lg"
-                      className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-[box-shadow,transform] active:scale-[0.96] px-8 py-6 text-lg"
+                      className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 font-semibold shadow-sm transition-transform active:scale-[0.96] px-8 py-6 text-lg"
                     >
-                      스터디 만들기
+                      모집글 보기
                     </Button>
                   </Link>
-                  <Link href="/posts">
+                  <Link href="/studies/create">
                     <Button
                       size="lg"
                       variant="outline"
                       className="w-full sm:w-auto border-2 border-white/70 text-white hover:bg-white/10 bg-transparent font-semibold px-8 py-6 text-lg transition-transform active:scale-[0.96]"
                     >
-                      모집글 보기
+                      스터디 만들기
                     </Button>
                   </Link>
                 </div>
@@ -116,11 +116,11 @@ export default function HeroSection() {
                   {FEATURE_CARDS.map((card) => (
                     <Card
                       key={card.title}
-                      className={`p-6 bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow animate-float ${card.indent ? "ml-8" : ""}`}
+                      className={`p-6 bg-white/95 backdrop-blur-sm border-0 shadow-sm animate-float ${card.indent ? "ml-8" : ""}`}
                       style={{ animationDelay: card.delay }}
                     >
                       <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-xl flex items-center justify-center flex-shrink-0 shadow-md`}>
+                        <div className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}>
                           <card.icon className="w-6 h-6 text-white" />
                         </div>
                         <div className="flex-1">
