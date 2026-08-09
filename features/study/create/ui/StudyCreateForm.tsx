@@ -62,10 +62,6 @@ export default function StudyCreateForm() {
 
   return (
       <Card className="p-6 md:p-8">
-          <h2 className="mb-6 text-2xl font-semibold text-foreground">
-            스터디 만들기
-          </h2>
-
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -91,13 +87,14 @@ export default function StudyCreateForm() {
                 )}
               />
 
-              {/* 대분류 */}
+              {/* 카테고리 (대/중/소) — 한 줄로 그룹 */}
+              <div className="grid gap-4 sm:grid-cols-3">
               <FormField
                 control={form.control}
                 name="mainCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>카테고리 (대분류)</FormLabel>
+                    <FormLabel>대분류</FormLabel>
                     <Select
                       value={mainCategoryValue}
                       onValueChange={(value) => {
@@ -109,7 +106,7 @@ export default function StudyCreateForm() {
                         form.setValue("studyCategory", "");
                       }}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="대분류 선택" />
                       </SelectTrigger>
                       <SelectContent>
@@ -131,7 +128,7 @@ export default function StudyCreateForm() {
                 name="subCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>카테고리 (중분류)</FormLabel>
+                    <FormLabel>중분류</FormLabel>
                     <Select
                       key={`sub-${mainCategoryValue}`}
                       value={subCategoryValue}
@@ -142,9 +139,10 @@ export default function StudyCreateForm() {
                         setStudyCategoryValue("");
                         form.setValue("studyCategory", "");
                       }}
+                      disabled={isPending || subcategories.length === 0}
                     >
-                      <SelectTrigger>
-                        <SelectValue placeholder="중분류 선택" />
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={mainCategoryValue ? "중분류 선택" : "대분류 먼저 선택"} />
                       </SelectTrigger>
                       <SelectContent>
                         {subcategories.map((sub) => (
@@ -165,7 +163,7 @@ export default function StudyCreateForm() {
                 name="detailCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>카테고리 (소분류)</FormLabel>
+                    <FormLabel>소분류</FormLabel>
                     <Select
                       key={`detail-${mainCategoryValue}-${subCategoryValue}`}
                       value={detailCategoryValue}
@@ -180,10 +178,10 @@ export default function StudyCreateForm() {
                           });
                         }
                       }}
-                      disabled={isPending}
+                      disabled={isPending || detailCategories.length === 0}
                     >
-                      <SelectTrigger>
-                        <SelectValue placeholder="소분류 선택" />
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={subCategoryValue ? "소분류 선택" : "중분류 먼저 선택"} />
                       </SelectTrigger>
                       <SelectContent>
                         {detailCategories.map((detail) => (
@@ -197,14 +195,16 @@ export default function StudyCreateForm() {
                   </FormItem>
                 )}
               />
+              </div>
 
-              {/* 시/도 */}
+              {/* 지역 (시/도 + 시/군/구) — 한 줄로 그룹 */}
+              <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="mainRegion"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>지역 (시/도)</FormLabel>
+                    <FormLabel>시/도</FormLabel>
                     <Select
                       value={mainRegionValue}
                       onValueChange={(value) => {
@@ -224,7 +224,7 @@ export default function StudyCreateForm() {
                         }
                       }}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="시/도 선택" />
                       </SelectTrigger>
                       <SelectContent>
@@ -247,7 +247,7 @@ export default function StudyCreateForm() {
                     name="detailRegion"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>지역 (시/군/구)</FormLabel>
+                        <FormLabel>시/군/구</FormLabel>
                         <Select
                           key={`sub-region-${mainRegionValue}`}
                           value={detailRegionValue}
@@ -262,9 +262,10 @@ export default function StudyCreateForm() {
                               });
                             }
                           }}
+                          disabled={isPending || detailRegions.length === 0}
                         >
-                          <SelectTrigger>
-                            <SelectValue placeholder="시/군/구 선택" />
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder={mainRegionValue ? "시/군/구 선택" : "시/도 먼저 선택"} />
                           </SelectTrigger>
                           <SelectContent>
                             {detailRegions.map((sub) => (
@@ -278,13 +279,14 @@ export default function StudyCreateForm() {
                       </FormItem>
                     )}
                   />
+              </div>
 
               {/* 최대 인원 */}
               <FormField
                 control={form.control}
                 name="maxParticipants"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="sm:max-w-[12rem]">
                     <FormLabel>최대 인원</FormLabel>
                     <FormControl>
                       <Input
