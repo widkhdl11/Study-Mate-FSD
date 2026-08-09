@@ -2,9 +2,8 @@ import { PostFromRowError } from "@/entities/post/model/Post";
 import { toPostView } from "@/entities/post/model/types";
 import { toStudyView } from "@/entities/study/model/types";
 import { toUserSummaryView } from "@/entities/user/model/types";
-import { ok, Result } from "@/shared/kernel/Result";
+import { err, ok, Result } from "@/shared/kernel/Result";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { notFound } from "next/navigation";
 import { PostWithStudyRow, PostWithStudyView } from "./types";
 
 // post + study + creator 조립 (필드 매핑은 각 엔티티 canonical 매퍼 소유).
@@ -42,7 +41,7 @@ export async function queryAllPosts(supabase: SupabaseClient): Promise<Result<Po
       comments_count,
       created_at,
       updated_at,
-      study:study_id (
+      study:study_id!inner (
         id,
         creator_id,
         title,
@@ -68,7 +67,7 @@ export async function queryAllPosts(supabase: SupabaseClient): Promise<Result<Po
 
 
   if (error) {
-    notFound();
+    return err({ kind: "Infra", message: error.message });
   }
   const postsResult = data as unknown as PostWithStudyRow[];
   const postsViewResult = toPostsAllView(postsResult);

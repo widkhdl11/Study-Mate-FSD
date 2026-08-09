@@ -1,9 +1,12 @@
 import { queryAllPosts, PostWithStudyView } from "@/entities/post"
 import { createClient } from "@/shared/api/supabase/server"
 import { Button } from "@/shared/shadcn/ui/button"
+import { RetryButton } from "@/shared/ui/RetryButton"
 import { FileQuestion, Inbox } from "lucide-react"
 import Link from "next/link"
 import PostCard from "./PostCard"
+
+const PREVIEW_COUNT = 6
 
 
 function SectionShell({ children }: { children: React.ReactNode }) {
@@ -15,7 +18,7 @@ function SectionShell({ children }: { children: React.ReactNode }) {
                         최신 모집글
                     </h2>
                     <p className='text-muted-foreground'>
-                        지금 모집 중인 스터디들을 확인해보세요
+                        최근 올라온 스터디를 둘러보세요
                     </p>
                 </div>
                 {children}
@@ -37,12 +40,15 @@ export default async function LatestSection() {
                     <p className='text-muted-foreground'>
                         모집글을 불러오지 못했어요. 잠시 후 다시 시도해주세요.
                     </p>
+                    <RetryButton />
                 </div>
             </SectionShell>
         )
     }
 
     const posts = postsData.value ?? []
+    // 홈은 프리뷰만 — 전량 렌더 금지(스켈레톤 6개·"더 보기" CTA와 일치). 전체 목록은 /posts.
+    const previewPosts = posts.slice(0, PREVIEW_COUNT)
 
     // 빈 상태: 첫 스터디 개설 유도 CTA
     if (posts.length === 0) {
@@ -73,7 +79,7 @@ export default async function LatestSection() {
     return (
         <SectionShell>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                {posts.map((post: PostWithStudyView, index: number) => (
+                {previewPosts.map((post: PostWithStudyView, index: number) => (
                     <Link key={post.id} href={`/posts/${post.id}`}>
                         <PostCard post={post} priority={index < 3} />
                     </Link>
