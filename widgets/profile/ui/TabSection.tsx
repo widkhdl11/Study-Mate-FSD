@@ -7,7 +7,7 @@ import { MyProfileCountResponse, ProfileResponse } from '@/entities/user'
 import { Tabs, TabsList, TabsTrigger } from '@/shared/shadcn/ui/tabs'
 import { BookOpen, FileText, MessageSquare, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MyChatTab from '../info/my-chat-tab'
 import MyInfoTab from '../info/my-info-tab'
 import MyPostTab from '../info/my-post-tab'
@@ -43,8 +43,21 @@ export default function TabSection({
 
     const handleTabChange = (value: string) => {
         setCurrentTab(value)
-        window.history.replaceState(null, '', `/profile?tab=${value}`)
+        // pushState라 뒤로가기가 프로필을 벗어나지 않고 이전 탭으로 복원된다.
+        window.history.pushState(null, '', `/profile?tab=${value}`)
     }
+
+    // 뒤로/앞으로 가기(popstate)로 URL이 바뀌면 탭 동기화.
+    // (수동 pushState는 useSearchParams를 갱신하지 않아 popstate를 직접 듣는다)
+    useEffect(() => {
+        const onPop = () => {
+            const t = new URLSearchParams(window.location.search).get('tab') || 'info'
+            setCurrentTab(t)
+            setPrevTab(t)
+        }
+        window.addEventListener('popstate', onPop)
+        return () => window.removeEventListener('popstate', onPop)
+    }, [])
 
     return (
         <section className='py-8 px-4 sm:px-6 lg:px-8'>
