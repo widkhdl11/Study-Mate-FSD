@@ -5,7 +5,6 @@ import { usePostDetail, PostDetailView } from "@/entities/post"
 import { getProfileImageUrl } from "@/shared/api/supabase/storage"
 import { getRegionPath } from "@/shared/config/region"
 import { getCategoryPath } from "@/shared/config/study-category"
-import { PARTICIPANT_STATUS_MAP } from "@/shared/lib/conversion/participants"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar"
 import { Badge } from "@/shared/shadcn/ui/badge"
 import { Card } from "@/shared/shadcn/ui/card"
@@ -18,24 +17,36 @@ export default function SidebarSection({ postData, participant, isOwner = false,
     const { data: post } = usePostDetail(postData)
 
     const {data : participantData} = useParticipantStatus(participant, post.study.id);
-    
-    const status = PARTICIPANT_STATUS_MAP[participantData?.status || ""] || "모집중";
+
+    // 개인 참여 상태 (raw): pending | accepted | rejected | kicked, 미신청이면 null
+    const myStatus = participantData?.status ?? null;
+
+    // 모집 상태 축 — completed 전이(정원참)가 없으므로 정원까지 같이 본다.
+    const isFull = (post.study.currentParticipants ?? 0) >= post.study.maxParticipants;
+    const recruitment: "open" | "full" | "closed" =
+      post.study.status !== "recruiting" ? "closed"
+      : isFull                            ? "full"
+      :                                     "open";
+
+    const recruitmentLabel =
+      recruitment === "open" ? "모집중" : recruitment === "full" ? "모집 완료" : "모집 종료";
+
     return (
          <div className="lg:col-span-1">
               {/* 스터디 정보 카드 */}
               <Card className="p-6 sticky top-20 shadow-sm">
-                {/* 상태 배지 */}
+                {/* 모집 상태 배지 (스터디 속성 — 개인 참여 상태는 액션 버튼이 표시) */}
                 <div className="mb-4">
                   <Badge
                     className={`text-white ${
-                      status === "모집중" || status === "참여중"
+                      recruitment === "open"
                         ? "bg-success"
-                        : status === "신청 거절됨"
-                        ? "bg-danger"
-                        : "bg-warning"
+                        : recruitment === "full"
+                        ? "bg-warning"
+                        : "bg-muted-foreground"
                     }`}
                   >
-                    {status}
+                    {recruitmentLabel}
                   </Badge>
                 </div>
 
@@ -110,10 +121,12 @@ export default function SidebarSection({ postData, participant, isOwner = false,
                   </div>
                 </div>
 
-                {/* 액션 버튼 */}
+                {/* 액션 버튼 — 개인 참여 상태 × 모집 상태 */}
                 <ParticipantActionSlot
-                  status={status}
+                  myStatus={myStatus}
+                  recruitment={recruitment}
                   studyId={post.study.id}
+                  participant={participantData ?? null}
                   isOwner={isOwner}
                   chatRoomId={chatRoomId}
                 />
