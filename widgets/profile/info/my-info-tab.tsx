@@ -51,9 +51,9 @@ export default function MyInfoTab({ currentUser }: { currentUser: ProfileRespons
               </p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm text-muted-foreground mb-1">회원 등급</p>
+              <p className="text-sm text-muted-foreground mb-1">포인트</p>
               <p className="text-lg font-semibold text-foreground">
-                {currentUser?.points}
+                {(currentUser?.points ?? 0).toLocaleString("ko-KR")}
               </p>
             </div>
           </div>

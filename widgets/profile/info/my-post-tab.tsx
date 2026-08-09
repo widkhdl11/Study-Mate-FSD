@@ -11,6 +11,14 @@ import { Badge } from '@/shared/shadcn/ui/badge'
 import { Button } from '@/shared/shadcn/ui/button'
 import { Card } from '@/shared/shadcn/ui/card'
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/shared/shadcn/ui/dialog'
+import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -22,6 +30,7 @@ import { Edit, Eye, FileText, MapPin, MoreVertical, ThumbsUp, Trash2 } from 'luc
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { getCategoryColor, getStatusColor } from '../lib/tabBadgeColors'
 
 export default function MyPostTab({
@@ -31,14 +40,19 @@ export default function MyPostTab({
 }) {
     const deleteMutation = useDeletePost()
     const router = useRouter()
+    const [deleteTarget, setDeleteTarget] = useState<{ id: number; title: string } | null>(null)
 
-    const handleDelete = (postId: number, e: React.MouseEvent) => {
+    const requestDelete = (post: { id: number; title: string }, e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
+        setDeleteTarget({ id: post.id, title: post.title })
+    }
 
-        if (!window.confirm('정말 삭제하시겠습니까?')) return
-
-        deleteMutation.mutate(postId)
+    const confirmDelete = () => {
+        if (!deleteTarget) return
+        deleteMutation.mutate(deleteTarget.id, {
+            onSuccess: () => setDeleteTarget(null),
+        })
     }
 
     const handleUpdate = (postId: number, e: React.MouseEvent) => {
@@ -89,8 +103,9 @@ export default function MyPostTab({
                                                 <Button
                                                     variant='ghost'
                                                     size='icon'
+                                                    aria-label='게시글 관리 메뉴'
                                                     className='h-8 w-8 hover:bg-muted'>
-                                                    <MoreVertical className='h-4 w-4' />
+                                                    <MoreVertical className='h-4 w-4' aria-hidden='true' />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent
@@ -105,7 +120,7 @@ export default function MyPostTab({
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={(e) =>
-                                                        handleDelete(item.id, e)
+                                                        requestDelete(item, e)
                                                     }
                                                     className='text-destructive focus:text-destructive'>
                                                     <Trash2 className='mr-2 h-4 w-4' />
@@ -182,6 +197,36 @@ export default function MyPostTab({
                     action={{ label: '모집글 작성하기', href: '/posts/create' }}
                 />
             )}
+
+            {/* 삭제 확인 — 네이티브 confirm 대신 브랜드 다이얼로그 */}
+            <Dialog
+                open={deleteTarget !== null}
+                onOpenChange={(open) => {
+                    if (!open) setDeleteTarget(null)
+                }}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>모집글을 삭제할까요?</DialogTitle>
+                        <DialogDescription>
+                            &lsquo;{deleteTarget?.title}&rsquo; 모집글이 삭제됩니다. 이 작업은 되돌릴 수 없어요.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button
+                            variant='outline'
+                            onClick={() => setDeleteTarget(null)}
+                            disabled={deleteMutation.isPending}>
+                            취소
+                        </Button>
+                        <Button
+                            variant='destructive'
+                            onClick={confirmDelete}
+                            disabled={deleteMutation.isPending}>
+                            {deleteMutation.isPending ? '삭제 중...' : '삭제'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </TabsContent>
     )
 }

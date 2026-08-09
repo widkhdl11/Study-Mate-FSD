@@ -42,13 +42,14 @@ async function ProfileTabsLoader({ user }: { user: ProfileResponse }) {
     notFound();
   }
 
-  // 카운트는 실패해도 페이지를 막지 않고 0으로 폴백 (기존 동작 유지)
+  // 카운트 쿼리 실패 시 조용한 0(로드실패↔진짜0 혼동)을 피하려고
+  // 이미 성공적으로 불러온 실제 배열 길이로 폴백한다.
   const profilesCountData = profilesCountResult.ok
     ? profilesCountResult.value
     : {
-        myPostsCount: 0,
-        myParticipatedStudiesCount: 0,
-        myParticipatedChatRoomsCount: 0,
+        myPostsCount: postsData.value.length,
+        myParticipatedStudiesCount: studiesData.value.length,
+        myParticipatedChatRoomsCount: chatRoomsResult.value.length,
       };
 
   return (

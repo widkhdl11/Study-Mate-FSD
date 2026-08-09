@@ -30,7 +30,7 @@ export default function MyChatTab({chatRooms} : {
                     <div className="flex items-start gap-4 p-4">
                         <Avatar className="h-12 w-12 flex-shrink-0">
                             <AvatarImage src={getProfileImageUrl(room.profile.avatar_url)} alt={room.chat.name ?? ""} />
-                            <AvatarFallback className="bg-primary text-primary-foreground"> {room.chat.name || "??"} </AvatarFallback>
+                            <AvatarFallback className="bg-primary text-primary-foreground">{room.chat.name?.[0] ?? "?"}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2 mb-1">

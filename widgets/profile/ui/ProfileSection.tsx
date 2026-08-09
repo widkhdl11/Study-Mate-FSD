@@ -6,7 +6,7 @@ import { getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import { Badge } from '@/shared/shadcn/ui/badge'
 import { Button } from '@/shared/shadcn/ui/button'
-import { Camera, Edit, Lock } from 'lucide-react'
+import { Camera, Edit, Loader2, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -16,25 +16,31 @@ export default function ProfileSection({
     currentUser: ProfileResponse
 }) {
     const updateProfileImage = useUpdateProfileImage()
-    const [profileImage, setProfileImage] = useState(
-        currentUser?.avatarUrl || '/placeholder.svg'
-    )
+    const isUploading = updateProfileImage.isPending
+    // 낙관적 프리뷰(blob URL). null이면 서버 아바타를 보여준다.
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
-        const previewUrl = URL.createObjectURL(file)
-        setProfileImage(previewUrl)
-        updateProfileImage.mutate(file)
+        if (previewUrl) URL.revokeObjectURL(previewUrl)
+        const nextPreview = URL.createObjectURL(file)
+        setPreviewUrl(nextPreview)
+        updateProfileImage.mutate(file, {
+            // 성공/실패 토스트는 훅이 담당. 여기선 실패 시 낙관적 프리뷰만 롤백한다.
+            onError: () => {
+                URL.revokeObjectURL(nextPreview)
+                setPreviewUrl(null)
+            },
+        })
+        e.target.value = '' // 같은 파일 재선택 허용
     }
 
     useEffect(() => {
         return () => {
-            if (profileImage && profileImage.startsWith('blob:')) {
-                URL.revokeObjectURL(profileImage)
-            }
+            if (previewUrl) URL.revokeObjectURL(previewUrl)
         }
-    }, [profileImage])
+    }, [previewUrl])
 
     return (
         <section className='border-b border-border bg-muted/30 py-10'>
@@ -43,7 +49,7 @@ export default function ProfileSection({
                     <div className='relative shrink-0'>
                         <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
                             <AvatarImage
-                                src={getProfileImageUrl(currentUser?.avatarUrl)}
+                                src={previewUrl ?? getProfileImageUrl(currentUser?.avatarUrl)}
                                 alt={currentUser.username || ''}
                                 width={96}
                                 height={96}
@@ -56,10 +62,21 @@ export default function ProfileSection({
 
                         <label
                             htmlFor='profile-image-upload'
-                            className='absolute bottom-0 right-0 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-sm transition-all hover:scale-110'
+                            aria-disabled={isUploading}
+                            className={`absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-sm transition-all ${
+                                isUploading
+                                    ? 'opacity-70 pointer-events-none'
+                                    : 'cursor-pointer hover:bg-primary/90 hover:scale-110'
+                            }`}
                             title='프로필 이미지 변경'>
-                            <Camera className='w-4 h-4' aria-hidden='true' />
-                            <span className='sr-only'>프로필 이미지 변경</span>
+                            {isUploading ? (
+                                <Loader2 className='w-4 h-4 animate-spin' aria-hidden='true' />
+                            ) : (
+                                <Camera className='w-4 h-4' aria-hidden='true' />
+                            )}
+                            <span className='sr-only'>
+                                {isUploading ? '이미지 업로드 중' : '프로필 이미지 변경'}
+                            </span>
                         </label>
 
                         <input
@@ -68,6 +85,7 @@ export default function ProfileSection({
                             accept='image/*'
                             aria-label='프로필 이미지 변경'
                             onChange={handleImageChange}
+                            disabled={isUploading}
                             className='sr-only'
                         />
                     </div>
@@ -83,7 +101,7 @@ export default function ProfileSection({
                                 </p>
                             </div>
                             <Badge className='bg-primary text-primary-foreground w-fit'>
-                                {currentUser?.points || ''}
+                                {(currentUser?.points ?? 0).toLocaleString('ko-KR')} 포인트
                             </Badge>
                         </div>
 
