@@ -45,7 +45,9 @@ export default function StudySelect({
                         <SelectValue placeholder='선택' />
                     </SelectTrigger>
 
-                    <SelectContent>
+                    {/* align=start: 트리거 좌측 기준 정렬(기본 center는 선택값 길이에 따라 좌우로 들쭉날쭉).
+                        폭은 클램프하지 않아 드롭다운이 내용만큼 우측으로 늘어난다. */}
+                    <SelectContent align='start'>
                         {studies?.map((study) => (
                             <SelectItem
                                 key={study.id}
