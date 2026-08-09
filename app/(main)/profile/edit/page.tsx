@@ -4,7 +4,8 @@ import { ProfileUpdateForm } from "@/features/profile/update";
 import { createClient } from "@/shared/api/supabase/server";
 import { CustomUserAuth } from "@/shared/lib/auth";
 import { Button } from "@/shared/shadcn/ui/button";
-import { ArrowLeft, Link } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -34,8 +35,8 @@ async function ProfileEditLoader() {
               프로필로 돌아가기
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold text-foreground mx-2">프로필 수정</h1>
-          <p className="mt-2 text-sm text-muted-foreground mx-4">회원 정보를 수정할 수 있습니다</p>
+          <h1 className="text-3xl font-bold text-foreground">프로필 수정</h1>
+          <p className="mt-2 text-sm text-muted-foreground">회원 정보를 수정할 수 있습니다</p>
         </div>
         <ProfileUpdateForm useData={currentUser.value} />
       </div>

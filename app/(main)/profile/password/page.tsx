@@ -4,7 +4,8 @@ import { PasswordChangeForm } from "@/features/auth/change-password";
 import { createClient } from "@/shared/api/supabase/server";
 import { CustomUserAuth } from "@/shared/lib/auth";
 import { Button } from "@/shared/shadcn/ui/button";
-import { ArrowLeft, Link, Lock } from "lucide-react";
+import { ArrowLeft, Lock } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -34,13 +35,13 @@ async function PasswordChangeLoader() {
               프로필로 돌아가기
             </Button>
           </Link>
-          <div className="flex items-center gap-3 mx-2">
+          <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
               <Lock className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">비밀번호 변경</h1>
           </div>
-          <p className="mt-2 text-sm text-muted-foreground mx-4">
+          <p className="mt-2 text-sm text-muted-foreground">
             보안을 위해 정기적으로 비밀번호를 변경해주세요
           </p>
         </div>
