@@ -10,6 +10,7 @@ import { formatTimeAgo } from '@/shared/lib/date'
 import { Badge } from '@/shared/shadcn/ui/badge'
 import { Button } from '@/shared/shadcn/ui/button'
 import { Card } from '@/shared/shadcn/ui/card'
+import { Input } from '@/shared/shadcn/ui/input'
 import {
     Dialog,
     DialogContent,
@@ -30,8 +31,10 @@ import { Edit, Eye, FileText, MapPin, MoreVertical, ThumbsUp, Trash2 } from 'luc
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useDeferredValue, useState } from 'react'
 import { getCategoryColor, getStatusColor } from '../lib/tabBadgeColors'
+
+const PAGE_SIZE = 6
 
 export default function MyPostTab({
     myPosts,
@@ -55,6 +58,26 @@ export default function MyPostTab({
         })
     }
 
+    const [query, setQuery] = useState('')
+    const deferredQuery = useDeferredValue(query)
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+    const [prevQuery, setPrevQuery] = useState('')
+
+    const q = deferredQuery.trim().toLowerCase()
+    const filtered = q
+        ? myPosts.filter(
+              (p) =>
+                  p.title.toLowerCase().includes(q) ||
+                  p.content?.toLowerCase().includes(q)
+          )
+        : myPosts
+    // 검색어가 바뀌면 "더 보기" 개수 리셋 (목록 위젯과 동일한 in-render 패턴)
+    if (deferredQuery !== prevQuery) {
+        setPrevQuery(deferredQuery)
+        setVisibleCount(PAGE_SIZE)
+    }
+    const visible = filtered.slice(0, visibleCount)
+
     const handleUpdate = (postId: number, e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
@@ -64,9 +87,28 @@ export default function MyPostTab({
 
     return (
         <TabsContent value='posts' className='space-y-4'>
-            {myPosts && myPosts?.length > 0 ? (
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    {myPosts.map((item, index) => (
+            {!myPosts || myPosts.length === 0 ? (
+                <EmptyState
+                    icon={FileText}
+                    title='아직 작성한 모집글이 없어요'
+                    description='모집글을 올려 함께할 스터디원을 모아보세요.'
+                    action={{ label: '모집글 작성하기', href: '/posts/create' }}
+                />
+            ) : (
+                <>
+                    <Input
+                        placeholder='제목·내용으로 검색'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        className='max-w-sm bg-background'
+                    />
+                    {filtered.length === 0 ? (
+                        <p className='py-12 text-center text-sm text-muted-foreground'>
+                            검색 결과가 없어요.
+                        </p>
+                    ) : (
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                            {visible.map((item, index) => (
                         <div key={item.id} className='relative'>
                             <Card className='group overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col p-0 gap-0'>
                                 <Link href={`/posts/${item.id}`}>
@@ -187,15 +229,19 @@ export default function MyPostTab({
                                 </div>
                             </Card>
                         </div>
-                    ))}
-                </div>
-            ) : (
-                <EmptyState
-                    icon={FileText}
-                    title='아직 작성한 모집글이 없어요'
-                    description='모집글을 올려 함께할 스터디원을 모아보세요.'
-                    action={{ label: '모집글 작성하기', href: '/posts/create' }}
-                />
+                            ))}
+                        </div>
+                    )}
+                    {visibleCount < filtered.length && (
+                        <div className='flex justify-center pt-2'>
+                            <Button
+                                variant='outline'
+                                onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}>
+                                더 보기 ({filtered.length - visibleCount}개 남음)
+                            </Button>
+                        </div>
+                    )}
+                </>
             )}
 
             {/* 삭제 확인 — 네이티브 confirm 대신 브랜드 다이얼로그 */}
