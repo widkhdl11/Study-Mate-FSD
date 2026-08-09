@@ -24,10 +24,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/shadcn/ui/select";
-import { Calendar, Eye, MapPin, Search, ThumbsUp, Users } from "lucide-react";
+import { Calendar, ChevronDown, Eye, MapPin, Search, SlidersHorizontal, ThumbsUp, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useDeferredValue, useState } from "react";
+
+// 필터 사이드바용 경량 아코디언 섹션(접기·펴기). 새 의존성 없이 로컬 state로 처리.
+function FilterGroup({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b last:border-b-0">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between py-3 text-sm font-semibold text-foreground"
+      >
+        {title}
+        <ChevronDown
+          className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && <div className="space-y-3 pb-4">{children}</div>}
+    </div>
+  );
+}
 
 
 export default function MainSection(
@@ -43,6 +72,10 @@ export default function MainSection(
         setPrevSearch(searchProp);
         setSearchQuery(searchProp);
     }
+
+    // 입력은 즉시 반영하되(searchQuery), 무거운 필터링은 지연값으로 돌려 타이핑 반응성 확보.
+    // 네트워크 호출이 아닌 순수 클라이언트 필터라 setTimeout debounce 대신 useDeferredValue가 맞다.
+    const deferredSearch = useDeferredValue(searchQuery);
 
   const [selectedStatus, setSelectedStatus] = useState("전체 상태");
   const [sortBy, setSortBy] = useState("latest");
@@ -69,13 +102,18 @@ export default function MainSection(
 
   const statuses = Object.values(STUDY_STATUS).map((status) => status.label);
 
+  // 점진적 노출 — 부모를 골라야 자식 셀렉트가 나타난다.
+  const showSubCategory = mainCategoryValue !== "" && mainCategoryValue !== "전체";
+  const showDetailCategory = showSubCategory && subCategoryValue !== "" && subCategoryValue !== "전체";
+  const showDetailRegion = mainRegionValue !== "" && mainRegionValue !== "전체";
+
   const filteredPosts = allPosts.filter((post: PostWithStudyView) => {
 
+    const q = deferredSearch.toLowerCase();
     const matchesSearch =
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.study.description?.toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      post.study.title?.toLowerCase().includes(searchQuery.toLowerCase());
+      post.title.toLowerCase().includes(q) ||
+      post.study.description?.toLowerCase().includes(q) ||
+      post.study.title?.toLowerCase().includes(q);
 
      let matchesCategory = true;
      if (detailCategoryValue && detailCategoryValue !== "전체") {
@@ -136,7 +174,7 @@ export default function MainSection(
 
   // 필터/정렬이 바뀌면 "더 보기" 개수를 처음으로 되돌린다 (in-render 리셋 — 이 파일의 prevSearch 패턴과 동일)
   const filterSignature = [
-    searchQuery, mainCategoryValue, subCategoryValue, detailCategoryValue,
+    deferredSearch, mainCategoryValue, subCategoryValue, detailCategoryValue,
     mainRegionValue, detailRegionValue, selectedStatus, sortBy,
   ].join("|");
   if (filterSignature !== prevFilterSig) {
@@ -152,171 +190,166 @@ export default function MainSection(
               {/* Sidebar Filters */}
               <aside className="lg:col-span-1">
                 <div className="sticky top-24 space-y-6">
-                  <Card className="p-5 space-y-5">
-                    <div className="flex items-center gap-2 font-semibold text-lg text-foreground pb-2 border-b">
-                      <span className="text-primary">⚡</span> 필터
+                  <Card className="p-5">
+                    <div className="flex items-center gap-2 font-semibold text-lg text-foreground pb-3 border-b">
+                      <SlidersHorizontal className="w-5 h-5 text-primary" /> 필터
                     </div>
 
-                    <div className="space-y-2">
-                      <label htmlFor="main-category" className="text-sm font-medium text-foreground">
-                        카테고리
-                      </label>
-                      <Select
-                        value={mainCategoryValue}
-                        onValueChange={(value) => {
-                          setMainCategoryValue(value);
-                          setSubCategoryValue("");
-                          setDetailCategoryValue("");
-                        }}
-                      >
-                        <SelectTrigger id="main-category" className="w-full bg-background">
-                          <SelectValue placeholder="대분류 선택" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="전체">
-                            전체
-                          </SelectItem>
-                          {mainCategories.map((category) => (
-                            <SelectItem
-                              key={category.value}
-                              value={category.value}
-                            >
-                              {category.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="sub-category" className="text-sm font-medium text-foreground">
-                        중분류
-                      </label>
-                      <Select
-                        value={subCategoryValue}
-                        onValueChange={(value) => {
-                          setSubCategoryValue(value);
-                          setDetailCategoryValue("");
-                        }}
-                      >
-                        <SelectTrigger id="sub-category" className="w-full bg-background">
-                          <SelectValue placeholder="중분류 선택" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="전체">
-                            전체
-                          </SelectItem>
-                          {subcategories.map((subcategory) => (
-                            <SelectItem
-                              key={subcategory.value}
-                              value={subcategory.value}
-                            >
-                              {subcategory.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    {/* 카테고리 그룹 — 부모를 골라야 중/소분류가 나타난다.
+                        URL로 카테고리가 넘어온 경우(initialCategory)엔 적용된 필터가 보이도록 펼쳐서 시작 */}
+                    <FilterGroup title="카테고리" defaultOpen={showSubCategory}>
+                      <div className="space-y-2">
+                        <label htmlFor="main-category" className="text-sm font-medium text-foreground">
+                          대분류
+                        </label>
+                        <Select
+                          value={mainCategoryValue}
+                          onValueChange={(value) => {
+                            setMainCategoryValue(value);
+                            setSubCategoryValue("");
+                            setDetailCategoryValue("");
+                          }}
+                        >
+                          <SelectTrigger id="main-category" className="w-full bg-background">
+                            <SelectValue placeholder="대분류 선택" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="전체">전체</SelectItem>
+                            {mainCategories.map((category) => (
+                              <SelectItem key={category.value} value={category.value}>
+                                {category.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                    <div className="space-y-2">
-                      <label htmlFor="detail-category" className="text-sm font-medium text-foreground">
-                        소분류
-                      </label>
-                      <Select
-                        value={detailCategoryValue}
-                        onValueChange={(value) => {
-                          setDetailCategoryValue(value);
-                        }}
-                      >
-                        <SelectTrigger id="detail-category" className="w-full bg-background">
-                          <SelectValue placeholder="소분류 선택" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="전체">
-                            전체
-                          </SelectItem>
-                          {detailCategories.map((detailCategory) => (
-                            <SelectItem
-                              key={detailCategory.value}
-                              value={detailCategory.value}
-                            >
-                              {detailCategory.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="main-region" className="text-sm font-medium text-foreground">
-                        지역 (시/도)
-                      </label>
-                      <Select
-                        value={mainRegionValue}
-                        onValueChange={(value) => {
-                          setMainRegionValue(value);
-                          setDetailRegionValue("");
-                        }}
-                      >
-                        <SelectTrigger id="main-region" className="w-full bg-background">
-                          <SelectValue placeholder="전체 지역" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="전체">전체 지역</SelectItem>
-                          {mainRegions.map((region) => (
-                            <SelectItem key={region.value} value={region.value}>
-                              {region.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                      {showSubCategory && (
+                        <div className="space-y-2">
+                          <label htmlFor="sub-category" className="text-sm font-medium text-foreground">
+                            중분류
+                          </label>
+                          <Select
+                            value={subCategoryValue}
+                            onValueChange={(value) => {
+                              setSubCategoryValue(value);
+                              setDetailCategoryValue("");
+                            }}
+                          >
+                            <SelectTrigger id="sub-category" className="w-full bg-background">
+                              <SelectValue placeholder="중분류 선택" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="전체">전체</SelectItem>
+                              {subcategories.map((subcategory) => (
+                                <SelectItem key={subcategory.value} value={subcategory.value}>
+                                  {subcategory.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
 
-                    <div className="space-y-2">
-                      <label htmlFor="detail-region" className="text-sm font-medium text-foreground">
-                        지역 (시/군/구)
-                      </label>
-                      <Select
-                        value={detailRegionValue}
-                        onValueChange={(value) => {
-                          setDetailRegionValue(value);
-                        }}
-                      >
-                        <SelectTrigger id="detail-region" className="w-full bg-background">
-                          <SelectValue placeholder="전체" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="전체">
-                            전체
-                          </SelectItem>
-                          {regions.map((region) => (
-                            <SelectItem key={region.value} value={region.value}>
-                              {region.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                      {showDetailCategory && (
+                        <div className="space-y-2">
+                          <label htmlFor="detail-category" className="text-sm font-medium text-foreground">
+                            소분류
+                          </label>
+                          <Select
+                            value={detailCategoryValue}
+                            onValueChange={(value) => {
+                              setDetailCategoryValue(value);
+                            }}
+                          >
+                            <SelectTrigger id="detail-category" className="w-full bg-background">
+                              <SelectValue placeholder="소분류 선택" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="전체">전체</SelectItem>
+                              {detailCategories.map((detailCategory) => (
+                                <SelectItem key={detailCategory.value} value={detailCategory.value}>
+                                  {detailCategory.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </FilterGroup>
 
-                    <div className="space-y-2">
-                      <label htmlFor="recruit-status" className="text-sm font-medium text-foreground">
-                        모집 상태
-                      </label>
-                      <Select
-                        value={selectedStatus}
-                        onValueChange={setSelectedStatus}
-                      >
-                        <SelectTrigger id="recruit-status" className="w-full bg-background">
-                          <SelectValue placeholder="전체 상태" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="전체 상태">전체 상태</SelectItem>
-                          {statuses.map((status) => (
-                            <SelectItem key={status} value={status}>
-                              {status}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    {/* 지역 그룹 — 시/도를 골라야 시/군/구가 나타난다 */}
+                    <FilterGroup title="지역">
+                      <div className="space-y-2">
+                        <label htmlFor="main-region" className="text-sm font-medium text-foreground">
+                          시/도
+                        </label>
+                        <Select
+                          value={mainRegionValue}
+                          onValueChange={(value) => {
+                            setMainRegionValue(value);
+                            setDetailRegionValue("");
+                          }}
+                        >
+                          <SelectTrigger id="main-region" className="w-full bg-background">
+                            <SelectValue placeholder="전체 지역" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="전체">전체 지역</SelectItem>
+                            {mainRegions.map((region) => (
+                              <SelectItem key={region.value} value={region.value}>
+                                {region.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {showDetailRegion && (
+                        <div className="space-y-2">
+                          <label htmlFor="detail-region" className="text-sm font-medium text-foreground">
+                            시/군/구
+                          </label>
+                          <Select
+                            value={detailRegionValue}
+                            onValueChange={(value) => {
+                              setDetailRegionValue(value);
+                            }}
+                          >
+                            <SelectTrigger id="detail-region" className="w-full bg-background">
+                              <SelectValue placeholder="전체" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="전체">전체</SelectItem>
+                              {regions.map((region) => (
+                                <SelectItem key={region.value} value={region.value}>
+                                  {region.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </FilterGroup>
+
+                    {/* 모집 상태 그룹 */}
+                    <FilterGroup title="모집 상태">
+                      <div className="space-y-2">
+                        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                          <SelectTrigger id="recruit-status" aria-label="모집 상태" className="w-full bg-background">
+                            <SelectValue placeholder="전체 상태" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="전체 상태">전체 상태</SelectItem>
+                            {statuses.map((status) => (
+                              <SelectItem key={status} value={status}>
+                                {status}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </FilterGroup>
 
                     {(mainCategoryValue !== "전체" ||
                     subCategoryValue !== "전체" ||
@@ -424,7 +457,7 @@ export default function MainSection(
                                   ))}
                                 </span>
                               </div>
-                              <h1 className="font-bold text-lg text-foreground line-clamp-1 group-hover:text-primary transition-colors mb-1">
+                              <h1 className="font-bold text-lg text-foreground line-clamp-2 group-hover:text-primary transition-colors mb-1">
                                 {post.title}
                               </h1>
                               <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
