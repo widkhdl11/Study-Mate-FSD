@@ -2,7 +2,6 @@
 import { CurrentUserResponse } from '@/entities/user'
 import { useLogout } from '@/features/auth/logout'
 import { getProfileImageUrl } from '@/shared/api/supabase/storage'
-import { cn } from '@/shared/lib/cn'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import {
     DropdownMenu,
@@ -12,7 +11,6 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/shadcn/ui/dropdown-menu'
 import Link from 'next/link'
-import { useHeaderChrome } from '../model/chrome'
 
 export default function LoginDropdown(
     {
@@ -23,15 +21,11 @@ export default function LoginDropdown(
 ) {
 
     const logoutMutation = useLogout()
-    const { transparent } = useHeaderChrome()
 
     return (
          <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className={cn(
-                    'flex items-center gap-2 p-1 rounded-lg transition-colors cursor-pointer',
-                    transparent ? 'hover:bg-white/10' : 'hover:bg-muted'
-                )}>
+                <button className='flex items-center gap-2 p-1 rounded-lg transition-colors cursor-pointer hover:bg-muted'>
                     <Avatar className='h-8 w-8'>
                         <AvatarImage
                             src={getProfileImageUrl(user.avatarUrl)}
@@ -44,10 +38,7 @@ export default function LoginDropdown(
                             {user.username?.[0]}
                         </AvatarFallback>
                     </Avatar>
-                    <span className={cn(
-                        'hidden sm:inline text-sm font-medium',
-                        transparent ? 'text-white' : 'text-foreground'
-                    )}>
+                    <span className='hidden sm:inline text-sm font-medium text-foreground'>
                         {user.username}
                     </span>
                 </button>

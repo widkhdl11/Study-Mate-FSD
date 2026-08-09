@@ -23,13 +23,13 @@ export default async function HeroStats() {
     ]
 
     return (
-        <div className="grid grid-cols-3 gap-6 pt-8">
+        <div className="grid grid-cols-3 gap-6 border-t border-border pt-6">
             {stats.map((s) => (
                 <div key={s.label} className="text-center lg:text-left space-y-1">
-                    <div className="text-3xl md:text-4xl font-bold text-white tabular-nums">
+                    <div className="text-3xl md:text-4xl font-bold text-foreground tabular-nums">
                         {s.value}
                     </div>
-                    <div className="text-sm text-white/70">{s.label}</div>
+                    <div className="text-sm text-muted-foreground">{s.label}</div>
                 </div>
             ))}
         </div>
@@ -39,11 +39,11 @@ export default async function HeroStats() {
 // Suspense 폴백: 카운트가 스트리밍될 때까지 히어로 페인트를 막지 않도록 스켈레톤.
 export function HeroStatsSkeleton() {
     return (
-        <div className="grid grid-cols-3 gap-6 pt-8">
+        <div className="grid grid-cols-3 gap-6 border-t border-border pt-6">
             {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="text-center lg:text-left space-y-1">
-                    <div className="h-9 md:h-10 w-20 bg-white/20 rounded-md animate-pulse mx-auto lg:mx-0" />
-                    <div className="h-4 w-16 bg-white/10 rounded-md animate-pulse mx-auto lg:mx-0" />
+                    <div className="h-9 md:h-10 w-20 bg-muted rounded-md animate-pulse mx-auto lg:mx-0" />
+                    <div className="h-4 w-16 bg-muted rounded-md animate-pulse mx-auto lg:mx-0" />
                 </div>
             ))}
         </div>

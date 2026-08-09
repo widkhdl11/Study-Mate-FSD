@@ -6,7 +6,6 @@ import { CurrentUserResponse } from '@/entities/user'
 import { useAllReadNotification } from '@/features/notification/all-read'
 import { useDeleteNotification } from '@/features/notification/delete'
 import { useReadNotification } from '@/features/notification/read'
-import { cn } from '@/shared/lib/cn'
 import { formatTimeAgo } from '@/shared/lib/date'
 import { Badge } from '@/shared/shadcn/ui/badge'
 import {
@@ -17,7 +16,6 @@ import {
 import { XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
-import { useHeaderChrome } from '../model/chrome'
 
 function notificationEmoji(type: string) {
     switch (type) {
@@ -45,7 +43,6 @@ function notificationHref(notification: NotificationResponse) {
 
 export default function NotificationDropdown({ user }: { user: CurrentUserResponse }) {
     const [notificationOpen, setNotificationOpen] = useState(false)
-    const { transparent } = useHeaderChrome()
     const { data: notifications } = useMyNotification(user)
     const readNotificationMutation = useReadNotification()
     const allReadNotificationMutation = useAllReadNotification(user.id)
@@ -60,10 +57,7 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
             <DropdownMenuTrigger asChild>
                 <button
                     type="button"
-                    className={cn(
-                        'relative p-2 rounded-lg transition-colors',
-                        transparent ? 'hover:bg-white/10' : 'text-foreground hover:bg-muted'
-                    )}
+                    className='relative p-2 rounded-lg transition-colors text-foreground hover:bg-muted'
                     aria-label="알림">
                     🔔
                     {notifications && unreadCount > 0 && (
@@ -79,7 +73,7 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
                     {notifications && notifications.length > 0 && (
                         <button
                             type="button"
-                            className="ml-auto shrink-0 text-[11px] leading-none text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                            className="ml-auto shrink-0 text-xs leading-none text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 disabled:pointer-events-none"
                             disabled={
                                 allReadNotificationMutation.isPending || unreadCount === 0
                             }
