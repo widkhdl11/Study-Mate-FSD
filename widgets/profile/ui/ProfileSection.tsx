@@ -1,7 +1,7 @@
 'use client'
 
 import { ProfileResponse } from '@/entities/user'
-import { useUpdateProfileImage } from '@/features/profile/update'
+import { useResetProfileImage, useUpdateProfileImage } from '@/features/profile/update'
 import { getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
 import { Button } from '@/shared/shadcn/ui/button'
@@ -15,9 +15,17 @@ export default function ProfileSection({
     currentUser: ProfileResponse
 }) {
     const updateProfileImage = useUpdateProfileImage()
+    const resetProfileImage = useResetProfileImage()
     const isUploading = updateProfileImage.isPending
-    // 낙관적 프리뷰(blob URL). null이면 서버 아바타를 보여준다.
+    const isResetting = resetProfileImage.isPending
+    const busy = isUploading || isResetting
+    // 낙관적 프리뷰(blob URL 또는 기본 이미지 경로). null이면 서버 아바타를 보여준다.
     const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
+    // 커스텀 이미지가 있을 때만 "기본 이미지로" 초기화를 노출한다.
+    const hasCustomImage = previewUrl
+        ? previewUrl !== '/default-profile.png'
+        : !!currentUser?.avatarUrl
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -33,6 +41,18 @@ export default function ProfileSection({
             },
         })
         e.target.value = '' // 같은 파일 재선택 허용
+    }
+
+    const handleReset = () => {
+        if (previewUrl && previewUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(previewUrl)
+        }
+        resetProfileImage.mutate(undefined, {
+            onSuccess: (res) => {
+                // 서버 prop은 새로고침 전까진 안 바뀌므로 기본 이미지를 즉시 보여준다.
+                if (res.success) setPreviewUrl('/default-profile.png')
+            },
+        })
     }
 
     useEffect(() => {
@@ -61,9 +81,9 @@ export default function ProfileSection({
 
                         <label
                             htmlFor='profile-image-upload'
-                            aria-disabled={isUploading}
+                            aria-disabled={busy}
                             className={`absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-sm transition-all ${
-                                isUploading
+                                busy
                                     ? 'opacity-70 pointer-events-none'
                                     : 'cursor-pointer hover:bg-primary/90 hover:scale-110'
                             }`}
@@ -84,9 +104,19 @@ export default function ProfileSection({
                             accept='image/*'
                             aria-label='프로필 이미지 변경'
                             onChange={handleImageChange}
-                            disabled={isUploading}
+                            disabled={busy}
                             className='sr-only'
                         />
+
+                        {hasCustomImage && (
+                            <button
+                                type='button'
+                                onClick={handleReset}
+                                disabled={busy}
+                                className='mt-2 block w-full text-center text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors'>
+                                {isResetting ? '되돌리는 중...' : '기본 이미지로'}
+                            </button>
+                        )}
                     </div>
 
                     <div className='flex-1 mt-4 sm:mt-0'>
