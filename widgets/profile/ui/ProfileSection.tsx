@@ -4,7 +4,6 @@ import { ProfileResponse } from '@/entities/user'
 import { useUpdateProfileImage } from '@/features/profile/update'
 import { getProfileImageUrl } from '@/shared/api/supabase/storage'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/shadcn/ui/avatar'
-import { Badge } from '@/shared/shadcn/ui/badge'
 import { Button } from '@/shared/shadcn/ui/button'
 import { Camera, Edit, Loader2, Lock } from 'lucide-react'
 import Link from 'next/link'
@@ -91,18 +90,13 @@ export default function ProfileSection({
                     </div>
 
                     <div className='flex-1 mt-4 sm:mt-0'>
-                        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4'>
-                            <div>
-                                <h1 className='text-3xl font-bold text-foreground'>
-                                    {currentUser?.username || ''}
-                                </h1>
-                                <p className='text-muted-foreground mt-1'>
-                                    {currentUser?.email || ''}
-                                </p>
-                            </div>
-                            <Badge className='bg-primary text-primary-foreground w-fit'>
-                                {(currentUser?.points ?? 0).toLocaleString('ko-KR')} 포인트
-                            </Badge>
+                        <div className='mb-4'>
+                            <h1 className='text-3xl font-bold text-foreground'>
+                                {currentUser?.username || ''}
+                            </h1>
+                            <p className='text-muted-foreground mt-1'>
+                                {currentUser?.email || ''}
+                            </p>
                         </div>
 
                         <p className='text-muted-foreground mb-4'>
