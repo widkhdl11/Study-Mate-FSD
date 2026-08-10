@@ -24,5 +24,23 @@ export async function queryMyChatRooms(
         return err({ kind: "Infra", message: error.message })
     }
 
-    return ok((data ?? []) as unknown as MyChatRoomView[])
+    // unreadCount는 방마다 count 쿼리로 집계(마이그레이션 없이) — 방 수가 적어 N+1 부담 미미.
+    // last_read_at 이후 도착한, 내가 보내지 않은 메시지 수.
+    const rooms = (data ?? []) as unknown as Omit<MyChatRoomView, "unreadCount">[]
+    const withUnread = await Promise.all(
+        rooms.map(async (room) => {
+            let countQuery = supabase
+                .from("chat_messages")
+                .select("id", { count: "exact", head: true })
+                .eq("chat_id", room.chat.id)
+                .neq("sender_id", userId)
+            if (room.last_read_at) {
+                countQuery = countQuery.gt("created_at", room.last_read_at)
+            }
+            const { count } = await countQuery
+            return { ...room, unreadCount: count ?? 0 }
+        }),
+    )
+
+    return ok(withUnread)
 }

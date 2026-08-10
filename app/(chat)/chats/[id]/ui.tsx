@@ -2,6 +2,7 @@
 
 import { useChatScroll } from "@/shared/lib/useChatScroll"
 import { useSendMessage } from "@/features/chat/send-message"
+import { useMarkChatRead } from "@/features/chat/mark-read"
 import { useCurrentUser } from "@/entities/user"
 import { getProfileImageUrl } from "@/shared/api/supabase/storage"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar"
@@ -18,6 +19,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
 
     const { data: user } = useCurrentUser();
     const inputRef = useRef<HTMLInputElement>(null);
+    useMarkChatRead(Number(chatRoom.id)); // 진입 시 읽음 처리
     const { data: messages, isLoading } = useChatMessages(Number(chatRoom.id));
     const sendMessageMutation = useSendMessage(Number(chatRoom.id));    
     const [newMessage, setNewMessage] = useState("")

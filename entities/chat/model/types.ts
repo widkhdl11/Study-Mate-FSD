@@ -51,4 +51,6 @@ export interface MyChatRoomView {
     last_read_at: string | null
     chat: ChatRow
     profile: ChatUserBrief
+    /** 내 last_read_at 이후 도착한, 내가 보내지 않은 메시지 수 (queryMyChatRooms가 방별로 집계) */
+    unreadCount: number
 }

@@ -1,9 +1,10 @@
+import { queryMyChatRooms } from "@/entities/chat";
 import { queryMyParticipations } from "@/entities/participant";
 import { queryMyStudies } from "@/entities/study";
 import { createClient } from "@/shared/api/supabase/server";
 import { tryAuth } from "@/shared/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/shadcn/ui/card";
-import { BookOpen, Clock, Users, type LucideIcon } from "lucide-react";
+import { BookOpen, Clock, MessageCircle, Users, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 type Stat = {
@@ -23,23 +24,28 @@ export default async function ActivitySummary() {
     const auth = await tryAuth(supabase);
     if (!auth.success) return null;
 
-    const [participationsRes, myStudiesRes] = await Promise.all([
+    const [participationsRes, myStudiesRes, chatRoomsRes] = await Promise.all([
         queryMyParticipations(supabase, auth.user.id),
         queryMyStudies(supabase, auth.user.id),
+        queryMyChatRooms(supabase, auth.user.id),
     ]);
 
     const participations = participationsRes.ok ? participationsRes.value : [];
     const participating = participations.filter((p) => p.status === "accepted").length;
     const pending = participations.filter((p) => p.status === "pending").length;
     const created = myStudiesRes.ok ? myStudiesRes.value.length : 0;
+    const unread = chatRoomsRes.ok
+        ? chatRoomsRes.value.reduce((sum, r) => sum + r.unreadCount, 0)
+        : 0;
 
     // 요약할 활동이 없으면 빈 카드 대신 섹션 자체를 숨긴다.
-    if (participating + pending + created === 0) return null;
+    if (participating + pending + created + unread === 0) return null;
 
     const stats: Stat[] = [
         { icon: Users, value: participating, label: "참여 중 스터디", href: "/profile?tab=studies" },
         { icon: Clock, value: pending, label: "신청 대기", href: "/profile?tab=studies" },
         { icon: BookOpen, value: created, label: "내가 개설", href: "/profile?tab=studies" },
+        { icon: MessageCircle, value: unread, label: "안 읽은 메시지", href: "/profile?tab=chats" },
     ];
 
     return (
@@ -49,7 +55,7 @@ export default async function ActivitySummary() {
                     <CardTitle className="text-lg">내 활동</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
                         {stats.map((s) => (
                             <Link
                                 key={s.label}

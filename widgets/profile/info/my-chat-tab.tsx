@@ -2,6 +2,7 @@
 
 import { getProfileImageUrl } from "@/shared/api/supabase/storage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
+import { Badge } from "@/shared/shadcn/ui/badge";
 import { Card } from "@/shared/shadcn/ui/card";
 import { TabsContent } from "@/shared/shadcn/ui/tabs";
 import { MyChatRoomView } from "@/entities/chat";
@@ -37,12 +38,12 @@ export default function MyChatTab({chatRooms} : {
                                 <h3 className="font-semibold text-foreground truncate"> {
                                     room.chat.name
                                 } </h3>
-                                {/* 읽지 않은 메세지 */}
-                                {/* {
-                                room.unreadCount > 0 && (<Badge className="bg-destructive text-white"> {
-                                    room.unreadCount
-                                } </Badge>)
-                            }  */}
+                                {/* 읽지 않은 메시지 */}
+                                {room.unreadCount > 0 && (
+                                    <Badge className="bg-destructive text-white shrink-0">
+                                        {room.unreadCount}
+                                    </Badge>
+                                )}
                             </div>
                             <p className="text-sm text-muted-foreground truncate"> {
                                 room.chat.last_message
