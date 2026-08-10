@@ -37,7 +37,7 @@ export async function updateSession(request: NextRequest) {
   // 보호된 경로 체크
   const protectedPaths = [
     "/posts/create",
-    "/studies/create",
+    "/studies/", // 스터디 섹션 전체 로그인 필수 (상세/편집/작성). 공개 studies 라우트 없음
     "/profile",
     "/chats",
   ];
