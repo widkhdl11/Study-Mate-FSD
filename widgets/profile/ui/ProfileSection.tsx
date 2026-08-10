@@ -65,55 +65,59 @@ export default function ProfileSection({
         <section className='border-b border-border bg-muted/30 py-10'>
             <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex flex-col sm:flex-row sm:items-start sm:gap-8'>
-                    <div className='relative shrink-0'>
-                        <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
-                            <AvatarImage
-                                src={previewUrl ?? getProfileImageUrl(currentUser?.avatarUrl)}
-                                alt={currentUser.username || ''}
-                                width={96}
-                                height={96}
-                                fetchPriority='high'
+                    <div className='shrink-0 flex flex-col items-center'>
+                        {/* 아바타+카메라만 감싸는 relative — 카메라(absolute)가 아바타 박스에만 앵커되도록
+                            (아래 "기본 이미지로" 버튼을 같은 relative에 두면 bottom-0이 버튼 위로 겹친다) */}
+                        <div className='relative'>
+                            <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
+                                <AvatarImage
+                                    src={previewUrl ?? getProfileImageUrl(currentUser?.avatarUrl)}
+                                    alt={currentUser.username || ''}
+                                    width={96}
+                                    height={96}
+                                    fetchPriority='high'
+                                />
+                                <AvatarFallback className='bg-primary text-primary-foreground text-2xl font-bold'>
+                                    {currentUser.username?.[0]}
+                                </AvatarFallback>
+                            </Avatar>
+
+                            <label
+                                htmlFor='profile-image-upload'
+                                aria-disabled={busy}
+                                className={`absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-sm transition-all ${
+                                    busy
+                                        ? 'opacity-70 pointer-events-none'
+                                        : 'cursor-pointer hover:bg-primary/90 hover:scale-110'
+                                }`}
+                                title='프로필 이미지 변경'>
+                                {isUploading ? (
+                                    <Loader2 className='w-4 h-4 animate-spin' aria-hidden='true' />
+                                ) : (
+                                    <Camera className='w-4 h-4' aria-hidden='true' />
+                                )}
+                                <span className='sr-only'>
+                                    {isUploading ? '이미지 업로드 중' : '프로필 이미지 변경'}
+                                </span>
+                            </label>
+
+                            <input
+                                id='profile-image-upload'
+                                type='file'
+                                accept='image/*'
+                                aria-label='프로필 이미지 변경'
+                                onChange={handleImageChange}
+                                disabled={busy}
+                                className='sr-only'
                             />
-                            <AvatarFallback className='bg-primary text-primary-foreground text-2xl font-bold'>
-                                {currentUser.username?.[0]}
-                            </AvatarFallback>
-                        </Avatar>
-
-                        <label
-                            htmlFor='profile-image-upload'
-                            aria-disabled={busy}
-                            className={`absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-sm transition-all ${
-                                busy
-                                    ? 'opacity-70 pointer-events-none'
-                                    : 'cursor-pointer hover:bg-primary/90 hover:scale-110'
-                            }`}
-                            title='프로필 이미지 변경'>
-                            {isUploading ? (
-                                <Loader2 className='w-4 h-4 animate-spin' aria-hidden='true' />
-                            ) : (
-                                <Camera className='w-4 h-4' aria-hidden='true' />
-                            )}
-                            <span className='sr-only'>
-                                {isUploading ? '이미지 업로드 중' : '프로필 이미지 변경'}
-                            </span>
-                        </label>
-
-                        <input
-                            id='profile-image-upload'
-                            type='file'
-                            accept='image/*'
-                            aria-label='프로필 이미지 변경'
-                            onChange={handleImageChange}
-                            disabled={busy}
-                            className='sr-only'
-                        />
+                        </div>
 
                         {hasCustomImage && (
                             <button
                                 type='button'
                                 onClick={handleReset}
                                 disabled={busy}
-                                className='mt-2 block w-full text-center text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors'>
+                                className='mt-3 text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors'>
                                 {isResetting ? '되돌리는 중...' : '기본 이미지로'}
                             </button>
                         )}
