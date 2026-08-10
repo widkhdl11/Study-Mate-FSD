@@ -43,7 +43,7 @@ export { default as StudySelect } from "./ui/StudySelect";
 export { StudyStatusBadge } from "./ui/StudyStatusBadge";
 
 // ── 공개 타입 ──
-export type { StudyRecommendationView, StudyResponse } from "./model/types";
+export type { StudyResponse } from "./model/types";
 
 // ── 폼 스키마 ──
 export { studyCreateSchema, studyUpdateSchema } from "./model/studyFormSchema";

@@ -1,16 +1,5 @@
 import type { StudyRow } from "./Study"
 
-export type StudyRecommendationView = {
-    id: number
-    name: string
-    category: string
-    region: string
-    description: string
-    currentParticipants: number
-    maxParticipants: number
-}
-
-
 export type StudyResponse = {
     id: number
     creatorId: string

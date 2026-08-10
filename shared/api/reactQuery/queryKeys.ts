@@ -32,7 +32,6 @@ export const queryKeys = {
 
 
   
-  aiRecommendedStudies: ["ai-recommended-studies"] as const,
   aiRecommendedPosts: ["ai-recommended-posts"] as const,
 };
 

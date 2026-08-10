@@ -19,6 +19,8 @@ export type InterestProfile = {
         pending: number; // 신청 후 대기
         created: number; // 내가 만든 스터디
     };
+    // 이미 참여 중(accepted)인 스터디 id — 추천 후보에서 제외해 중복 추천을 막는다.
+    excludeStudyIds: number[];
 };
 
 // 신호 세기 — 직접 참여/생성이 좋아요보다 관심을 강하게 반영한다.
@@ -80,12 +82,17 @@ export async function buildInterestProfile(
 
     let participating = 0;
     let pending = 0;
+    const excludeStudyIds: number[] = [];
 
     if (participationsRes.ok) {
         for (const p of participationsRes.value) {
             const accepted = p.status === "accepted";
-            if (accepted) participating += 1;
-            else if (p.status === "pending") pending += 1;
+            if (accepted) {
+                participating += 1;
+                excludeStudyIds.push(p.studyId);
+            } else if (p.status === "pending") {
+                pending += 1;
+            }
             addStudy(
                 p.studyCategory,
                 p.region,
@@ -117,5 +124,6 @@ export async function buildInterestProfile(
         topCategories,
         topRegions,
         activity: { participating, pending, created },
+        excludeStudyIds,
     };
 }
