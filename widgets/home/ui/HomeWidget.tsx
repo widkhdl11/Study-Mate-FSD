@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import CategorySection from "./CategorySection";
-import HeroSection from "./HeroSection";
+import HeroSection, { HeroSectionSkeleton } from "./HeroSection";
 import LatestSection from "./LatestSection";
 
 
@@ -50,7 +50,10 @@ export default async function HomeWidget() {
     return (
         <div className='min-h-screen flex flex-col bg-background'>
             <main className='flex-1'>
-                <HeroSection />
+                {/* 개인화 인사말은 auth 왕복이 필요 — Suspense로 히어로만 스트리밍해 나머지 홈 페인트를 막지 않는다 */}
+                <Suspense fallback={<HeroSectionSkeleton />}>
+                    <HeroSection />
+                </Suspense>
                 <CategorySection />
                 <Suspense fallback={<LatestSectionSkeleton />}>
                     <LatestSection />

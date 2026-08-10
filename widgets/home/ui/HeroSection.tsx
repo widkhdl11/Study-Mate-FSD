@@ -1,3 +1,5 @@
+import { createClient } from "@/shared/api/supabase/server"
+import { tryAuth } from "@/shared/lib/auth"
 import { Button } from "@/shared/shadcn/ui/button"
 import { CheckCircle2, MessageCircle, Search, UserPlus, type LucideIcon } from "lucide-react"
 import Link from "next/link"
@@ -13,7 +15,23 @@ const FLOW_STEPS: { icon: LucideIcon; title: string; desc: string }[] = [
   { icon: MessageCircle, title: "대화", desc: "그룹 채팅방에서 바로 대화를 시작해요" },
 ]
 
-export default function HeroSection() {
+// 로그인 유저에게 표시할 이름 조회 — 히어로 인사말에만 쓰이므로 username만 가볍게 가져온다.
+async function getHeroUsername(): Promise<string | null> {
+  const supabase = await createClient()
+  const auth = await tryAuth(supabase)
+  if (!auth.success) return null
+  const { data } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", auth.user.id)
+    .single()
+  return data?.username ?? null
+}
+
+export default async function HeroSection() {
+  // 개인화: 로그인 방문자에겐 가입 유도 대신 "이어보기" 카피/CTA. 비로그인은 기존과 동일.
+  const username = await getHeroUsername()
+
   return (
     // Border-First: 풀블리드 그라디언트/오브/그리드 대신 은은한 브랜드 틴트 + 하단 테두리로 구획
     <section className="border-b border-border bg-secondary px-4 py-16 sm:px-6 md:py-24 lg:px-8">
@@ -23,12 +41,22 @@ export default function HeroSection() {
           <div className="space-y-8 text-center lg:text-left">
             <div className="space-y-4">
               <h1 className="text-balance text-4xl font-bold leading-tight text-foreground md:text-5xl lg:text-6xl">
-                함께 성장하는
-                <br className="hidden sm:block" /> 스터디 문화
+                {username ? (
+                  <>
+                    {username}님,
+                    <br className="hidden sm:block" /> 오늘도 함께 성장해요
+                  </>
+                ) : (
+                  <>
+                    함께 성장하는
+                    <br className="hidden sm:block" /> 스터디 문화
+                  </>
+                )}
               </h1>
               <p className="mx-auto max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground lg:mx-0">
-                관심 분야와 지역으로 나에게 맞는 스터디를 찾고, 신청부터 승인,
-                그룹 채팅까지 한 곳에서 이어가요.
+                {username
+                  ? "이어서 관심 스터디를 둘러보거나, 참여 중인 활동과 채팅을 확인해 보세요."
+                  : "관심 분야와 지역으로 나에게 맞는 스터디를 찾고, 신청부터 승인, 그룹 채팅까지 한 곳에서 이어가요."}
               </p>
             </div>
 
@@ -36,9 +64,15 @@ export default function HeroSection() {
               <Button asChild size="lg" className="px-8 py-6 text-lg transition-transform active:scale-[0.97]">
                 <Link href="/posts">모집글 보기</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg transition-transform active:scale-[0.97]">
-                <Link href="/studies/create">스터디 만들기</Link>
-              </Button>
+              {username ? (
+                <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg transition-transform active:scale-[0.97]">
+                  <Link href="/profile">내 활동</Link>
+                </Button>
+              ) : (
+                <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg transition-transform active:scale-[0.97]">
+                  <Link href="/studies/create">스터디 만들기</Link>
+                </Button>
+              )}
             </div>
 
             {/* 실데이터 스탯 — 스트리밍(히어로 페인트 비차단) */}
@@ -71,6 +105,48 @@ export default function HeroSection() {
                 </li>
               ))}
             </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// 히어로 개인화(auth 왕복) 대기 중 대체 UI — 로그인/비로그인 오판 깜빡임을 피하려고
+// 실제 카피 대신 중립 스켈레톤을 쓰고, 레이아웃 시프트 방지를 위해 실제 구조·높이를 맞춘다.
+export function HeroSectionSkeleton() {
+  return (
+    <section className="border-b border-border bg-secondary px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="h-12 w-3/4 animate-pulse rounded-md bg-muted md:h-14 lg:h-16" />
+              <div className="h-12 w-1/2 animate-pulse rounded-md bg-muted md:h-14 lg:h-16" />
+              <div className="space-y-2 pt-2">
+                <div className="h-5 w-full animate-pulse rounded-md bg-muted" />
+                <div className="h-5 w-2/3 animate-pulse rounded-md bg-muted" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="h-[60px] w-full animate-pulse rounded-md bg-muted sm:w-40" />
+              <div className="h-[60px] w-full animate-pulse rounded-md bg-muted sm:w-40" />
+            </div>
+            <HeroStatsSkeleton />
+          </div>
+          <div className="rounded-xl border border-border bg-card p-6 md:p-8">
+            <div className="mb-6 h-5 w-48 animate-pulse rounded-md bg-muted" />
+            <div className="space-y-6">
+              {Array.from({ length: FLOW_STEPS.length }).map((_, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="h-10 w-10 shrink-0 animate-pulse rounded-full bg-muted" />
+                  <div className="flex-1 space-y-2 pt-1.5">
+                    <div className="h-4 w-20 animate-pulse rounded-md bg-muted" />
+                    <div className="h-4 w-full animate-pulse rounded-md bg-muted" />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
