@@ -3,7 +3,7 @@ import { queryParticipantStatus } from "@/entities/participant";
 import { queryPostDetail, PostDetailView, PostWithRelationResponse } from "@/entities/post";
 import { queryMyProfile } from "@/entities/user";
 import { createClient } from "@/shared/api/supabase/server";
-import { CustomUserAuth, tryAuth } from "@/shared/lib/auth";
+import { tryAuth } from "@/shared/lib/auth";
 import { PostDetailWidget, SidebarSection, MainSection } from "@/widgets/post-detail";
 import { notFound } from "next/navigation";
 
@@ -28,10 +28,11 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 }
 async function MainSectionLoader({ postData }: { postData: PostDetailView }) {
   const supabase = await createClient();
-  const { user } = await CustomUserAuth(supabase);
-  const profile = await queryMyProfile(supabase, user.id);
+  // 상세글은 공개 페이지 — 비로그인 방문자도 열람 가능해야 하므로 throw/redirect하는 CustomUserAuth 대신 tryAuth 사용
+  const auth = await tryAuth(supabase);
+  const profile = auth.success ? await queryMyProfile(supabase, auth.user.id) : null;
 
-  return <MainSection postData={postData} user={profile.ok ? profile.value : null} />;
+  return <MainSection postData={postData} user={profile?.ok ? profile.value : null} />;
 }
 async function SidebarSectionLoader({ postData }: { postData: PostDetailView }) {
   const supabase = await createClient();
