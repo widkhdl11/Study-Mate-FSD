@@ -9,7 +9,7 @@ import { Loader2, MapPin, Sparkles, User } from "lucide-react";
 import Link from "next/link";
 
 export function AIRecommendedStudies() {
-  const { data: recommendationsPosts, isLoading, error } = useAIRecommendedPosts();
+  const { data: recommendation, isLoading, error } = useAIRecommendedPosts();
 
   if (isLoading) {
     return (
@@ -28,8 +28,8 @@ export function AIRecommendedStudies() {
     );
   }
 
-  // 프로필이 없거나(신규 유저) 추천이 없으면 죽은 카드 대신 섹션 자체를 숨긴다.
-  if (error || !recommendationsPosts || recommendationsPosts.length === 0) {
+  // 로그인 필요·추천 없음(신규 유저) 등이면 죽은 카드 대신 섹션 자체를 숨긴다.
+  if (error || !recommendation || recommendation.posts.length === 0) {
     return null;
   }
 
@@ -41,11 +41,11 @@ export function AIRecommendedStudies() {
           AI 추천 스터디
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          회원님의 프로필을 분석해서 추천해드려요
+          {recommendation.summary}
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {recommendationsPosts.map((rec, index) => (
+        {recommendation.posts.map((rec, index) => (
           <Link 
             key={rec.id} 
             href={`/posts/${rec.id}`}

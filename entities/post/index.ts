@@ -13,6 +13,8 @@ export type { PostDetailView } from "./api/query/postDetail/types";
 export { queryAllPosts } from "./api/query/postsAll/queryPostsAll";
 export type { PostWithStudyView } from "./api/query/postsAll/types";
 export { queryMyPostsWithStudy } from "./api/query/myPostsWithStudy/queryMyPostsWithStudy";
+export { queryMyLikedStudies } from "./api/query/myLikedStudies/queryMyLikedStudies";
+export type { MyLikedStudyView } from "./api/query/myLikedStudies/queryMyLikedStudies";
 export { queryPostsCount } from "./api/query/postsCount/queryPostsCount";
 export { useIsLiked } from "./api/query/isLiked/useIsLiked";
 

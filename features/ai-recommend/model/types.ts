@@ -28,6 +28,12 @@ export type PostRecommendedRow = {
     }
 }
 
+/** 홈 AI 추천 응답 — 개인화 요약 문장 + 추천 목록을 함께 담는다(요약+추천 통합). */
+export type AIRecommendationResult = {
+    summary: string;
+    posts: PostRecommendedView[];
+};
+
 export type PostRecommendedView = {
     id: number
     title: string
