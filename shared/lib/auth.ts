@@ -12,12 +12,15 @@ export async function CustomUserAuth(
         error,
     } = await supabase.auth.getUser()
 
-    if (error) {
-        throw new Error('인증 확인에 실패했습니다')
-    }
-
+    // 비로그인 요청의 getUser()는 user:null 과 함께 AuthSessionMissingError를 반환하므로,
+    // !user(로그인 필요) 리다이렉트를 error throw보다 먼저 검사한다.
+    // 순서가 반대면 미들웨어가 막지 않는 경로에서 로그인 유도 대신 서버 렌더가 크래시한다.
     if (!user) {
         redirect(redirectTo)
+    }
+
+    if (error) {
+        throw new Error('인증 확인에 실패했습니다')
     }
 
     return { user }
