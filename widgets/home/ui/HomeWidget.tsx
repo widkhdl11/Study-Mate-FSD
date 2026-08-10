@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import ActivitySummary from "./ActivitySummary";
 import CategorySection from "./CategorySection";
 import HeroSection, { HeroSectionSkeleton } from "./HeroSection";
 import LatestSection from "./LatestSection";
@@ -53,6 +54,10 @@ export default async function HomeWidget() {
                 {/* 개인화 인사말은 auth 왕복이 필요 — Suspense로 히어로만 스트리밍해 나머지 홈 페인트를 막지 않는다 */}
                 <Suspense fallback={<HeroSectionSkeleton />}>
                     <HeroSection />
+                </Suspense>
+                {/* 로그인 유저 활동 요약(비로그인·무활동이면 null). auth 왕복이 홈 페인트를 막지 않도록 스트리밍 */}
+                <Suspense fallback={null}>
+                    <ActivitySummary />
                 </Suspense>
                 <CategorySection />
                 <Suspense fallback={<LatestSectionSkeleton />}>
