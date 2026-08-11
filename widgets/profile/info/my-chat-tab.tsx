@@ -1,20 +1,19 @@
 'use client'
 
-import { getProfileImageUrl } from "@/shared/api/supabase/storage";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
-import { Badge } from "@/shared/shadcn/ui/badge";
-import { Card } from "@/shared/shadcn/ui/card";
-import { TabsContent } from "@/shared/shadcn/ui/tabs";
 import { MyChatRoomView } from "@/entities/chat";
 import { formatTimeAgo } from "@/shared/lib/date";
+import { Avatar, AvatarFallback } from "@/shared/shadcn/ui/avatar";
+import { Badge } from "@/shared/shadcn/ui/badge";
+import { TabsContent } from "@/shared/shadcn/ui/tabs";
 import { EmptyState } from "@/shared/ui/EmptyState";
 import { MessageCircle } from "lucide-react";
 import Link from "next/link";
-export default function MyChatTab({chatRooms} : {
-    chatRooms : MyChatRoomView[]
+
+export default function MyChatTab({ chatRooms }: {
+    chatRooms: MyChatRoomView[]
 }) {
-    return (<> {/* 채팅 탭 */}
-        <TabsContent value="chats" className="space-y-4">
+    return (
+        <TabsContent value="chats" className="space-y-2">
             {chatRooms.length === 0 ? (
                 <EmptyState
                     icon={MessageCircle}
@@ -23,41 +22,45 @@ export default function MyChatTab({chatRooms} : {
                     action={{ label: "스터디 찾아보기", href: "/posts" }}
                 />
             ) : (
-            <div className="space-y-3"> {
-                chatRooms.map((room : MyChatRoomView) => (
-                <Card key={room.chat.id}
-                    className="group overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col p-0 gap-0 min-h-[100px]">
-                    <Link href={`/chats/${room.chat.id}`}>
-                    <div className="flex items-start gap-4 p-4">
-                        <Avatar className="h-12 w-12 flex-shrink-0">
-                            <AvatarImage src={getProfileImageUrl(room.profile.avatar_url)} alt={room.chat.name ?? ""} />
-                            <AvatarFallback className="bg-primary text-primary-foreground">{room.chat.name?.[0] ?? "?"}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-2 mb-1">
-                                <h3 className="font-semibold text-foreground truncate"> {
-                                    room.chat.name
-                                } </h3>
-                                {/* 읽지 않은 메시지 */}
-                                {room.unreadCount > 0 && (
-                                    <Badge className="bg-destructive text-white shrink-0">
-                                        {room.unreadCount}
-                                    </Badge>
-                                )}
+                chatRooms.map((room) => {
+                    const unread = room.unreadCount > 0
+                    const time = room.chat.last_message_at ?? room.created_at
+                    return (
+                        <Link key={room.chat.id} href={`/chats/${room.chat.id}`} className="block">
+                            <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-muted/30">
+                                {/* 그룹 스터디 채팅 — 방 이니셜을 브랜드 틴트 원형으로(개인 아바타가 아니라 방 정체성) */}
+                                <Avatar className="h-12 w-12 shrink-0">
+                                    <AvatarFallback className="bg-secondary text-primary text-lg font-bold">
+                                        {room.chat.name?.[0] ?? "#"}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-baseline gap-2">
+                                        <h3 className={`truncate ${unread ? "font-bold text-foreground" : "font-semibold text-foreground"}`}>
+                                            {room.chat.name ?? "채팅방"}
+                                        </h3>
+                                        {time && (
+                                            <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                                                {formatTimeAgo(time)}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="mt-1 flex items-center gap-2">
+                                        <p className={`min-w-0 flex-1 truncate text-sm ${unread ? "text-foreground" : "text-muted-foreground"}`}>
+                                            {room.chat.last_message ?? "아직 메시지가 없어요"}
+                                        </p>
+                                        {unread && (
+                                            <Badge className="shrink-0 rounded-full bg-primary px-2 text-primary-foreground tabular-nums">
+                                                {room.unreadCount}
+                                            </Badge>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                            <p className="text-sm text-muted-foreground truncate"> {
-                                room.chat.last_message
-                            } </p>
-                            <p className="text-xs text-muted-foreground mt-1"> {
-                                room.chat.last_message_at ? formatTimeAgo(room.chat.last_message_at) : room.created_at ? formatTimeAgo(room.created_at) : ""
-                            } </p>
-                        </div>
-                    </div>
-                    </Link>
-                </Card>
-                ))
-            } </div>
+                        </Link>
+                    )
+                })
             )}
         </TabsContent>
-    </>);
+    )
 }
