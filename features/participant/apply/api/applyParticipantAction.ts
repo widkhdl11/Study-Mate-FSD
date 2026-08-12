@@ -67,10 +67,11 @@ export async function applyParticipantAction(studyId: number) {
     }
 
     const createNotificationVO = Notification.createNew({
-        userId: loadStudy.value.creatorId,
-        type: "request_accepted",
-        senderId: userIdVO.value,
+        userId: loadStudy.value.creatorId,        // 수신자: 스터디장
+        type: "participant_request",              // 참가 "요청" 알림 (승인 아님)
+        senderId: userIdVO.value,                 // 발신자: 신청자
         reference: { kind: "study", id: studyId },
+        // senderName(hostName)은 실제로는 신청자 이름 — "○○님이 참가 요청을 보내셨습니다"에 쓰인다.
         ctx: { senderName: hostName, targetTitle: loadStudy.value.title },
     })
 
