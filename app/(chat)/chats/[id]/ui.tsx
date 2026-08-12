@@ -12,9 +12,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/sh
 import { EmptyState } from "@/shared/ui/EmptyState"
 import { format, isToday, isYesterday } from "date-fns"
 import { ko } from "date-fns/locale"
-import { ArrowLeft, Menu, MessageCircle, Send, Users } from "lucide-react"
+import { ArrowLeft, Loader2, Menu, MessageCircle, Send, Users } from "lucide-react"
 import Link from "next/link"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 
 const GROUP_GAP_MS = 5 * 60 * 1000 // 같은 사람 연속 메시지를 한 그룹으로 묶는 시간 간격
 
@@ -35,16 +35,60 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
   const { data: user } = useCurrentUser();
   const inputRef = useRef<HTMLInputElement>(null);
   useMarkChatRead(Number(chatRoom.id)); // 진입 시 읽음 처리
-  const { data: messages, isLoading } = useChatMessages(Number(chatRoom.id));
+  const { data: messages, isLoading, fetchOlder, hasMore, isLoadingOlder } = useChatMessages(Number(chatRoom.id));
   const sendMessageMutation = useSendMessage(Number(chatRoom.id));
   const [newMessage, setNewMessage] = useState("")
   const { containerRef, scrollToBottom } = useChatScroll()
 
-  // 메시지가 추가되면 스크롤 이동
+  const list = messages ?? []
+
+  // 스크롤/페이지네이션 위치 추적용 refs
+  const prevScrollHeightRef = useRef(0)
+  const prevFirstIdRef = useRef<number | null>(null)
+  const prevLastIdRef = useRef<number | null>(null)
+  const initializedRef = useRef(false)
+
+  // 상단 근처로 스크롤하면 이전 페이지 로드(프리펜드 전 높이를 기록해 위치 보존에 사용)
+  const handleScroll = useCallback(() => {
+    const el = containerRef.current
+    if (!el || !hasMore || isLoadingOlder) return
+    if (el.scrollTop < 80) {
+      prevScrollHeightRef.current = el.scrollHeight
+      fetchOlder()
+    }
+  }, [containerRef, hasMore, isLoadingOlder, fetchOlder])
+
+  // 최초 로드/하단 새 메시지 → 맨 아래로, 상단에 이전 메시지 프리펜드 → 보던 위치 유지
   useEffect(() => {
-    scrollToBottom()
-    inputRef.current?.focus()
-  }, [messages, scrollToBottom])
+    const el = containerRef.current
+    if (!el) return
+    const first = list[0]?.id ?? null
+    const last = list[list.length - 1]?.id ?? null
+
+    if (!initializedRef.current && list.length > 0) {
+      initializedRef.current = true
+      el.scrollTop = el.scrollHeight
+    } else if (
+      prevFirstIdRef.current !== null &&
+      first !== prevFirstIdRef.current &&
+      last === prevLastIdRef.current
+    ) {
+      // 위에 이전 메시지가 붙음 → 추가된 높이만큼 보정해 시야 고정
+      el.scrollTop = el.scrollHeight - prevScrollHeightRef.current
+    } else if (last !== prevLastIdRef.current) {
+      scrollToBottom()
+    }
+
+    prevFirstIdRef.current = first
+    prevLastIdRef.current = last
+  }, [list, containerRef, scrollToBottom])
+
+  // 방 전환 시 스크롤/페이지네이션 상태 초기화
+  useEffect(() => {
+    initializedRef.current = false
+    prevFirstIdRef.current = null
+    prevLastIdRef.current = null
+  }, [chatRoom.id])
 
   const handleSendMessage = () => {
     if (newMessage.trim() === "" || sendMessageMutation.isPending) return
@@ -65,15 +109,15 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
     }
   }, [sendMessageMutation.isPending]);
 
-  const list = messages ?? []
-
   return (
-    <div className="flex h-full w-full max-w-2xl mx-auto flex-col">
+    <div className="flex h-full w-full min-w-0 bg-background">
+      {/* 대화 페인 */}
+      <section className="flex min-w-0 flex-1 flex-col">
       {/* 채팅방 헤더 */}
       <header className="flex-shrink-0 border-b border-border bg-background/95 backdrop-blur">
         <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4">
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <Link href="/profile" aria-label="뒤로 가기">
+            <Link href="/chats" aria-label="채팅 목록으로" className="md:hidden">
               <Button variant="ghost" size="icon" className="flex-shrink-0">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
@@ -95,7 +139,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
           {/* 멤버 목록 시트 */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="참여 멤버 보기">
+              <Button variant="ghost" size="icon" aria-label="참여 멤버 보기" className="xl:hidden">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -103,31 +147,16 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
               <SheetHeader>
                 <SheetTitle>참여 멤버 {chatParticipants.length}명</SheetTitle>
               </SheetHeader>
-              <div className="flex-1 space-y-1 overflow-y-auto px-3 py-2">
-                {chatParticipants.map((member) => (
-                  <div key={member.id} className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50">
-                    <Avatar className="h-10 w-10 flex-shrink-0">
-                      <AvatarImage
-                        src={getProfileImageUrl(member.profile?.avatar_url)}
-                        alt={member.profile?.username || "사용자"}
-                      />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {member.profile?.username?.substring(0, 2) || "??"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <p className="min-w-0 flex-1 truncate font-medium text-foreground">
-                      {member.profile?.username || "알 수 없음"}
-                    </p>
-                  </div>
-                ))}
+              <div className="flex-1 overflow-y-auto px-3 py-2">
+                <MemberList members={chatParticipants} />
               </div>
             </SheetContent>
           </Sheet>
         </div>
       </header>
 
-      {/* 메시지 영역 */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-3 py-4 sm:px-4" ref={containerRef}>
+      {/* 메시지 영역 — secondary 틴트 캔버스로 흰 말풍선·파란 말풍선 모두 바닥을 얻게 한다 */}
+      <div className="flex-1 min-h-0 overflow-y-auto bg-secondary/60 px-3 py-4 sm:px-4" ref={containerRef} onScroll={handleScroll}>
         {isLoading ? (
           <MessagesSkeleton />
         ) : list.length === 0 ? (
@@ -139,7 +168,13 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
             />
           </div>
         ) : (
-          list.map((message: ChatMessage, i) => {
+          <>
+          {isLoadingOlder && (
+            <div className="flex justify-center py-2">
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" aria-label="이전 메시지 불러오는 중" />
+            </div>
+          )}
+          {list.map((message: ChatMessage, i) => {
             const isMe = message.sender_id === user?.id
             const created = message.created_at || ""
             const prev = list[i - 1]
@@ -168,7 +203,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
               <React.Fragment key={message.id}>
                 {newDay && (
                   <div className="my-4 flex justify-center">
-                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
+                    <span className="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
                       {dayLabel(created)}
                     </span>
                   </div>
@@ -203,7 +238,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                         </span>
                       )}
                       <div
-                        className={`px-3.5 py-2 leading-relaxed ${
+                        className={`px-4 py-2.5 leading-relaxed shadow-sm ${
                           isMe
                             ? "rounded-2xl rounded-tr-md bg-primary text-primary-foreground"
                             : "rounded-2xl rounded-tl-md border border-border bg-card text-foreground"
@@ -221,7 +256,8 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                 </div>
               </React.Fragment>
             )
-          })
+          })}
+          </>
         )}
       </div>
 
@@ -250,6 +286,62 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
           </Button>
         </div>
       </div>
+      </section>
+
+      {/* 정보 레일 — 가장 넓은 화면(xl+)에서만 상시 노출(그 아래는 헤더의 멤버 시트로 대체) */}
+      <aside className="hidden w-72 shrink-0 flex-col border-l border-border bg-background xl:flex">
+        {/* 방 정체성 */}
+        <div className="flex flex-col items-center gap-3 border-b border-border px-4 py-6 text-center">
+          <Avatar className="h-16 w-16">
+            <AvatarFallback className="bg-secondary text-primary text-2xl font-bold">
+              {chatRoom.name?.[0] ?? "#"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0">
+            <h2 className="truncate font-bold text-foreground">{chatRoom.name ?? "채팅방"}</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">스터디 채팅방</p>
+          </div>
+          {chatRoom.study_id && (
+            <Link href={`/studies/${chatRoom.study_id}`} className="w-full">
+              <Button variant="outline" size="sm" className="w-full">
+                스터디 보기
+              </Button>
+            </Link>
+          )}
+        </div>
+
+        {/* 멤버 목록 */}
+        <div className="flex-1 overflow-y-auto px-3 py-4">
+          <p className="mb-2 px-1 text-xs font-medium text-muted-foreground">
+            멤버 {chatParticipants.length}명
+          </p>
+          <MemberList members={chatParticipants} />
+        </div>
+      </aside>
+    </div>
+  )
+}
+
+// 멤버 행 — 헤더의 멤버 시트(모바일)와 우측 정보 레일(데스크톱)이 공유한다.
+function MemberList({ members }: { members: ChatParticipant[] }) {
+  return (
+    <div className="space-y-1">
+      {members.map((member) => (
+        <div key={member.id} className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50">
+          <Avatar className="h-9 w-9 shrink-0">
+            <AvatarImage
+              src={getProfileImageUrl(member.profile?.avatar_url)}
+              alt={member.profile?.username || "사용자"}
+            />
+            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+              {member.profile?.username?.substring(0, 2) || "??"}
+            </AvatarFallback>
+          </Avatar>
+          <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+            {member.profile?.username || "알 수 없음"}
+          </p>
+        </div>
+      ))}
     </div>
   )
 }

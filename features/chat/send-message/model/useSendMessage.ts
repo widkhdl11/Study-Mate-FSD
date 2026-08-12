@@ -1,4 +1,4 @@
-import type { ChatMessage } from "@/entities/chat";
+import { compareMyChatRooms, type ChatMessage, type MyChatRoomView } from "@/entities/chat";
 import { useCurrentUser } from "@/entities/user";
 import { queryKeys } from "@/shared/api/reactQuery/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,6 +21,7 @@ export const useSendMessage = (chatId: number) => {
 
       // 이전 캐시 저장 (롤백용)
       const previousMessages = queryClient.getQueryData(queryKeys.chatMessages(chatId));
+      const previousRooms = queryClient.getQueryData(queryKeys.myChatRooms);
 
       // 임시 메시지 생성
       const tempMessage: ChatMessage = {
@@ -44,7 +45,25 @@ export const useSendMessage = (chatId: number) => {
         }
       );
 
-      return { previousMessages, tempMessage };
+      // 사이드바 목록: 이 방의 마지막 메시지/시각을 갱신하고 최신순으로 재정렬 → 방이 맨 위로.
+      queryClient.setQueryData<MyChatRoomView[]>(queryKeys.myChatRooms, (old) => {
+        if (!old) return old;
+        const updated = old.map((room) =>
+          room.chat.id === chatId
+            ? {
+                ...room,
+                chat: {
+                  ...room.chat,
+                  last_message: content,
+                  last_message_at: tempMessage.created_at,
+                },
+              }
+            : room
+        );
+        return [...updated].sort(compareMyChatRooms);
+      });
+
+      return { previousMessages, previousRooms, tempMessage };
     },
     // 에러 시 롤백
     onError: (err, content, context) => {
@@ -53,6 +72,9 @@ export const useSendMessage = (chatId: number) => {
           queryKeys.chatMessages(chatId),
           context.previousMessages
         );
+      }
+      if (context?.previousRooms) {
+        queryClient.setQueryData(queryKeys.myChatRooms, context.previousRooms);
       }
       toast.error("메시지 전송 중 오류가 발생했습니다");
     },

@@ -1,12 +1,8 @@
 import { queryChatDetail, queryChatParticipants } from "@/entities/chat";
 import { createClient } from "@/shared/api/supabase/server";
 import { CustomUserAuth } from "@/shared/lib/auth";
-import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-
-const ChatRoomUI = dynamic(
-    () => import('./ui')
-)
+import ChatRoomUI from "./ui";
 
 export default async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
 

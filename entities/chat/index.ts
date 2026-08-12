@@ -6,3 +6,5 @@ export { queryMyChatRooms } from "./api/query/myChatRooms/queryMyChatRooms";
 export { queryChatMessages } from "./api/query/chatMessages/queryChatMessages";
 export { queryStudyChatRoom } from "./api/query/studyChatRoom/queryStudyChatRoom";
 export { useChatMessages } from "./api/query/chatMessages/useChatMessages";
+export { useMyChatRooms } from "./api/query/myChatRooms/useMyChatRooms";
+export { compareMyChatRooms } from "./lib/compareMyChatRooms";

@@ -18,7 +18,11 @@ export async function queryMyChatRooms(
             profile:profiles!chat_participants_user_id_fkey(username, avatar_url)
         `)
         .eq("user_id", userId)
-        .order("chat(last_message_at)", { ascending: true })
+        // 최신 메시지 순(내림차순). 메시지 없는 방(null)은 맨 아래로(NULLS LAST).
+        // 2차 기준 chat.id로 동점을 깨서 정렬을 결정론적으로 고정 —
+        // 없으면 동점(빈 방들)이 물리적 tuple 순서로 떨어져, 방을 클릭(UPDATE)할 때마다 순서가 바뀐다.
+        .order("chat(last_message_at)", { ascending: false, nullsFirst: false })
+        .order("chat(id)", { ascending: false })
 
     if (error) {
         return err({ kind: "Infra", message: error.message })
