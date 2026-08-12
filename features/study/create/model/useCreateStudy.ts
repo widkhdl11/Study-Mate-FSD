@@ -1,7 +1,6 @@
-import { queryClient } from "@/shared/api/reactQuery/ReactQueryClientProvider"
 import { queryKeys } from "@/shared/api/reactQuery/queryKeys"
 import { isRedirect } from "@/shared/lib/format"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { createStudyAction } from "../api/createStudyAction"
 
@@ -9,6 +8,7 @@ import { createStudyAction } from "../api/createStudyAction"
 export const useCreateStudy=(
     onFieldError?: (field: string, message: string) => void
 )=>{
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn : createStudyAction,
