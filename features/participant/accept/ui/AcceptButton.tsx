@@ -15,7 +15,7 @@ export default function AcceptButton({ participant, studyId }: Props) {
     return (
          <Button
             size="sm"
-            className="bg-success hover:bg-success/90 gap-1"
+            className="bg-ink text-paper hover:bg-ink/90 active:scale-[0.97] gap-1"
             onClick={() => {
                 if (
                 window.confirm(

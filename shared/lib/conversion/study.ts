@@ -17,18 +17,19 @@ export const getStudyStatusExistValue = (status: string):string => {
 };
 
 // 스터디 상태 색상 반환 (입력 = status 코드, studyStatusConversion과 동일 도메인)
+// 플래너 월드: 형광펜 코딩(모집중=민트, 마감=코랄, 대기=옐로), 글자는 항상 잉크.
 export const getStudyStatusColor = (status: string) => {
     switch (status) {
         case "recruiting":
-            return "bg-success text-white";
+            return "bg-hl-mint text-ink";
         case "closed":
-            return "bg-destructive text-white";
+            return "bg-hl-coral text-ink";
         case "pending":
-            return "bg-warning text-foreground";
+            return "bg-hl-yellow text-ink";
         case "completed":
-            return "bg-muted-foreground text-white";
+            return "bg-ink/10 text-ink-soft";
         default:
-            return "bg-muted text-muted-foreground";
+            return "bg-ink/10 text-ink-soft";
     }
 };
 

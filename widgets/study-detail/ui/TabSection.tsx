@@ -52,17 +52,17 @@ export default function TabSection(
 
               {/* 개요 탭 */}
               <TabsContent value="overview" className="space-y-6">
-                <Card className="p-6">
-                  <h2 className="text-xl font-bold text-foreground mb-4">
+                <Card className="p-6 bg-paper border-2 border-ink/15 rounded-xl shadow-soft">
+                  <h2 className="text-xl font-bold text-ink mb-4">
                     스터디 소개
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                  <p className="text-ink-soft leading-relaxed whitespace-pre-line">
                     {study.description}
                   </p>
                 </Card>
 
-                <Card className="p-6">
-                  <h2 className="text-xl font-bold text-foreground mb-4">
+                <Card className="p-6 bg-paper border-2 border-ink/15 rounded-xl shadow-soft">
+                  <h2 className="text-xl font-bold text-ink mb-4">
                     호스트 정보
                   </h2>
                   <div className="flex items-center gap-4">
@@ -71,15 +71,15 @@ export default function TabSection(
                         src={getProfileImageUrl(study.creator.avatarUrl)}
                         alt={study.creator.email || ""}
                       />
-                      <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                      <AvatarFallback className="bg-ink text-paper text-lg">
                         {study.creator.email}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold text-foreground text-lg">
+                      <p className="font-semibold text-ink text-lg">
                         {study.creator.username}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-ink-soft">
                         {study.creator.email}
                       </p>
                     </div>
@@ -91,12 +91,12 @@ export default function TabSection(
 
               {/* 멤버 탭 */}
               <TabsContent value="members" className="space-y-4">
-                <Card className="p-6">
+                <Card className="p-6 bg-paper border-2 border-ink/15 rounded-xl shadow-soft">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-foreground">
+                    <h2 className="text-xl font-bold text-ink">
                       멤버 관리
                     </h2>
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="rounded-md border border-ink/20 text-ink-soft tabular-nums">
                       {study.currentParticipants ?? 0}/
                       {study.maxParticipants}명 참여중
                     </Badge>
@@ -137,7 +137,7 @@ export default function TabSection(
               {/* 모집글 탭 */}
               <TabsContent value="posts" className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-foreground">
+                  <h2 className="text-xl font-bold text-ink">
                     모집글 목록
                   </h2>
                   <CreateLink studyId={study.id} />

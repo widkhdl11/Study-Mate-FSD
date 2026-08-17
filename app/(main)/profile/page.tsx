@@ -18,7 +18,7 @@ export default async function UserProfilePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-paper">
       <main className="flex-1">
         <ProfileSection currentUser={profileData.value} />
         <Suspense fallback={<TabSectionSkeleton />}>

@@ -1,6 +1,6 @@
 export function Skeleton({ className }: { className?: string }) {
   return (
-    <div className={`bg-muted animate-pulse rounded ${className}`} />
+    <div className={`bg-ink/10 animate-pulse rounded ${className}`} />
   );
 }
 
@@ -29,7 +29,7 @@ export function PageSkeleton() {
 
 export function CardSkeleton() {
   return (
-    <div className="p-6 border rounded-lg space-y-4">
+    <div className="p-6 border-2 border-ink/15 bg-paper rounded-lg space-y-4">
       <Skeleton className="h-6 w-32" />
       <Skeleton className="h-4 w-full" />
       <Skeleton className="h-4 w-2/3" />
@@ -63,7 +63,7 @@ export function ProfileSkeleton() {
 
 export function HeaderSkeleton() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-ink/10 bg-paper/95 backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ export function PostsListSkeleton() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <aside className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
-              <div className="rounded-xl border bg-card p-5 space-y-5">
+              <div className="rounded-xl border-2 border-ink/15 bg-paper p-5 space-y-5">
                 <Skeleton className="h-6 w-20" />
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="space-y-2">
@@ -121,7 +121,7 @@ export function PostsListSkeleton() {
 
 export function PostCardSkeleton() {
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <div className="rounded-xl border-2 border-ink/15 bg-paper overflow-hidden">
       <Skeleton className="h-48 w-full rounded-none" />
       <div className="p-5 space-y-3">
         <div className="flex gap-2">
@@ -152,7 +152,7 @@ export function PostDetailMainSkeleton() {
   return (
     <div className="lg:col-span-2 space-y-4">
       <Skeleton className="h-9 w-3/4" />
-      <div className="flex items-center justify-between pb-6 border-b border-border mb-6">
+      <div className="flex items-center justify-between pb-6 border-b-2 border-dashed border-paper-line mb-6">
         <div className="flex items-center gap-3">
           <Skeleton className="h-10 w-10 rounded-full" />
           <div className="space-y-1">
@@ -180,7 +180,7 @@ export function PostDetailMainSkeleton() {
 export function PostDetailSidebarSkeleton() {
   return (
     <div className="lg:col-span-1">
-      <div className="rounded-xl border bg-card p-6 space-y-4">
+      <div className="rounded-xl border-2 border-ink/15 bg-paper p-6 space-y-4">
         <Skeleton className="h-6 w-16 rounded-full" />
         <Skeleton className="h-7 w-3/4" />
         <div className="flex flex-wrap gap-2">
@@ -199,7 +199,7 @@ export function PostDetailSidebarSkeleton() {
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-5/6" />
         </div>
-        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+        <div className="flex items-center gap-3 p-3 bg-ink/5 rounded-lg">
           <Skeleton className="h-8 w-8 rounded-full" />
           <div className="space-y-1">
             <Skeleton className="h-3 w-10" />
@@ -233,11 +233,11 @@ export function StudyDetailSkeleton() {
           <Skeleton className="h-10 w-24 rounded-md" />
           <Skeleton className="h-10 w-24 rounded-md" />
         </div>
-        <div className="p-6 border rounded-lg space-y-4">
+        <div className="p-6 border-2 border-ink/15 bg-paper rounded-xl space-y-4">
           <Skeleton className="h-6 w-32" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="p-4 bg-muted/50 rounded-lg space-y-2">
+              <div key={i} className="p-4 bg-ink/5 rounded-lg space-y-2">
                 <Skeleton className="h-4 w-16" />
                 <Skeleton className="h-6 w-32" />
               </div>
@@ -253,8 +253,8 @@ export function StudyDetailSkeleton() {
 
 export function ChatSkeleton() {
   return (
-    <div className="flex flex-col h-screen">
-      <div className="border-b p-4 flex items-center gap-3">
+    <div className="flex flex-col h-screen bg-paper">
+      <div className="border-b-2 border-ink/10 p-4 flex items-center gap-3">
         <Skeleton className="h-10 w-10 rounded-full" />
         <Skeleton className="h-5 w-32" />
       </div>
@@ -268,7 +268,7 @@ export function ChatSkeleton() {
           </div>
         ))}
       </div>
-      <div className="border-t p-4">
+      <div className="border-t-2 border-ink/10 p-4">
         <Skeleton className="h-10 w-full rounded-md" />
       </div>
     </div>
@@ -286,7 +286,7 @@ export function FormSkeleton() {
           <Skeleton className="h-8 w-36 mx-auto" />
           <Skeleton className="h-4 w-48 mx-auto" />
         </div>
-        <div className="p-6 md:p-8 border rounded-xl space-y-6">
+        <div className="p-6 md:p-8 border-2 border-ink/15 bg-paper rounded-xl space-y-6">
           <Skeleton className="h-7 w-32" />
           {[1, 2, 3].map((i) => (
             <div key={i} className="space-y-2">
@@ -309,9 +309,9 @@ export function FormSkeleton() {
 export function StudySelectSkeleton() {
   return (
     <div className="space-y-2">
-      <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-      <div className="h-4 w-48 bg-muted animate-pulse rounded" />
-      <div className="h-10 w-full bg-muted animate-pulse rounded-md" />
+      <div className="h-4 w-24 bg-ink/10 animate-pulse rounded" />
+      <div className="h-4 w-48 bg-ink/10 animate-pulse rounded" />
+      <div className="h-10 w-full bg-ink/10 animate-pulse rounded-md" />
     </div>
   );
 }
@@ -323,7 +323,7 @@ export function TabSectionSkeleton() {
       <div className="max-w-5xl mx-auto">
         <div className="grid grid-cols-3 gap-4 mb-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="text-center p-3 bg-muted/50 rounded-lg">
+            <div key={i} className="text-center p-3 bg-ink/5 rounded-lg border-2 border-ink/15">
               <Skeleton className="h-8 w-12 mx-auto mb-1" />
               <Skeleton className="h-3 w-16 mx-auto" />
             </div>
@@ -334,11 +334,11 @@ export function TabSectionSkeleton() {
             <Skeleton key={i} className="h-10 w-24 rounded-md" />
           ))}
         </div>
-        <div className="p-6 border rounded-lg space-y-4">
+        <div className="p-6 border-2 border-ink/15 rounded-xl bg-paper shadow-soft space-y-4">
           <Skeleton className="h-7 w-32" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="p-4 bg-muted/50 rounded-lg">
+              <div key={i} className="p-4 bg-ink/5 rounded-lg">
                 <Skeleton className="h-4 w-16 mb-2" />
                 <Skeleton className="h-6 w-32" />
               </div>

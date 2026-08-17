@@ -24,8 +24,8 @@ export default function SearchBox() {
         }
     }
     return (
-            <div className='hidden lg:flex items-center gap-1 bg-muted rounded-lg px-2 py-1.5 w-72'>
-                <span className='text-muted-foreground pl-1 shrink-0'>
+            <div className='hidden lg:flex items-center gap-1 rounded-lg border-2 border-ink/10 bg-ink/5 px-2 py-1.5 w-72'>
+                <span className='text-ink-soft pl-1 shrink-0'>
                     🔍
                 </span>
                 <input
@@ -40,14 +40,13 @@ export default function SearchBox() {
                         }
                     }}
                     placeholder='스터디·모집글 검색...'
-                    className='bg-muted text-foreground placeholder-muted-foreground outline-none flex-1 min-w-0 text-sm'
+                    className='bg-transparent text-ink placeholder-ink-soft outline-none flex-1 min-w-0 text-sm'
                     aria-label='검색어'
                 />
                 <Button
                     type='button'
                     size='sm'
-                    variant='secondary'
-                    className='h-8 shrink-0'
+                    className='h-8 shrink-0 bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]'
                     onClick={runSearch}>
                     검색
                 </Button>

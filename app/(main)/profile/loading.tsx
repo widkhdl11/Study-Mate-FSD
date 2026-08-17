@@ -3,11 +3,11 @@ import { Card } from "@/shared/shadcn/ui/card"
 
 export default function ProfileLoading() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-paper">
 
       <main className="flex-1">
         {/* 프로필 헤더 스켈레톤 */}
-        <section className="border-b border-border bg-gradient-to-br from-primary/5 to-muted/40 py-10">
+        <section className="border-b-2 border-ink/10 bg-paper py-10">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-start sm:gap-8">
               {/* 아바타 스켈레톤 */}
@@ -29,7 +29,7 @@ export default function ProfileLoading() {
                 {/* 통계 카드 */}
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="text-center p-3 bg-muted/50 rounded-lg">
+                    <div key={i} className="text-center p-3 bg-ink/5 rounded-lg border-2 border-ink/15">
                       <Skeleton className="h-8 w-12 mx-auto mb-1" />
                       <Skeleton className="h-3 w-16 mx-auto" />
                     </div>
@@ -59,11 +59,11 @@ export default function ProfileLoading() {
 
             {/* 탭 컨텐츠 - 카드 리스트 */}
             <div className="space-y-6">
-              <Card className="p-6">
+              <Card className="p-6 bg-paper border-2 border-ink/15 rounded-xl shadow-soft">
                 <Skeleton className="h-7 w-32 mb-6" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="p-4 bg-muted/50 rounded-lg">
+                    <div key={i} className="p-4 bg-ink/5 rounded-lg">
                       <Skeleton className="h-4 w-16 mb-2" />
                       <Skeleton className="h-6 w-32" />
                     </div>
@@ -71,11 +71,11 @@ export default function ProfileLoading() {
                 </div>
               </Card>
 
-              <Card className="p-6">
+              <Card className="p-6 bg-paper border-2 border-ink/15 rounded-xl shadow-soft">
                 <Skeleton className="h-7 w-32 mb-6" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[1, 2].map((i) => (
-                    <div key={i} className="p-4 bg-muted/50 rounded-lg">
+                    <div key={i} className="p-4 bg-ink/5 rounded-lg">
                       <Skeleton className="h-4 w-16 mb-2" />
                       <Skeleton className="h-6 w-24" />
                     </div>

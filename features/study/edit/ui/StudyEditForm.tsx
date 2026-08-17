@@ -62,8 +62,8 @@ export default function StudyEditForm({
   const mainRegions = getMainRegion();
   const detailRegions = getSubRegion(mainRegionValue)
   return (
-        <Card className="p-6 md:p-8">
-          <h2 className="mb-6 text-2xl font-semibold text-foreground">
+        <Card className="bg-paper border-2 border-ink/15 shadow-soft p-6 md:p-8">
+          <h2 className="mb-6 font-heading text-2xl font-normal text-ink">
             스터디 수정하기
           </h2>
 
@@ -75,10 +75,11 @@ export default function StudyEditForm({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>스터디 제목</FormLabel>
+                    <FormLabel className="text-ink font-semibold">스터디 제목</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="스터디 제목을 입력해주세요"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         {...field}
                       />
@@ -94,7 +95,7 @@ export default function StudyEditForm({
                 name="mainCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>카테고리 (대분류)</FormLabel>
+                    <FormLabel className="text-ink font-semibold">카테고리 (대분류)</FormLabel>
                     <Select
                       value={mainCategoryValue}
                       onValueChange={(value) => {
@@ -108,7 +109,7 @@ export default function StudyEditForm({
                       disabled={isPending}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                           <SelectValue placeholder="대분류 선택" />
                         </SelectTrigger>
                       </FormControl>
@@ -134,7 +135,7 @@ export default function StudyEditForm({
                 name="subCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>카테고리 (중분류)</FormLabel>
+                    <FormLabel className="text-ink font-semibold">카테고리 (중분류)</FormLabel>
                     <Select
                       key={`sub-${mainCategoryValue}`}
                       value={subCategoryValue}
@@ -148,7 +149,7 @@ export default function StudyEditForm({
                       disabled={isPending}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                           <SelectValue placeholder="중분류 선택" />
                         </SelectTrigger>
                       </FormControl>
@@ -174,7 +175,7 @@ export default function StudyEditForm({
                 name="detailCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>카테고리 (소분류)</FormLabel>
+                    <FormLabel className="text-ink font-semibold">카테고리 (소분류)</FormLabel>
                     <Select
                       key={`detail-${mainCategoryValue}-${subCategoryValue}`}
                       value={detailCategoryValue}
@@ -192,7 +193,7 @@ export default function StudyEditForm({
                       disabled={isPending}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                           <SelectValue placeholder="소분류 선택" />
                         </SelectTrigger>
                       </FormControl>
@@ -218,7 +219,7 @@ export default function StudyEditForm({
                 name="mainRegion"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>지역 (시/도)</FormLabel>
+                    <FormLabel className="text-ink font-semibold">지역 (시/도)</FormLabel>
                     <Select
                       value={mainRegionValue}
                       onValueChange={(value) => {
@@ -239,7 +240,7 @@ export default function StudyEditForm({
                       disabled={isPending}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                           <SelectValue placeholder="시/도 선택" />
                         </SelectTrigger>
                       </FormControl>
@@ -263,7 +264,7 @@ export default function StudyEditForm({
                     name="detailRegion"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>지역 (시/군/구)</FormLabel>
+                        <FormLabel className="text-ink font-semibold">지역 (시/군/구)</FormLabel>
                         <Select
                           key={`sub-region-${mainRegionValue}`}
                           value={detailRegionValue}
@@ -278,7 +279,7 @@ export default function StudyEditForm({
                           disabled={isPending}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                               <SelectValue placeholder="시/군/구 선택" />
                             </SelectTrigger>
                           </FormControl>
@@ -301,13 +302,14 @@ export default function StudyEditForm({
                 name="maxParticipants"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>최대 인원</FormLabel>
+                    <FormLabel className="text-ink font-semibold">최대 인원</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="1"
                         max="20"
                         placeholder="1-20명"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft tabular-nums focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         {...field}
                       />
@@ -323,10 +325,11 @@ export default function StudyEditForm({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>설명</FormLabel>
+                    <FormLabel className="text-ink font-semibold">설명</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="스터디에 대해 설명해주세요 (최소 10자)"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         rows={5}
                         {...field}
@@ -341,7 +344,7 @@ export default function StudyEditForm({
               <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="flex-1 bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]"
                   disabled={isPending}
                 >
                   {isPending ? "저장 중..." : "수정 완료"}
@@ -350,7 +353,7 @@ export default function StudyEditForm({
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full bg-transparent"
+                    className="w-full border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5 hover:text-ink"
                     disabled={isPending}
                   >
                     취소

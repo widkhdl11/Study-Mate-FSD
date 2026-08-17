@@ -44,10 +44,11 @@ export default function SignupForm() {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>아이디</FormLabel>
+                    <FormLabel className="text-ink font-semibold">아이디</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="아이디를 입력해주세요"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={signupMutation.isPending}
                         {...field}
                       />
@@ -63,11 +64,12 @@ export default function SignupForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>이메일</FormLabel>
+                    <FormLabel className="text-ink font-semibold">이메일</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="example@email.com"
                         type="email"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={signupMutation.isPending}
                         {...field}
                       />
@@ -83,11 +85,12 @@ export default function SignupForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>비밀번호</FormLabel>
+                    <FormLabel className="text-ink font-semibold">비밀번호</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="비밀번호를 입력해주세요"
                         type="password"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={signupMutation.isPending}
                         {...field}
                       />
@@ -103,11 +106,12 @@ export default function SignupForm() {
                 name="passwordConfirm"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>비밀번호 확인</FormLabel>
+                    <FormLabel className="text-ink font-semibold">비밀번호 확인</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="비밀번호를 다시 입력해주세요"
                         type="password"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={signupMutation.isPending}
                         {...field}
                       />
@@ -121,17 +125,18 @@ export default function SignupForm() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>생년월일</FormLabel>
-                    <input 
-                      type="hidden" 
-                      name="birthDate" 
-                      value={field.value ?? ""} 
+                    <FormLabel className="text-ink font-semibold">생년월일</FormLabel>
+                    <input
+                      type="hidden"
+                      name="birthDate"
+                      value={field.value ?? ""}
                     />
                     <FormControl>
-                     
-                      <Input 
+
+                      <Input
                         type="date"
-                        disabled={signupMutation.isPending} 
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
+                        disabled={signupMutation.isPending}
                         {...field}
                       />
                     </FormControl>
@@ -145,13 +150,13 @@ export default function SignupForm() {
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>성별</FormLabel>
-                    <Select onValueChange={field.onChange} 
-                      defaultValue={field.value || ""} 
+                    <FormLabel className="text-ink font-semibold">성별</FormLabel>
+                    <Select onValueChange={field.onChange}
+                      defaultValue={field.value || ""}
                       disabled={signupMutation.isPending}>
                       <input type="hidden" name="gender" value={field.value ?? ""} />
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                           <SelectValue placeholder="성별을 선택해주세요" />
                         </SelectTrigger>
                       </FormControl>
@@ -168,7 +173,7 @@ export default function SignupForm() {
               {/* 회원가입 버튼 */}
               <Button
                 type="submit"
-                className="mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="mt-6 w-full bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]"
                 disabled={signupMutation.isPending}
               >
                 {signupMutation.isPending ? "회원가입 중..." : "회원가입"}

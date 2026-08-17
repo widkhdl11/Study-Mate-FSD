@@ -66,19 +66,19 @@ export default function TabSection({
                     value={currentTab}
                     onValueChange={handleTabChange}
                     className='space-y-6'>
-                    <TabsList className='grid w-full grid-cols-2 sm:grid-cols-4 lg:w-auto lg:inline-flex'>
-                        <TabsTrigger value='info' className='gap-2'>
+                    <TabsList className='grid h-auto w-full grid-cols-2 gap-1 rounded-xl border-2 border-ink/15 bg-ink/5 p-1 sm:grid-cols-4 lg:w-auto lg:inline-flex'>
+                        <TabsTrigger value='info' className='gap-2 rounded-md text-ink-soft data-[state=active]:bg-ink data-[state=active]:text-paper data-[state=active]:shadow-none'>
                             <User className='w-4 h-4 hidden sm:inline' />내 정보
                         </TabsTrigger>
-                        <TabsTrigger value='chats' className='gap-2'>
+                        <TabsTrigger value='chats' className='gap-2 rounded-md text-ink-soft data-[state=active]:bg-ink data-[state=active]:text-paper data-[state=active]:shadow-none'>
                             <MessageSquare className='w-4 h-4 hidden sm:inline' />
                             채팅 ({profilesCountData.myParticipatedChatRoomsCount})
                         </TabsTrigger>
-                        <TabsTrigger value='posts' className='gap-2'>
+                        <TabsTrigger value='posts' className='gap-2 rounded-md text-ink-soft data-[state=active]:bg-ink data-[state=active]:text-paper data-[state=active]:shadow-none'>
                             <FileText className='w-4 h-4 hidden sm:inline' />
                             작성한 글 ({profilesCountData.myPostsCount})
                         </TabsTrigger>
-                        <TabsTrigger value='studies' className='gap-2'>
+                        <TabsTrigger value='studies' className='gap-2 rounded-md text-ink-soft data-[state=active]:bg-ink data-[state=active]:text-paper data-[state=active]:shadow-none'>
                             <BookOpen className='w-4 h-4 hidden sm:inline' />내
                             스터디 ({profilesCountData.myParticipatedStudiesCount})
                         </TabsTrigger>

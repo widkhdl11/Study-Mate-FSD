@@ -36,12 +36,12 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
     return (
         <div className="lg:col-span-2">
               {/* 포스트 제목 */}
-              <h1 className="text-3xl font-bold text-foreground mb-4">
+              <h1 className="font-heading text-3xl font-normal text-ink mb-4">
                 {post.title}
               </h1>
 
               {/* 작성자 정보 및 메타정보 */}
-              <div className="flex items-center justify-between pb-6 border-b border-border mb-6">
+              <div className="flex items-center justify-between pb-6 border-b-2 border-dashed border-paper-line mb-6">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
                     <AvatarImage
@@ -50,15 +50,15 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
                       width={60}
                       height={60}
                     />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
+                    <AvatarFallback className="bg-ink text-paper">
                       {post.author?.email?.[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-foreground">
+                    <p className="font-semibold text-ink">
                       {post.author?.username}
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-ink-soft">
                       <TimeAgo date={post.createdAt} />
                     </p>
                   </div>
@@ -72,12 +72,12 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
                     disabled={isTogglingLike}
                     aria-pressed={isLiked}
                     aria-label={isLiked ? "좋아요 취소" : "좋아요"}
-                    className={`gap-2 ${isLiked ? "bg-primary/5 border-primary text-primary" : ""}`}
+                    className={`gap-2 border-2 text-ink hover:bg-ink/5 ${isLiked ? "border-ink bg-ink/5" : "border-ink/20 bg-transparent"}`}
                   >
-                    <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-primary" : ""}`} aria-hidden="true" />
-                    <span className="font-semibold">{post.likesCount}</span>
+                    <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-ink" : ""}`} aria-hidden="true" />
+                    <span className="font-semibold tabular-nums">{post.likesCount}</span>
                   </Button>
-                  <span className="flex items-center gap-1 text-sm text-muted-foreground tabular-nums">
+                  <span className="flex items-center gap-1 text-sm text-ink-soft tabular-nums">
                     <Eye className="h-4 w-4" />
                     {post.viewsCount}
                   </span>
@@ -89,7 +89,7 @@ export default function MainSection({ postData,user }: { postData: PostDetailVie
 
               {/* 포스트 내용 */}
               <div className="prose prose-sm dark:prose-invert max-w-none mb-8">
-                <div className="text-foreground whitespace-pre-line leading-relaxed">
+                <div className="text-ink whitespace-pre-line leading-relaxed">
                   {post.content}
                 </div>
               </div>

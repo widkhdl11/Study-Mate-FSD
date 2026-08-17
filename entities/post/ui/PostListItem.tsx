@@ -16,10 +16,10 @@ export default function PostListItem({ post, badgeSlot, actionSlot }: PostListIt
     return (
         <Card
           key={post.id}
-          className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer p-0 gap-0"
+          className="overflow-hidden border-2 border-ink/15 bg-paper shadow-soft hover:-translate-y-1 hover:shadow-lift transition-all cursor-pointer p-0 gap-0"
         >
           <Link href={`/posts/${post.id}`}>
-            <div className="relative w-full h-40 bg-muted">
+            <div className="relative w-full h-40 bg-paper-line">
               <Image
                 fill
                 src={getImageUrl(post.imageUrl?.[0]?.url || "/default-post-thumbnail.jpg")}
@@ -32,13 +32,13 @@ export default function PostListItem({ post, badgeSlot, actionSlot }: PostListIt
               </div>
             </div>
             <div className="p-4 space-y-3">
-              <h3 className="font-bold text-foreground line-clamp-1">
+              <h3 className="font-bold text-ink line-clamp-1">
                 {post.title}
               </h3>
-              <p className="text-sm text-muted-foreground line-clamp-2">
+              <p className="text-sm text-ink-soft line-clamp-2">
                 {post.content}
               </p>
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex items-center justify-between text-sm text-ink-soft">
                 <span>{ formatTimeAgo(post.createdAt)}</span>
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-1">

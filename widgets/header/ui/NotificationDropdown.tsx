@@ -57,23 +57,23 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
             <DropdownMenuTrigger asChild>
                 <button
                     type="button"
-                    className='relative p-2 rounded-lg transition-colors text-foreground hover:bg-muted'
+                    className='relative p-2 rounded-lg transition-colors text-ink hover:bg-ink/5'
                     aria-label="알림">
                     🔔
                     {notifications && unreadCount > 0 && (
-                        <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-destructive text-destructive-foreground text-xs text-white">
-                            <span className="text-xs text-white">{unreadCount}</span>
+                        <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center rounded-full bg-hl-coral text-ink text-xs font-bold">
+                            <span className="text-xs font-bold tabular-nums">{unreadCount}</span>
                         </Badge>
                     )}
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80 p-0">
-                <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border">
-                    <span className="font-semibold text-sm text-foreground shrink-0">알림</span>
+            <DropdownMenuContent align="end" className="w-80 p-0 bg-paper border-2 border-ink/15 rounded-xl shadow-soft">
+                <div className="flex items-center justify-between gap-2 px-3 py-2 border-b-2 border-dashed border-paper-line">
+                    <span className="font-semibold text-sm text-ink shrink-0">알림</span>
                     {notifications && notifications.length > 0 && (
                         <button
                             type="button"
-                            className="ml-auto shrink-0 text-xs leading-none text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                            className="ml-auto shrink-0 text-xs leading-none text-ink-soft hover:text-ink transition-colors disabled:opacity-40 disabled:pointer-events-none"
                             disabled={
                                 allReadNotificationMutation.isPending || unreadCount === 0
                             }
@@ -87,10 +87,10 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
                         notifications.map((notification) => (
                             <div
                                 key={notification.id}
-                                className="flex items-start gap-1 px-2 py-2 hover:bg-muted focus-within:bg-muted">
+                                className="flex items-start gap-1 px-2 py-2 hover:bg-ink/5 focus-within:bg-ink/5">
                                 <Link
                                     href={notificationHref(notification)}
-                                    className="flex flex-1 min-w-0 items-start gap-2 px-1 py-1 rounded-sm"
+                                    className="flex flex-1 min-w-0 items-start gap-2 px-1 py-1 rounded-md"
                                     onClick={() => {
                                         setNotificationOpen(false)
                                         if (!notification.isRead) {
@@ -103,17 +103,17 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
                                             <span
-                                                className={`text-sm font-medium ${!notification.isRead ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                                className={`text-sm font-medium ${!notification.isRead ? 'text-ink' : 'text-ink-soft'}`}>
                                                 {notification.title}
                                             </span>
                                             {!notification.isRead && (
-                                                <span className="w-2 h-2 rounded-full bg-destructive shrink-0" />
+                                                <span className="w-2 h-2 rounded-full bg-hl-coral shrink-0" />
                                             )}
                                         </div>
-                                        <p className="text-xs text-muted-foreground line-clamp-2">
+                                        <p className="text-xs text-ink-soft line-clamp-2">
                                             {notification.content}
                                         </p>
-                                        <span className="text-xs text-muted-foreground">
+                                        <span className="text-xs text-ink-soft">
                                             {formatTimeAgo(notification.createdAt)}
                                         </span>
                                     </div>
@@ -121,7 +121,7 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
                                 <button
                                     type="button"
                                     aria-label="알림 삭제"
-                                    className="shrink-0 p-1.5 text-muted-foreground hover:text-foreground hover:bg-background rounded-md transition-colors disabled:opacity-50"
+                                    className="shrink-0 p-1.5 text-ink-soft hover:text-ink hover:bg-ink/5 rounded-md transition-colors disabled:opacity-50"
                                     disabled={deleteNotificationMutation.isPending}
                                     onClick={(event) => {
                                         event.preventDefault()
@@ -133,7 +133,7 @@ export default function NotificationDropdown({ user }: { user: CurrentUserRespon
                             </div>
                         ))
                     ) : (
-                        <div className="px-3 py-8 text-center text-muted-foreground text-sm">
+                        <div className="px-3 py-8 text-center text-ink-soft text-sm">
                             알림이 없습니다
                         </div>
                     )}

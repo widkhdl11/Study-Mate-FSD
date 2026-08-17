@@ -40,12 +40,13 @@ export default function LoginForm() {
                     name='email'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>이메일</FormLabel>
+                            <FormLabel className='text-ink font-semibold'>이메일</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}
                                     placeholder='example@email.com'
                                     type='email'
+                                    className='border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30'
                                     disabled={
                                         loginMutation.isPending
                                     }
@@ -62,12 +63,13 @@ export default function LoginForm() {
                     name='password'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>비밀번호</FormLabel>
+                            <FormLabel className='text-ink font-semibold'>비밀번호</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}
                                     placeholder='비밀번호를 입력해주세요'
                                     type='password'
+                                    className='border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30'
                                     disabled={
                                         loginMutation.isPending
                                     }
@@ -81,7 +83,7 @@ export default function LoginForm() {
                 {/* 로그인 버튼 */}
                 <Button
                     type='submit'
-                    className='mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground'
+                    className='mt-6 w-full bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]'
                     disabled={loginMutation.isPending}>
                     {loginMutation.isPending
                         ? '로그인 중...'

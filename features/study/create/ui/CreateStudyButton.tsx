@@ -24,7 +24,7 @@ export default function CreateStudyButton({
         <button
             onClick={handleClick}
             className={cn(
-                'text-foreground hover:text-accent transition-colors font-medium',
+                'text-ink hover:text-ink/60 transition-colors font-medium',
                 className
             )}>
             스터디 만들기

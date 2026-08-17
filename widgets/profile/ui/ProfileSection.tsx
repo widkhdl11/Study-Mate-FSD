@@ -62,14 +62,14 @@ export default function ProfileSection({
     }, [previewUrl])
 
     return (
-        <section className='border-b border-border bg-muted/30 py-10'>
+        <section className='border-b-2 border-ink/10 bg-paper py-10'>
             <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex flex-col sm:flex-row sm:items-start sm:gap-8'>
                     <div className='shrink-0 flex flex-col items-center'>
                         {/* 아바타+카메라만 감싸는 relative — 카메라(absolute)가 아바타 박스에만 앵커되도록
                             (아래 "기본 이미지로" 버튼을 같은 relative에 두면 bottom-0이 버튼 위로 겹친다) */}
                         <div className='relative'>
-                            <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
+                            <Avatar className='h-24 w-24 ring-2 ring-ink/15'>
                                 <AvatarImage
                                     src={previewUrl ?? getProfileImageUrl(currentUser?.avatarUrl)}
                                     alt={currentUser.username || ''}
@@ -77,7 +77,7 @@ export default function ProfileSection({
                                     height={96}
                                     fetchPriority='high'
                                 />
-                                <AvatarFallback className='bg-primary text-primary-foreground text-2xl font-bold'>
+                                <AvatarFallback className='bg-ink text-paper text-2xl font-bold'>
                                     {currentUser.username?.[0]}
                                 </AvatarFallback>
                             </Avatar>
@@ -85,10 +85,10 @@ export default function ProfileSection({
                             <label
                                 htmlFor='profile-image-upload'
                                 aria-disabled={busy}
-                                className={`absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-sm transition-all ${
+                                className={`absolute bottom-0 right-0 bg-ink text-paper rounded-full p-2 shadow-soft transition-all ${
                                     busy
                                         ? 'opacity-70 pointer-events-none'
-                                        : 'cursor-pointer hover:bg-primary/90 hover:scale-110'
+                                        : 'cursor-pointer hover:bg-ink/90 hover:scale-110'
                                 }`}
                                 title='프로필 이미지 변경'>
                                 {isUploading ? (
@@ -117,7 +117,7 @@ export default function ProfileSection({
                                 type='button'
                                 onClick={handleReset}
                                 disabled={busy}
-                                className='mt-3 text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors'>
+                                className='mt-3 text-xs text-ink-soft hover:text-ink disabled:opacity-50 transition-colors'>
                                 {isResetting ? '되돌리는 중...' : '기본 이미지로'}
                             </button>
                         )}
@@ -125,21 +125,21 @@ export default function ProfileSection({
 
                     <div className='flex-1 mt-4 sm:mt-0'>
                         <div className='mb-4'>
-                            <h1 className='text-3xl font-bold text-foreground'>
+                            <h1 className='font-heading text-3xl font-normal text-ink'>
                                 {currentUser?.username || ''}
                             </h1>
-                            <p className='text-muted-foreground mt-1'>
+                            <p className='text-ink-soft mt-1'>
                                 {currentUser?.email || ''}
                             </p>
                         </div>
 
-                        <p className='text-muted-foreground mb-4'>
+                        <p className='text-ink-soft mb-4'>
                             {currentUser.bio}
                         </p>
 
                         <div className='flex flex-wrap gap-3'>
                             <Link href='/profile/edit'>
-                                <Button className='bg-primary hover:bg-primary/90 gap-2'>
+                                <Button className='bg-ink text-paper hover:bg-ink/90 active:scale-[0.97] gap-2'>
                                     <Edit className='w-4 h-4' />
                                     프로필 수정
                                 </Button>
@@ -147,7 +147,7 @@ export default function ProfileSection({
                             <Link href='/profile/password'>
                                 <Button
                                     variant='outline'
-                                    className='gap-2 bg-transparent'>
+                                    className='gap-2 border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5'>
                                     <Lock className='w-4 h-4' />
                                     비밀번호 변경
                                 </Button>

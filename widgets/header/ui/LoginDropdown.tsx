@@ -25,7 +25,7 @@ export default function LoginDropdown(
     return (
          <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className='flex items-center gap-2 p-1 rounded-lg transition-colors cursor-pointer hover:bg-muted'>
+                <button className='flex items-center gap-2 p-1 rounded-lg transition-colors cursor-pointer hover:bg-ink/5'>
                     <Avatar className='h-8 w-8'>
                         <AvatarImage
                             src={getProfileImageUrl(user.avatarUrl)}
@@ -34,18 +34,18 @@ export default function LoginDropdown(
                             height={32}
                             fetchPriority='high'
                         />
-                        <AvatarFallback className='bg-primary text-primary-foreground text-xs font-semibold'>
+                        <AvatarFallback className='bg-ink text-paper text-xs font-semibold'>
                             {user.username?.[0]}
                         </AvatarFallback>
                     </Avatar>
-                    <span className='hidden sm:inline text-sm font-medium text-foreground'>
+                    <span className='hidden sm:inline text-sm font-medium text-ink'>
                         {user.username}
                     </span>
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 align='end'
-                className='w-48'>
+                className='w-48 bg-paper border-2 border-ink/15 rounded-xl shadow-soft'>
                 <DropdownMenuItem asChild className='cursor-pointer'>
                     <Link
                         href='/profile'

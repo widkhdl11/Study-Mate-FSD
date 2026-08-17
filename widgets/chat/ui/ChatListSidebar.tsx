@@ -30,12 +30,12 @@ export function ChatListSidebar() {
   return (
     <aside
       className={cn(
-        "flex-col border-border bg-background md:flex md:w-80 md:shrink-0 md:border-r",
+        "flex-col border-ink/10 bg-paper md:flex md:w-80 md:shrink-0 md:border-r",
         roomOpen ? "hidden md:flex" : "flex w-full",
       )}
     >
-      <div className="flex-shrink-0 border-b border-border px-4 py-4">
-        <h2 className="text-lg font-bold text-foreground">채팅</h2>
+      <div className="flex-shrink-0 border-b border-ink/10 px-4 py-4">
+        <h2 className="text-lg font-bold text-ink">채팅</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto p-2">
@@ -43,8 +43,8 @@ export function ChatListSidebar() {
           <SidebarSkeleton />
         ) : !rooms || rooms.length === 0 ? (
           <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
-            <MessageCircle className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
-            <p className="text-sm text-muted-foreground">
+            <MessageCircle className="h-8 w-8 text-ink-soft" aria-hidden="true" />
+            <p className="text-sm text-ink-soft">
               아직 참여 중인 채팅방이 없어요.
             </p>
           </div>
@@ -57,13 +57,17 @@ export function ChatListSidebar() {
               <Link key={room.chat.id} href={`/chats/${room.chat.id}`} className="block">
                 <div
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-3 transition-colors",
-                    active ? "bg-secondary" : "hover:bg-muted/50",
+                    "relative flex items-center gap-3 rounded-xl px-3 py-3 transition-colors",
+                    active ? "bg-ink/5" : "hover:bg-ink/5",
                   )}
                 >
+                  {/* 활성 방 — 좌측 형광 바로 지금 보는 칸을 표시 */}
+                  {active && (
+                    <span className="absolute inset-y-2 left-0 w-1 rounded-full bg-hl-coral" aria-hidden="true" />
+                  )}
                   {/* 그룹 스터디 채팅 — 방 이니셜 원형(개인 아바타가 아니라 방 정체성) */}
                   <Avatar className="h-11 w-11 shrink-0">
-                    <AvatarFallback className="bg-secondary text-primary font-bold">
+                    <AvatarFallback className="bg-hl-mint text-ink font-bold">
                       {room.chat.name?.[0] ?? "#"}
                     </AvatarFallback>
                   </Avatar>
@@ -72,13 +76,13 @@ export function ChatListSidebar() {
                       <h3
                         className={cn(
                           "truncate",
-                          unread ? "font-bold text-foreground" : "font-semibold text-foreground",
+                          unread ? "font-bold text-ink" : "font-semibold text-ink",
                         )}
                       >
                         {room.chat.name ?? "채팅방"}
                       </h3>
                       {time && (
-                        <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                        <span className="ml-auto shrink-0 text-xs text-ink-soft tabular-nums">
                           {formatTimeAgo(time)}
                         </span>
                       )}
@@ -87,13 +91,13 @@ export function ChatListSidebar() {
                       <p
                         className={cn(
                           "min-w-0 flex-1 truncate text-sm",
-                          unread ? "text-foreground" : "text-muted-foreground",
+                          unread ? "text-ink" : "text-ink-soft",
                         )}
                       >
                         {room.chat.last_message ?? "아직 메시지가 없어요"}
                       </p>
                       {unread && (
-                        <Badge className="shrink-0 rounded-full bg-primary px-2 text-primary-foreground tabular-nums">
+                        <Badge className="shrink-0 rounded-full bg-hl-coral px-2 text-ink tabular-nums">
                           {room.unreadCount}
                         </Badge>
                       )}
@@ -115,10 +119,10 @@ function SidebarSkeleton() {
     <div className="space-y-1 p-1">
       {Array.from({ length: 6 }).map((_, i) => (
         <div key={i} className="flex items-center gap-3 px-3 py-3">
-          <div className="h-11 w-11 shrink-0 animate-pulse rounded-full bg-muted" />
+          <div className="h-11 w-11 shrink-0 animate-pulse rounded-full bg-ink/10" />
           <div className="min-w-0 flex-1 space-y-2">
-            <div className="h-3.5 w-24 animate-pulse rounded bg-muted" />
-            <div className="h-3 w-40 animate-pulse rounded bg-muted" />
+            <div className="h-3.5 w-24 animate-pulse rounded bg-ink/10" />
+            <div className="h-3 w-40 animate-pulse rounded bg-ink/10" />
           </div>
         </div>
       ))}

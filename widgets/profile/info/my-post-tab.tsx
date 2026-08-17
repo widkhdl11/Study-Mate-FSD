@@ -100,26 +100,26 @@ export default function MyPostTab({
                         placeholder='제목·내용으로 검색'
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className='max-w-sm bg-background'
+                        className='max-w-sm bg-paper border-ink/15'
                     />
                     {filtered.length === 0 ? (
-                        <p className='py-12 text-center text-sm text-muted-foreground'>
+                        <p className='py-12 text-center text-sm text-ink-soft'>
                             검색 결과가 없어요.
                         </p>
                     ) : (
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                             {visible.map((item, index) => (
                         <div key={item.id} className='relative'>
-                            <Card className='group overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col p-0 gap-0'>
+                            <Card className='group overflow-hidden border-2 border-ink/15 bg-paper shadow-soft transition-all hover:-translate-y-1 hover:border-ink/40 hover:shadow-lift h-full flex flex-col p-0 gap-0'>
                                 <Link href={`/posts/${item.id}`}>
-                                    <div className='relative w-full h-40 bg-muted overflow-hidden cursor-pointer'>
+                                    <div className='relative w-full h-40 bg-paper-line overflow-hidden cursor-pointer'>
                                         <Image
                                             fill
                                             priority={index === 0}
                                             fetchPriority={index === 0 ? "high" : "auto"}
                                             sizes="(max-width: 640px) 100vw, 424px"
                                             src={
-                                                item.imageUrl?.[0]?.url ? getImageUrl(item.imageUrl?.[0]?.url) : '/default-post-thumbnail.jpg'
+                                                item.imageUrl?.[0]?.url ? getImageUrl(item.imageUrl?.[0]?.url) : '/default-post-thumbnail.png'
                                             }
                                             alt={item.title}
                                             className='w-full h-full object-cover group-hover:scale-105 transition-transform'
@@ -146,7 +146,7 @@ export default function MyPostTab({
                                                     variant='ghost'
                                                     size='icon'
                                                     aria-label='게시글 관리 메뉴'
-                                                    className='h-8 w-8 hover:bg-muted'>
+                                                    className='h-8 w-8 hover:bg-ink/5'>
                                                     <MoreVertical className='h-4 w-4' aria-hidden='true' />
                                                 </Button>
                                             </DropdownMenuTrigger>
@@ -191,7 +191,7 @@ export default function MyPostTab({
                                                     </Badge>
                                                 ))}
 
-                                                <span className='text-xs text-muted-foreground flex items-center gap-1'>
+                                                <span className='text-xs text-ink-soft flex items-center gap-1'>
                                                     <MapPin className='w-3 h-3' />{' '}
                                                     {getRegionPath(
                                                         Number(
@@ -200,16 +200,16 @@ export default function MyPostTab({
                                                     ).labels.join(' ')}
                                                 </span>
                                             </div>
-                                            <h3 className='font-bold text-foreground line-clamp-1 hover:text-primary transition-colors'>
+                                            <h3 className='font-bold text-ink line-clamp-1 hover:text-ink/60 transition-colors'>
                                                 {item.title}
                                             </h3>
-                                            <p className='text-sm text-muted-foreground line-clamp-2 mt-1'>
+                                            <p className='text-sm text-ink-soft line-clamp-2 mt-1'>
                                                 {item.content}
                                             </p>
                                         </div>
                                     </Link>
 
-                                    <div className='flex items-center justify-between text-xs text-muted-foreground mt-auto pt-2 border-t border-border'>
+                                    <div className='flex items-center justify-between text-xs text-ink-soft mt-auto pt-2 border-t-2 border-dashed border-paper-line'>
                                         <span>
                                             {formatTimeAgo(new Date(
                                                 item.createdAt
@@ -236,6 +236,7 @@ export default function MyPostTab({
                         <div className='flex justify-center pt-2'>
                             <Button
                                 variant='outline'
+                                className='border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5'
                                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}>
                                 더 보기 ({filtered.length - visibleCount}개 남음)
                             </Button>

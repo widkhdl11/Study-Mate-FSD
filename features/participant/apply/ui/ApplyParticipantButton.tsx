@@ -9,7 +9,7 @@ export function ApplyParticipantButton({ studyId, label = "참여 신청" }: { s
     const { mutate: applyMutation, isPending: isApplying } = useApplyParticipant(studyId);
     return (
         <Button
-            className="w-full py-6 text-lg bg-primary hover:bg-primary/90"
+            className="w-full py-6 text-lg bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]"
             onClick={() => applyMutation()}
             disabled={isApplying}
         >

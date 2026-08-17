@@ -11,7 +11,7 @@ import {
   getSubcategories,
 } from "@/shared/config/study-category";
 import { STUDY_STATUS } from "@/shared/config/study-status";
-import { getStudyStatusColor, getStudyStatusExistValue, studyStatusConversion } from "@/shared/lib/conversion/study";
+import { getStudyStatusExistValue, studyStatusConversion } from "@/shared/lib/conversion/study";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
 import { Badge } from "@/shared/shadcn/ui/badge";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -29,6 +29,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 
+// 플래너 월드 상태 태그 — 형광펜 코딩(모집중=민트, 마감=코랄, 그 외=잉크 약). entities/post/ui/PostCard와 동일 규칙.
+function statusClass(status: string): string {
+  if (status === "recruiting") return "bg-hl-mint text-ink";
+  if (status === "closed") return "bg-hl-coral text-ink";
+  return "bg-ink/10 text-ink-soft";
+}
+
 // 필터 사이드바용 경량 아코디언 섹션(접기·펴기). 새 의존성 없이 로컬 state로 처리.
 function FilterGroup({
   title,
@@ -41,16 +48,16 @@ function FilterGroup({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b last:border-b-0">
+    <div className="border-b border-dashed border-paper-line last:border-b-0">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between py-3 text-sm font-semibold text-foreground"
+        className="flex w-full items-center justify-between py-3 text-sm font-semibold text-ink"
       >
         {title}
         <ChevronDown
-          className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-ink-soft transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open && <div className="space-y-3 pb-4">{children}</div>}
@@ -190,16 +197,16 @@ export default function MainSection(
               {/* Sidebar Filters */}
               <aside className="lg:col-span-1">
                 <div className="sticky top-24 space-y-6">
-                  <Card className="p-5">
-                    <div className="flex items-center gap-2 font-semibold text-lg text-foreground pb-3 border-b">
-                      <SlidersHorizontal className="w-5 h-5 text-primary" /> 필터
+                  <Card className="bg-paper border-2 border-ink/15 rounded-xl shadow-soft p-5">
+                    <div className="flex items-center gap-2 font-semibold text-lg text-ink pb-3 border-b border-dashed border-paper-line">
+                      <SlidersHorizontal className="w-5 h-5 text-ink" /> 필터
                     </div>
 
                     {/* 카테고리 그룹 — 부모를 골라야 중/소분류가 나타난다.
                         URL로 카테고리가 넘어온 경우(initialCategory)엔 적용된 필터가 보이도록 펼쳐서 시작 */}
                     <FilterGroup title="카테고리" defaultOpen={showSubCategory}>
                       <div className="space-y-2">
-                        <label htmlFor="main-category" className="text-sm font-medium text-foreground">
+                        <label htmlFor="main-category" className="text-sm font-medium text-ink">
                           대분류
                         </label>
                         <Select
@@ -210,7 +217,7 @@ export default function MainSection(
                             setDetailCategoryValue("");
                           }}
                         >
-                          <SelectTrigger id="main-category" className="w-full bg-background">
+                          <SelectTrigger id="main-category" className="w-full bg-paper border-2 border-ink/15 text-ink">
                             <SelectValue placeholder="대분류 선택" />
                           </SelectTrigger>
                           <SelectContent>
@@ -226,7 +233,7 @@ export default function MainSection(
 
                       {showSubCategory && (
                         <div className="space-y-2">
-                          <label htmlFor="sub-category" className="text-sm font-medium text-foreground">
+                          <label htmlFor="sub-category" className="text-sm font-medium text-ink">
                             중분류
                           </label>
                           <Select
@@ -236,7 +243,7 @@ export default function MainSection(
                               setDetailCategoryValue("");
                             }}
                           >
-                            <SelectTrigger id="sub-category" className="w-full bg-background">
+                            <SelectTrigger id="sub-category" className="w-full bg-paper border-2 border-ink/15 text-ink">
                               <SelectValue placeholder="중분류 선택" />
                             </SelectTrigger>
                             <SelectContent>
@@ -253,7 +260,7 @@ export default function MainSection(
 
                       {showDetailCategory && (
                         <div className="space-y-2">
-                          <label htmlFor="detail-category" className="text-sm font-medium text-foreground">
+                          <label htmlFor="detail-category" className="text-sm font-medium text-ink">
                             소분류
                           </label>
                           <Select
@@ -262,7 +269,7 @@ export default function MainSection(
                               setDetailCategoryValue(value);
                             }}
                           >
-                            <SelectTrigger id="detail-category" className="w-full bg-background">
+                            <SelectTrigger id="detail-category" className="w-full bg-paper border-2 border-ink/15 text-ink">
                               <SelectValue placeholder="소분류 선택" />
                             </SelectTrigger>
                             <SelectContent>
@@ -281,7 +288,7 @@ export default function MainSection(
                     {/* 지역 그룹 — 시/도를 골라야 시/군/구가 나타난다 */}
                     <FilterGroup title="지역">
                       <div className="space-y-2">
-                        <label htmlFor="main-region" className="text-sm font-medium text-foreground">
+                        <label htmlFor="main-region" className="text-sm font-medium text-ink">
                           시/도
                         </label>
                         <Select
@@ -291,7 +298,7 @@ export default function MainSection(
                             setDetailRegionValue("");
                           }}
                         >
-                          <SelectTrigger id="main-region" className="w-full bg-background">
+                          <SelectTrigger id="main-region" className="w-full bg-paper border-2 border-ink/15 text-ink">
                             <SelectValue placeholder="전체 지역" />
                           </SelectTrigger>
                           <SelectContent>
@@ -307,7 +314,7 @@ export default function MainSection(
 
                       {showDetailRegion && (
                         <div className="space-y-2">
-                          <label htmlFor="detail-region" className="text-sm font-medium text-foreground">
+                          <label htmlFor="detail-region" className="text-sm font-medium text-ink">
                             시/군/구
                           </label>
                           <Select
@@ -316,7 +323,7 @@ export default function MainSection(
                               setDetailRegionValue(value);
                             }}
                           >
-                            <SelectTrigger id="detail-region" className="w-full bg-background">
+                            <SelectTrigger id="detail-region" className="w-full bg-paper border-2 border-ink/15 text-ink">
                               <SelectValue placeholder="전체" />
                             </SelectTrigger>
                             <SelectContent>
@@ -336,7 +343,7 @@ export default function MainSection(
                     <FilterGroup title="모집 상태">
                       <div className="space-y-2">
                         <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                          <SelectTrigger id="recruit-status" aria-label="모집 상태" className="w-full bg-background">
+                          <SelectTrigger id="recruit-status" aria-label="모집 상태" className="w-full bg-paper border-2 border-ink/15 text-ink">
                             <SelectValue placeholder="전체 상태" />
                           </SelectTrigger>
                           <SelectContent>
@@ -369,7 +376,7 @@ export default function MainSection(
                           setSelectedStatus("전체 상태");
                           setSearchQuery("");
                         }}
-                        className="w-full mt-2"
+                        className="w-full mt-2 border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5"
                       >
                         필터 초기화
                       </Button>
@@ -386,22 +393,22 @@ export default function MainSection(
                     placeholder="스터디 제목, 내용, 스터디명으로 검색해보세요"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-11 py-6 text-base bg-card border-border/60 shadow-sm focus-visible:ring-primary/30 transition-all group-hover:border-primary/50"
+                    className="pl-11 py-6 text-base bg-paper border-2 border-ink/15 text-ink placeholder-ink-soft shadow-soft focus-visible:ring-ink/20 transition-all group-hover:border-ink/40"
                   />
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-hover:text-primary transition-colors" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-ink-soft w-5 h-5 group-hover:text-ink transition-colors" />
                 </div>
 
                 {/* Results Counter + Sort */}
                 <div className="flex items-center justify-between gap-3 pt-2">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-ink-soft">
                     총{" "}
-                    <span className="font-bold text-foreground">
+                    <span className="font-bold tabular-nums text-ink">
                       {sortedPosts.length}
                     </span>
                     개의 스터디
                   </p>
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger id="sort" className="w-36 bg-background" aria-label="정렬 기준">
+                    <SelectTrigger id="sort" className="w-36 bg-paper border-2 border-ink/15 text-ink" aria-label="정렬 기준">
                       <SelectValue placeholder="정렬" />
                     </SelectTrigger>
                     <SelectContent>
@@ -417,9 +424,9 @@ export default function MainSection(
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {visiblePosts.map((post) => (
                       <Link key={post.id} href={`/posts/${post.id}`}>
-                        <Card className="group overflow-hidden transition-all duration-300 h-full flex flex-col cursor-pointer border-border/60 hover:border-primary/50 p-0 gap-0">
+                        <Card className="group overflow-hidden transition-all duration-300 h-full flex flex-col cursor-pointer rounded-xl border-2 border-ink/15 bg-paper text-ink shadow-soft hover:-translate-y-1 hover:border-ink/40 hover:shadow-lift p-0 gap-0">
                           {/* Thumbnail Image */}
-                          <div className="relative w-full h-48 bg-muted overflow-hidden">
+                          <div className="relative w-full h-48 bg-paper-line overflow-hidden">
                             <Image
                               src={
                                 getImageUrl(post.imageUrl?.[0]?.url || "/default-post-thumbnail.jpg")
@@ -431,9 +438,9 @@ export default function MainSection(
                             />
                             <div className="absolute top-3 right-3">
                               <Badge
-                                className={`${getStudyStatusColor(
+                                className={`${statusClass(
                                   post.study?.status || ""
-                                )} border-0 shadow-sm`}
+                                )} border-0 rounded-md font-bold shadow-soft`}
                               >
                                 { studyStatusConversion(post.study?.status || "")}
                               </Badge>
@@ -446,34 +453,34 @@ export default function MainSection(
                               <div className="flex items-center gap-2 mb-2">
                                 
                                   {getCategoryPath(Number(post.study?.studyCategory || 0)).labels.map((category) => (
-                                    <Badge key={category} variant="outline" className={`text-xs font-normal`}>
+                                    <Badge key={category} className={`rounded-md border-0 bg-ink/5 text-ink text-xs font-medium`}>
                                       {category}
-                                    </Badge>  
+                                    </Badge>
                                   ))}
-                                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                <span className="text-xs text-ink-soft flex items-center gap-1">
                                   <MapPin className="w-3 h-3" />{" "}
                                   {getRegionPath(Number(post.study?.region || 0)).labels.map((region) => (
                                     <span key={region}>{region}</span>
                                   ))}
                                 </span>
                               </div>
-                              <h1 className="font-bold text-lg text-foreground line-clamp-2 group-hover:text-primary transition-colors mb-1">
+                              <h1 className="font-bold text-lg text-ink line-clamp-2 group-hover:text-ink/60 transition-colors mb-1">
                                 {post.title}
                               </h1>
-                              <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                              <p className="text-sm text-ink-soft line-clamp-2 leading-relaxed">
                                 {post.study?.description || ""}
                               </p>
                             </div>
 
                             {/* Divider */}
-                            <div className="h-px bg-border/50 w-full" />
+                            <div className="border-t-2 border-dashed border-paper-line w-full" />
 
                             {/* Study Info & Stats */}
                             <div className="space-y-3">
                               <div className="flex justify-between items-center text-sm">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <div className="flex items-center gap-1.5 text-ink-soft">
                                   <Calendar className="w-3.5 h-3.5" />
-                                  <span className="text-xs">
+                                  <span className="text-xs tabular-nums">
                                     {new Date(
                                       post.createdAt ||
                                         new Date().toISOString()
@@ -481,12 +488,12 @@ export default function MainSection(
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                  <Users className="w-3.5 h-3.5 text-primary" />
-                                  <span className="text-xs font-medium">
-                                    <span className="text-foreground">
+                                  <Users className="w-3.5 h-3.5 text-ink" />
+                                  <span className="text-xs font-medium tabular-nums">
+                                    <span className="text-ink">
                                       {post.study?.currentParticipants || 0}
                                     </span>
-                                    <span className="text-muted-foreground">
+                                    <span className="text-ink-soft">
                                       /{post.study?.maxParticipants || 0}명
                                     </span>
                                   </span>
@@ -494,9 +501,9 @@ export default function MainSection(
                               </div>
 
                               {/* Progress Bar */}
-                              <div className="w-full bg-muted/60 rounded-full h-1.5 overflow-hidden">
+                              <div className="w-full bg-ink/10 rounded-full h-1.5 overflow-hidden">
                                 <div
-                                  className="h-full bg-primary rounded-full transition-all duration-500"
+                                  className="h-full bg-hl-coral rounded-full transition-all duration-500"
                                   style={{
                                     width: `${
                                       (post.study?.maxParticipants || 0) > 0
@@ -512,26 +519,26 @@ export default function MainSection(
                             {/* Footer: Author & Metrics */}
                             <div className="flex items-center justify-between mt-auto pt-2">
                               <div className="flex items-center gap-2">
-                                <Avatar className="h-6 w-6 ring-1 ring-border">
+                                <Avatar className="h-6 w-6 ring-1 ring-ink/10">
                                   <AvatarImage
                                     src={getProfileImageUrl(post.author?.avatarUrl)}
                                     alt={post.author?.email || ""}
                                   />
-                                  <AvatarFallback className="text-xs bg-secondary">
+                                  <AvatarFallback className="text-xs bg-ink text-paper">
                                     {post.author?.email?.[0] || ""}
                                   </AvatarFallback>
                                 </Avatar>
-                                <span className="text-xs font-medium text-muted-foreground">
+                                <span className="text-xs font-medium text-ink-soft">
                                   {post.author?.username || ""}
                                 </span>
                               </div>
 
-                              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                <div className="flex items-center gap-1">
+                              <div className="flex items-center gap-3 text-xs text-ink-soft">
+                                <div className="flex items-center gap-1 tabular-nums">
                                   <ThumbsUp className="w-3 h-3" />{" "}
                                   {post.likesCount}
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-1 tabular-nums">
                                   <Eye className="w-3 h-3" /> {post.viewsCount}
                                 </div>
                               </div>
@@ -542,18 +549,19 @@ export default function MainSection(
                     ))}
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-16 bg-card rounded-xl border border-dashed border-border">
-                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                      <Search className="w-8 h-8 text-muted-foreground" />
+                  <div className="flex flex-col items-center justify-center py-16 bg-paper rounded-xl border-2 border-dashed border-paper-line">
+                    <div className="w-16 h-16 bg-ink/5 rounded-full flex items-center justify-center mb-4">
+                      <Search className="w-8 h-8 text-ink-soft" />
                     </div>
-                    <h1 className="text-lg font-semibold text-foreground mb-1">
+                    <h1 className="text-lg font-semibold text-ink mb-1">
                       검색 결과가 없습니다
                     </h1>
-                    <p className="text-muted-foreground mb-6 text-center max-w-xs">
+                    <p className="text-ink-soft mb-6 text-center max-w-xs">
                       다른 키워드로 검색하거나 필터를 초기화해보세요.
                     </p>
                     <Button
                       variant="outline"
+                      className="border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5"
                       onClick={() => {
                         setSearchQuery("");
                         setMainCategoryValue("전체");
@@ -574,6 +582,7 @@ export default function MainSection(
                   <div className="flex justify-center py-8">
                     <Button
                       variant="outline"
+                      className="border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5"
                       onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
                     >
                       더 보기 ({sortedPosts.length - visibleCount}개 남음)

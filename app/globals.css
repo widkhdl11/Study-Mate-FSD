@@ -3,6 +3,29 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── 디스플레이 서체: 배민 주아체(Jua) ──
+   플래너 월드의 "손으로 쓴 다이어리" 톤. 제목·히어로 전용(font-heading),
+   본문은 Pretendard 유지. 자가호스팅 + display:swap(FOIT 없음).
+   한글/라틴 서브셋을 unicode-range로 분리해 라틴만 필요한 화면은 16KB만 로드. */
+@font-face {
+  font-family: "Jua";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jua/jua-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Jua";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jua/jua-korean-400-normal.woff2") format("woff2");
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+}
+
 :root {
   /* Study Mate 컬러 시스템 — 케빈스룸(Kevin's Room) 디자인 언어 적용
      단일 지배 블루 #2F58E0 + 슬레이트 텍스트 #1F2933 + 라이트 블루그레이 중립 */
@@ -14,6 +37,23 @@
   --popover-foreground: #1f2933;
   --primary: #2f58e0; /* 케빈스룸 브랜드 블루 */
   --primary-foreground: #ffffff;
+  --primary-deep: #1e3aa8; /* 코발트의 진한 셰이드 — 색 블로킹(딥블루 카드/밴드)용. One Blue 유지 */
+
+  /* ── 스터디 플래너 월드 (홈 리디자인) ──
+     종이 바탕 + 형광펜 카테고리 코딩 + 잉크. "옅고 평평한 SaaS"를 버린 새 룰. */
+  --paper: #f9f7f3;        /* 따뜻한 종이 바탕 (누런기 낮춘 라이트 크림) */
+  --paper-line: #ebe6dd;   /* 플래너 괘선/그리드 */
+  --ink: #262019;          /* 연필/마커 잉크(따뜻한 먹) */
+  --ink-soft: #6f6656;     /* 보조 잉크(메타) */
+  --hl-yellow: #ffe24d;    /* 형광 옐로 */
+  --hl-mint: #5fe0bd;      /* 형광 민트 */
+  --hl-coral: #ff8f7a;     /* 형광 코랄 */
+  --hl-lavender: #c3b4ff;  /* 형광 라벤더 */
+  --hl-sky: #86c5ff;       /* 형광 스카이 */
+  --hl-orange: #ffb45c;    /* 형광 오렌지 */
+  --hl-lime: #b8e06a;      /* 형광 라임 */
+  --hl-pink: #ff9ec4;      /* 형광 핑크 */
+
   --secondary: #f0f4f9; /* 라이트 블루그레이 */
   --secondary-foreground: #1f2933;
   --muted: #f0f4f9;
@@ -53,6 +93,21 @@
   --popover-foreground: oklch(0.95 0 0);
   --primary: #5b7cf0; /* 케빈스룸 블루 (다크 대비용 라이트닝) */
   --primary-foreground: #ffffff;
+  --primary-deep: #3b5bd9; /* 다크 모드용 딥블루 */
+
+  /* 스터디 플래너 월드 — 다크(밤 책상 위 플래너) */
+  --paper: #201d18;
+  --paper-line: #332e26;
+  --ink: #f3ede0;
+  --ink-soft: #b3a894;
+  --hl-yellow: #d8bf3f;
+  --hl-mint: #4bc2a2;
+  --hl-coral: #e07866;
+  --hl-lavender: #a493e6;
+  --hl-sky: #6aa8e6;
+  --hl-orange: #d89a48;
+  --hl-lime: #9cbe55;
+  --hl-pink: #db85a6;
   --secondary: oklch(0.25 0.02 250);
   --secondary-foreground: oklch(0.95 0 0);
   --muted: oklch(0.3 0 0);
@@ -87,6 +142,8 @@
      --font-pretendard 미로드 시 Geist → 시스템 폰트로 폴백 */
   --font-sans: var(--font-pretendard), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* 디스플레이/제목 서체(font-heading 유틸) — 주아체 → Pretendard 폴백 */
+  --font-heading: "Jua", var(--font-pretendard), var(--font-geist-sans);
 
   /* 케빈스룸 본문 타이포 토큰: text-base = 17px / 행간 1.7 (spacing 불변) */
   --text-base: 1.0625rem;
@@ -107,6 +164,21 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-deep: var(--primary-deep);
+
+  /* 스터디 플래너 월드 토큰 → 유틸(bg-paper, text-ink, bg-hl-yellow …) */
+  --color-paper: var(--paper);
+  --color-paper-line: var(--paper-line);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-hl-yellow: var(--hl-yellow);
+  --color-hl-mint: var(--hl-mint);
+  --color-hl-coral: var(--hl-coral);
+  --color-hl-lavender: var(--hl-lavender);
+  --color-hl-sky: var(--hl-sky);
+  --color-hl-orange: var(--hl-orange);
+  --color-hl-lime: var(--hl-lime);
+  --color-hl-pink: var(--hl-pink);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -138,6 +210,12 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* 은은한 입체감용 소프트 그림자 — 순검정 대신 슬레이트(#1f2933) 틴트로 브랜드에 녹인다.
+     Border-First를 버리지 않고(테두리는 유지) 카드가 지면에서 살짝 떠 보이게만 한다.
+     shadow-soft = 기본, shadow-lift = hover 상승 상태. */
+  --shadow-soft: 0 1px 2px rgb(31 41 51 / 0.04), 0 4px 14px -4px rgb(31 41 51 / 0.10);
+  --shadow-lift: 0 6px 14px -6px rgb(31 41 51 / 0.12), 0 18px 34px -10px rgb(31 41 51 / 0.18);
 
   /* 홈페이지 Hero 섹션을 위한 커스텀 애니메이션 추가 */
   @keyframes fadeIn {
@@ -256,6 +334,16 @@
 
 /* 홈페이지 Hero 섹션 애니메이션 클래스 추가 */
 @layer utilities {
+  /* 형광펜 밑줄 강조 — 헤드라인 키워드에 <span class="hl-mark">…</span> */
+  .hl-mark {
+    background-image: linear-gradient(transparent 58%, var(--hl-yellow) 58%);
+    padding: 0 0.08em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .hl-mark-mint { background-image: linear-gradient(transparent 58%, var(--hl-mint) 58%); }
+  .hl-mark-coral { background-image: linear-gradient(transparent 58%, var(--hl-coral) 58%); }
+
   .animate-fade-in {
     animation: fadeIn 0.8s ease-out;
   }

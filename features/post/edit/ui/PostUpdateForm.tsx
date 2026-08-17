@@ -48,10 +48,11 @@ export default function PostUpdateForm(
                 name="title"
                 render={({field})=>(
                   <FormItem>
-                    <FormLabel>게시글 제목</FormLabel>
+                    <FormLabel className="text-ink font-semibold">게시글 제목</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="게시글 제목을 입력해주세요"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         {...field}
                       />
@@ -66,8 +67,8 @@ export default function PostUpdateForm(
                     name='studyId'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>스터디 선택 *</FormLabel>
-                            <FormDescription>
+                            <FormLabel className="text-ink font-semibold">스터디 선택 *</FormLabel>
+                            <FormDescription className="text-ink-soft">
                                 모집글을 작성할 스터디를 선택해주세요
                             </FormDescription>
                             <Suspense fallback={<StudySelectSkeleton />}>
@@ -88,14 +89,14 @@ export default function PostUpdateForm(
                 name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>내용 *</FormLabel>
-                    <FormDescription>모집글의 상세한 내용을 입력해주세요 (최소 10자)</FormDescription>
+                    <FormLabel className="text-ink font-semibold">내용 *</FormLabel>
+                    <FormDescription className="text-ink-soft">모집글의 상세한 내용을 입력해주세요 (최소 10자)</FormDescription>
                     <FormControl>
                       <Textarea
                         placeholder="스터디에 대한 상세한 설명을 입력하세요"
                         disabled={isPending}
                         rows={6}
-                        className="resize-none"
+                        className="resize-none border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         {...field}
                       />
                     </FormControl>
@@ -112,11 +113,11 @@ export default function PostUpdateForm(
                 disabled={isPending}
               />
               <div className="flex gap-3 pt-4">
-                <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground" disabled={isPending}>
+                <Button type="submit" className="flex-1 bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]" disabled={isPending}>
                   {isPending ? "수정 중..." : "수정 완료"}
                 </Button>
                 <Link href={`/posts/${postData.id}`} className="flex-1">
-                  <Button type="button" variant="outline" className="w-full bg-transparent" disabled={isPending}>
+                  <Button type="button" variant="outline" className="w-full border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5 hover:text-ink" disabled={isPending}>
                     취소
                   </Button>
                 </Link>

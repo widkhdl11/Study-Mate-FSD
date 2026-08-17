@@ -7,7 +7,7 @@ import { MessageCircle } from "lucide-react";
  */
 export default function ChatsIndexPage() {
   return (
-    <div className="hidden h-full items-center justify-center bg-secondary/40 p-6 md:flex">
+    <div className="hidden h-full items-center justify-center bg-ink/5 p-6 md:flex">
       <EmptyState
         icon={MessageCircle}
         title="대화를 선택하세요"

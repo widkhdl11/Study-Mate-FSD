@@ -7,15 +7,15 @@ import Image from "next/image"
 
 export default function RelationSection({ relatedPosts }: { relatedPosts: PostWithRelationResponse[] }) {
     return (
-         <div className="mt-12 pt-8 border-t border-border">
-              <h3 className="text-2xl font-bold text-foreground mb-6">
+         <div className="mt-12 pt-8 border-t-2 border-dashed border-paper-line">
+              <h3 className="font-heading text-2xl font-normal text-ink mb-6">
                 같은 스터디의 다른 모집글
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedPosts.map((relatedPost) => (
                   <Card
                     key={relatedPost.id}
-                    className="overflow-hidden shadow-sm hover:border-primary/50 transition-colors"
+                    className="overflow-hidden bg-paper border-2 border-ink/15 rounded-xl shadow-soft transition-all hover:-translate-y-1 hover:border-ink/40 hover:shadow-lift"
                   >
                     <div className="relative w-full h-40">
                       <Image
@@ -27,14 +27,14 @@ export default function RelationSection({ relatedPosts }: { relatedPosts: PostWi
                     </div>
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-semibold text-foreground flex-1">
+                        <h4 className="font-semibold text-ink flex-1">
                           {relatedPost.title}
                         </h4>
                         <Badge
-                          className={`text-white ml-2 ${
+                          className={`ml-2 rounded-md font-bold text-ink ${
                             relatedPost.study.status === "모집중"
-                              ? "bg-success"
-                              : "bg-danger"
+                              ? "bg-hl-mint"
+                              : "bg-hl-coral"
                           }`}
                         >
                           {relatedPost.study.status}
@@ -42,7 +42,7 @@ export default function RelationSection({ relatedPosts }: { relatedPosts: PostWi
                       </div>
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-0 h-auto text-primary"
+                        className="w-full justify-start p-0 h-auto text-ink hover:text-ink/60"
                       >
                         → 상세보기
                       </Button>

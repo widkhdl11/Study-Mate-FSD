@@ -1,23 +1,23 @@
-import { queryAllPosts, PostWithStudyView } from "@/entities/post"
+import { queryAllPosts, PostWithStudyView, PostCard } from "@/entities/post"
 import { createClient } from "@/shared/api/supabase/server"
 import { Button } from "@/shared/shadcn/ui/button"
 import { RetryButton } from "@/shared/ui/RetryButton"
-import { FileQuestion, Inbox } from "lucide-react"
+import { FileQuestion } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
-import PostCard from "./PostCard"
 
 const PREVIEW_COUNT = 6
 
 
 function SectionShell({ children }: { children: React.ReactNode }) {
     return (
-        <section className='py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-background'>
+        <section className='bg-paper px-4 py-16 text-ink sm:px-6 md:py-20 lg:px-8'>
             <div className='max-w-7xl mx-auto space-y-8'>
                 <div className='space-y-2'>
-                    <h2 className='text-3xl md:text-4xl font-bold text-foreground'>
-                        최신 모집글
+                    <h2 className='font-heading text-3xl md:text-4xl font-normal text-ink'>
+                        <span className='hl-mark'>최신</span> 모집글
                     </h2>
-                    <p className='text-muted-foreground'>
+                    <p className='text-ink-soft'>
                         최근 올라온 스터디를 둘러보세요
                     </p>
                 </div>
@@ -35,9 +35,9 @@ export default async function LatestSection() {
     if (!postsData.ok) {
         return (
             <SectionShell>
-                <div className='flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border py-16 text-center'>
-                    <FileQuestion className='w-10 h-10 text-muted-foreground' />
-                    <p className='text-muted-foreground'>
+                <div className='flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-paper-line py-16 text-center'>
+                    <FileQuestion className='w-10 h-10 text-ink-soft' />
+                    <p className='text-ink-soft'>
                         모집글을 불러오지 못했어요. 잠시 후 다시 시도해주세요.
                     </p>
                     <RetryButton />
@@ -54,20 +54,26 @@ export default async function LatestSection() {
     if (posts.length === 0) {
         return (
             <SectionShell>
-                <div className='flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-16 text-center'>
-                    <Inbox className='w-10 h-10 text-muted-foreground' />
+                <div className='flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-paper-line py-16 text-center'>
+                    <Image
+                        src='/empty-study-state.png'
+                        alt=''
+                        width={200}
+                        height={200}
+                        className='h-40 w-40 object-contain'
+                    />
                     <div className='space-y-1'>
-                        <p className='font-medium text-foreground'>
+                        <p className='font-bold text-ink'>
                             아직 모집 중인 스터디가 없어요
                         </p>
-                        <p className='text-sm text-muted-foreground'>
+                        <p className='text-sm text-ink-soft'>
                             첫 스터디를 만들어 동료를 모아보세요
                         </p>
                     </div>
                     <Link href='/studies/create'>
                         <Button
                             size='lg'
-                            className='transition-transform active:scale-[0.96]'>
+                            className='bg-ink text-paper hover:bg-ink/90 transition-transform active:scale-[0.96]'>
                             스터디 만들기
                         </Button>
                     </Link>
@@ -91,7 +97,7 @@ export default async function LatestSection() {
                     <Button
                         variant='outline'
                         size='lg'
-                        className='border-2 border-primary text-primary hover:bg-primary/5 bg-transparent transition-transform active:scale-[0.96]'>
+                        className='border-2 border-ink text-ink hover:bg-ink/5 bg-transparent transition-transform active:scale-[0.96]'>
                         더 많은 모집글 보기 →
                     </Button>
                 </Link>

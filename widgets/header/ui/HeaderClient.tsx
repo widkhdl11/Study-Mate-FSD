@@ -19,14 +19,14 @@ export default function HeaderClient({
 }) {
     return (
         <>
-            <header className='fixed top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+            <header className='fixed top-0 z-50 w-full border-b-2 border-ink/10 bg-paper/95 text-ink backdrop-blur supports-[backdrop-filter]:bg-paper/80'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                     <div className='flex items-center justify-between h-[69px]'>
                         <Link
                             href='/'
-                            className='flex items-center gap-2 font-bold text-xl text-foreground transition-colors hover:text-accent'
+                            className='flex items-center gap-2 font-heading text-2xl text-ink transition-colors hover:text-ink/70'
                         >
-                            <div className='w-8 h-8 rounded-md flex items-center justify-center text-lg font-bold leading-none bg-accent text-accent-foreground'>
+                            <div className='w-8 h-8 rounded-md flex items-center justify-center text-lg font-bold leading-none bg-ink text-paper'>
                                 S
                             </div>
                             Study Mate
@@ -35,13 +35,13 @@ export default function HeaderClient({
                         <nav className='hidden md:flex items-center gap-8'>
                             <Link
                                 href='/posts'
-                                className='font-medium text-foreground transition-colors hover:text-accent'
+                                className='font-medium text-ink transition-colors hover:text-ink/60'
                             >
                                 모집글
                             </Link>
                             <CreateStudyButton
                                 isLoggedIn={!!currentUser}
-                                className='text-foreground hover:text-accent'
+                                className='text-ink hover:text-ink/60'
                             />
                         </nav>
 
@@ -51,7 +51,7 @@ export default function HeaderClient({
                             {currentUser ? (
                                 <UserMenu user={currentUser} />
                             ) : (
-                                <Button asChild>
+                                <Button asChild className='bg-ink text-paper transition-transform hover:bg-ink/90 active:scale-[0.97]'>
                                     <Link href='/auth/login'>로그인</Link>
                                 </Button>
                             )}

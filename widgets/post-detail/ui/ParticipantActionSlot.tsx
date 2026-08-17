@@ -34,7 +34,7 @@ export function ParticipantActionSlot({
   // 소유자(호스트)는 자기 스터디에 신청할 수 없다 — 신청 대신 신청자 관리로.
   if (isOwner) {
     return (
-      <Button asChild className="w-full py-6 text-lg">
+      <Button asChild className="w-full py-6 text-lg bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]">
         <Link href={`/studies/${studyId}`}>신청자 관리</Link>
       </Button>
     );
@@ -45,11 +45,11 @@ export function ParticipantActionSlot({
     case "accepted":
       return (
         <div className="flex gap-3">
-          <Badge className="flex-1 text-center bg-success text-white text-base justify-center">
+          <Badge className="flex-1 text-center bg-hl-mint text-ink text-base font-bold justify-center rounded-md">
             참여중
           </Badge>
           {chatRoomId != null && (
-            <Button asChild variant="outline" className="flex-1">
+            <Button asChild className="flex-1 bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]">
               <Link href={`/chats/${chatRoomId}`}>채팅방 입장</Link>
             </Button>
           )}
@@ -59,7 +59,7 @@ export function ParticipantActionSlot({
     case "pending":
       return (
         <div className="flex flex-col gap-2">
-          <Button disabled className="w-full py-6 text-lg bg-warning hover:bg-warning/90">
+          <Button disabled className="w-full py-6 text-lg border-2 border-ink/20 bg-ink/5 text-ink-soft">
             수락 대기중
           </Button>
           {participant && (
@@ -75,7 +75,7 @@ export function ParticipantActionSlot({
       if (recruitment === "open") {
         return (
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-ink-soft">
               이전 신청은 거절되었어요. 다시 신청할 수 있습니다.
             </p>
             <ApplyParticipantButton studyId={studyId} label="재신청" />
@@ -83,14 +83,14 @@ export function ParticipantActionSlot({
         );
       }
       return (
-        <Button disabled className="w-full py-6 text-lg bg-danger hover:bg-danger/90 text-white">
+        <Button disabled className="w-full py-6 text-lg bg-ink/10 text-ink-soft">
           신청 거절됨
         </Button>
       );
 
     case "kicked":
       return (
-        <Button disabled className="w-full py-6 text-lg">
+        <Button disabled className="w-full py-6 text-lg bg-ink/10 text-ink-soft">
           참여할 수 없는 스터디입니다
         </Button>
       );
@@ -102,13 +102,13 @@ export function ParticipantActionSlot({
       return <ApplyParticipantButton studyId={studyId} />;
     case "full":
       return (
-        <Button disabled className="w-full py-6 text-lg">
+        <Button disabled className="w-full py-6 text-lg bg-ink/10 text-ink-soft">
           모집 완료 (정원 마감)
         </Button>
       );
     case "closed":
       return (
-        <Button disabled className="w-full py-6 text-lg">
+        <Button disabled className="w-full py-6 text-lg bg-ink/10 text-ink-soft">
           모집 종료
         </Button>
       );

@@ -41,7 +41,7 @@ export default function StudySelect({
                     }
                     onValueChange={(v) => onChange(Number(v))}
                     disabled={disabled}>
-                    <SelectTrigger>
+                    <SelectTrigger className='w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30'>
                         <SelectValue placeholder='선택' />
                     </SelectTrigger>
 
@@ -70,12 +70,12 @@ export default function StudySelect({
             ) : (
                 <div className='flex flex-col items-center justify-center'>
                     <div className='flex flex-col items-center justify-between h-full w-full'>
-                        <p className='text-sm text-muted-foreground'>
+                        <p className='text-sm text-ink-soft'>
                             스터디가 없습니다
                         </p>
                         <Link
                             href='/studies/create'
-                            className='text-sm text-primary hover:text-primary/80'>
+                            className='text-sm font-semibold text-ink hover:text-ink/60'>
                             스터디 만들기
                         </Link>
                     </div>
@@ -83,13 +83,13 @@ export default function StudySelect({
             )}
 
             {selectedStudy && (
-                <div className='mt-3 rounded-lg border border-primary/20 bg-primary/5 p-4'>
-                    <h4 className='text-sm font-semibold text-foreground mb-3'>
+                <div className='mt-3 rounded-lg border-2 border-ink/15 bg-ink/5 p-4'>
+                    <h4 className='text-sm font-semibold text-ink mb-3'>
                         {selectedStudy.title}
                     </h4>
                     <div className='grid grid-cols-2 gap-3'>
-                        <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                            <Tag className='w-4 h-4 text-primary shrink-0' />
+                        <div className='flex items-center gap-2 text-sm text-ink-soft'>
+                            <Tag className='w-4 h-4 text-ink-soft shrink-0' />
                             <span className='shrink-0'>카테고리</span>
                             <div className='flex items-center pr-2'>
                                 {getCategoryPath(
@@ -104,8 +104,8 @@ export default function StudySelect({
                                 ))}
                             </div>
                         </div>
-                        <div className='flex items-center gap-2 text-sm text-muted-foreground w-full'>
-                            <MapPin className='w-4 h-4 text-primary shrink-0' />
+                        <div className='flex items-center gap-2 text-sm text-ink-soft w-full'>
+                            <MapPin className='w-4 h-4 text-ink-soft shrink-0' />
                             <span className='shrink-0'>지역</span>
                             <div className='w-full flex justify-start shrink-1'>
                                 {getRegionPath(
@@ -120,10 +120,10 @@ export default function StudySelect({
                                 ))}
                             </div>
                         </div>
-                        <div className='flex items-center gap-2 text-sm text-muted-foreground col-span-2'>
-                            <Users className='w-4 h-4 text-primary' />
+                        <div className='flex items-center gap-2 text-sm text-ink-soft col-span-2'>
+                            <Users className='w-4 h-4 text-ink-soft' />
                             <span>모집 인원</span>
-                            <span className='font-medium text-foreground'>
+                            <span className='font-medium tabular-nums text-ink'>
                                 {selectedStudy.currentParticipants}/
                                 {selectedStudy.maxParticipants}명
                             </span>

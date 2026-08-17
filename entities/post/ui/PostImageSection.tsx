@@ -18,7 +18,7 @@ export default function PostImageSection({ postData }: { postData: PostDetailVie
                   <>
                   {postData.imageUrl.map((image: { url: string }, index: number) => (
                     <CarouselItem key={index}>
-                      <div className="relative w-full h-96 rounded-lg overflow-hidden shadow-lg" >
+                      <div className="relative w-full h-96 rounded-xl overflow-hidden border-2 border-ink/15 shadow-soft" >
                         <Image
                           src={getImageUrl(image.url)}
                           alt={`${postData.title} - 이미지 ${index + 1}`}

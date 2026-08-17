@@ -110,11 +110,11 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
   }, [sendMessageMutation.isPending]);
 
   return (
-    <div className="flex h-full w-full min-w-0 bg-background">
+    <div className="flex h-full w-full min-w-0 bg-paper">
       {/* 대화 페인 */}
       <section className="flex min-w-0 flex-1 flex-col">
       {/* 채팅방 헤더 */}
-      <header className="flex-shrink-0 border-b border-border bg-background/95 backdrop-blur">
+      <header className="flex-shrink-0 border-b border-ink/10 bg-paper/95 backdrop-blur">
         <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <Link href="/chats" aria-label="채팅 목록으로" className="md:hidden">
@@ -123,13 +123,13 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
               </Button>
             </Link>
             <Avatar className="h-10 w-10 flex-shrink-0">
-              <AvatarFallback className="bg-secondary text-primary font-bold">
+              <AvatarFallback className="bg-hl-mint text-ink font-bold">
                 {chatRoom.name?.[0] ?? "#"}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <h1 className="truncate text-base font-bold text-foreground">{chatRoom.name ?? "채팅방"}</h1>
-              <p className="flex items-center gap-1 text-xs text-muted-foreground">
+              <h1 className="truncate text-base font-bold text-ink">{chatRoom.name ?? "채팅방"}</h1>
+              <p className="flex items-center gap-1 text-xs text-ink-soft">
                 <Users className="h-3 w-3" aria-hidden="true" />
                 멤버 {chatParticipants.length}명
               </p>
@@ -155,8 +155,8 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
         </div>
       </header>
 
-      {/* 메시지 영역 — secondary 틴트 캔버스로 흰 말풍선·파란 말풍선 모두 바닥을 얻게 한다 */}
-      <div className="flex-1 min-h-0 overflow-y-auto bg-secondary/60 px-3 py-4 sm:px-4" ref={containerRef} onScroll={handleScroll}>
+      {/* 메시지 영역 — 옅은 잉크 틴트 캔버스로 종이·잉크 말풍선 모두 바닥을 얻게 한다 */}
+      <div className="flex-1 min-h-0 overflow-y-auto bg-ink/5 px-3 py-4 sm:px-4" ref={containerRef} onScroll={handleScroll}>
         {isLoading ? (
           <MessagesSkeleton />
         ) : list.length === 0 ? (
@@ -171,7 +171,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
           <>
           {isLoadingOlder && (
             <div className="flex justify-center py-2">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" aria-label="이전 메시지 불러오는 중" />
+              <Loader2 className="h-5 w-5 animate-spin text-ink-soft" aria-label="이전 메시지 불러오는 중" />
             </div>
           )}
           {list.map((message: ChatMessage, i) => {
@@ -203,7 +203,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
               <React.Fragment key={message.id}>
                 {newDay && (
                   <div className="my-4 flex justify-center">
-                    <span className="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+                    <span className="rounded-full border border-ink/10 bg-ink/5 px-3 py-1 text-xs font-medium text-ink-soft">
                       {dayLabel(created)}
                     </span>
                   </div>
@@ -217,7 +217,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                           src={getProfileImageUrl(message.profile?.avatar_url)}
                           alt={message.profile?.username || "사용자"}
                         />
-                        <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                        <AvatarFallback className="bg-hl-mint text-ink text-xs">
                           {message.profile?.username?.substring(0, 2) || "??"}
                         </AvatarFallback>
                       </Avatar>
@@ -227,27 +227,27 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
                   )}
                   <div className={`flex max-w-[75%] flex-col ${isMe ? "items-end" : "items-start"}`}>
                     {!isMe && isFirstOfGroup && (
-                      <span className="mb-1 px-1 text-xs font-medium text-muted-foreground">
+                      <span className="mb-1 px-1 text-xs font-medium text-ink-soft">
                         {message.profile?.username || "알 수 없음"}
                       </span>
                     )}
                     <div className="flex items-end gap-1.5">
                       {isMe && isLastOfGroup && created && (
-                        <span className="mb-0.5 shrink-0 text-xs text-muted-foreground tabular-nums">
+                        <span className="mb-0.5 shrink-0 text-xs text-ink-soft tabular-nums">
                           {timeLabel(created)}
                         </span>
                       )}
                       <div
-                        className={`px-4 py-2.5 leading-relaxed shadow-sm ${
+                        className={`px-4 py-2.5 leading-relaxed shadow-soft ${
                           isMe
-                            ? "rounded-2xl rounded-tr-md bg-primary text-primary-foreground"
-                            : "rounded-2xl rounded-tl-md border border-border bg-card text-foreground"
+                            ? "rounded-2xl rounded-tr-md bg-ink text-paper"
+                            : "rounded-2xl rounded-tl-md border-2 border-ink/12 bg-paper text-ink"
                         }`}
                       >
                         <p className="whitespace-pre-wrap break-words">{message.content}</p>
                       </div>
                       {!isMe && isLastOfGroup && created && (
-                        <span className="mb-0.5 shrink-0 text-xs text-muted-foreground tabular-nums">
+                        <span className="mb-0.5 shrink-0 text-xs text-ink-soft tabular-nums">
                           {timeLabel(created)}
                         </span>
                       )}
@@ -262,9 +262,9 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
       </div>
 
       {/* 입력 영역 */}
-      <div className="flex-shrink-0 border-t border-border bg-background px-3 py-3 sm:px-4">
+      <div className="flex-shrink-0 border-t border-ink/10 bg-paper px-3 py-3 sm:px-4">
         <div className="flex items-center gap-2">
-          <div className="flex flex-1 items-center rounded-full border border-border bg-secondary px-4 py-2 transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30">
+          <div className="flex flex-1 items-center rounded-full border-2 border-ink/15 bg-paper px-4 py-2 transition-colors focus-within:border-ink/40 focus-within:ring-2 focus-within:ring-ink/15">
             <input
               ref={inputRef}
               type="text"
@@ -273,13 +273,13 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyPress}
-              className="flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
+              className="flex-1 bg-transparent text-ink outline-none placeholder:text-ink-soft"
             />
           </div>
           <Button
             onClick={handleSendMessage}
             aria-label="메시지 보내기"
-            className="h-10 w-10 flex-shrink-0 rounded-full bg-primary p-0 transition-transform hover:bg-primary/90 active:scale-95"
+            className="h-10 w-10 flex-shrink-0 rounded-full bg-ink p-0 text-paper transition-transform hover:bg-ink/90 active:scale-95"
             disabled={newMessage.trim() === "" || sendMessageMutation.isPending}
           >
             <Send className="h-5 w-5" />
@@ -289,21 +289,21 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
       </section>
 
       {/* 정보 레일 — 가장 넓은 화면(xl+)에서만 상시 노출(그 아래는 헤더의 멤버 시트로 대체) */}
-      <aside className="hidden w-72 shrink-0 flex-col border-l border-border bg-background xl:flex">
+      <aside className="hidden w-72 shrink-0 flex-col border-l border-ink/10 bg-paper xl:flex">
         {/* 방 정체성 */}
-        <div className="flex flex-col items-center gap-3 border-b border-border px-4 py-6 text-center">
+        <div className="flex flex-col items-center gap-3 border-b border-ink/10 px-4 py-6 text-center">
           <Avatar className="h-16 w-16">
-            <AvatarFallback className="bg-secondary text-primary text-2xl font-bold">
+            <AvatarFallback className="bg-hl-mint text-ink text-2xl font-bold">
               {chatRoom.name?.[0] ?? "#"}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h2 className="truncate font-bold text-foreground">{chatRoom.name ?? "채팅방"}</h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">스터디 채팅방</p>
+            <h2 className="truncate font-bold text-ink">{chatRoom.name ?? "채팅방"}</h2>
+            <p className="mt-0.5 text-xs text-ink-soft">스터디 채팅방</p>
           </div>
           {chatRoom.study_id && (
             <Link href={`/studies/${chatRoom.study_id}`} className="w-full">
-              <Button variant="outline" size="sm" className="w-full">
+              <Button variant="outline" size="sm" className="w-full border-2 border-ink text-ink hover:bg-ink/5 hover:text-ink">
                 스터디 보기
               </Button>
             </Link>
@@ -312,7 +312,7 @@ export default function ChatRoomUI({ chatParticipants, chatRoom }:
 
         {/* 멤버 목록 */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
-          <p className="mb-2 px-1 text-xs font-medium text-muted-foreground">
+          <p className="mb-2 px-1 text-xs font-medium text-ink-soft">
             멤버 {chatParticipants.length}명
           </p>
           <MemberList members={chatParticipants} />
@@ -327,17 +327,17 @@ function MemberList({ members }: { members: ChatParticipant[] }) {
   return (
     <div className="space-y-1">
       {members.map((member) => (
-        <div key={member.id} className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50">
+        <div key={member.id} className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-ink/5">
           <Avatar className="h-9 w-9 shrink-0">
             <AvatarImage
               src={getProfileImageUrl(member.profile?.avatar_url)}
               alt={member.profile?.username || "사용자"}
             />
-            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+            <AvatarFallback className="bg-hl-mint text-ink text-xs">
               {member.profile?.username?.substring(0, 2) || "??"}
             </AvatarFallback>
           </Avatar>
-          <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+          <p className="min-w-0 flex-1 truncate text-sm font-medium text-ink">
             {member.profile?.username || "알 수 없음"}
           </p>
         </div>
@@ -359,8 +359,8 @@ function MessagesSkeleton() {
     <div className="space-y-4">
       {rows.map((r, i) => (
         <div key={i} className={`flex gap-2 ${r.me ? "flex-row-reverse" : "flex-row"}`}>
-          {!r.me && <div className="h-8 w-8 flex-shrink-0 animate-pulse rounded-full bg-muted" />}
-          <div className={`h-10 ${r.w} animate-pulse rounded-2xl bg-muted`} />
+          {!r.me && <div className="h-8 w-8 flex-shrink-0 animate-pulse rounded-full bg-ink/10" />}
+          <div className={`h-10 ${r.w} animate-pulse rounded-2xl bg-ink/10`} />
         </div>
       ))}
     </div>

@@ -13,7 +13,7 @@ export default async function PostsPage(
   const search = resolvedParams.search
   const category = resolvedParams.category
   return (
-      <div className="min-h-screen flex flex-col bg-background">
+      <div className="min-h-screen flex flex-col bg-paper">
       <main className="flex-1">
         <HeaderSection />
         <Suspense fallback={<PostsListSkeleton />}>
@@ -35,9 +35,9 @@ async function MainSectionLoader({search, category}:
   if (!allPosts.ok) {
     return (
       <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-16 text-center">
-          <FileQuestion className="w-10 h-10 text-muted-foreground" />
-          <p className="text-muted-foreground">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-paper-line py-16 text-center">
+          <FileQuestion className="w-10 h-10 text-ink-soft" />
+          <p className="text-ink-soft">
             스터디 목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.
           </p>
           <RetryButton />

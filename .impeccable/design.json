@@ -1,30 +1,34 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-06",
-  "title": "Design System: Study Mate",
+  "generatedAt": "2026-08-13",
+  "title": "Design System: Study Mate — 스터디 플래너 월드",
   "extensions": {
     "colorMeta": {
-      "primary": { "role": "primary", "displayName": "코발트 러닝 블루", "canonical": "#2f58e0", "tonalRamp": ["oklch(0.15 0.09 265)", "oklch(0.25 0.13 265)", "oklch(0.35 0.16 265)", "oklch(0.45 0.18 265)", "oklch(0.55 0.18 265)", "oklch(0.68 0.14 265)", "oklch(0.82 0.08 265)", "oklch(0.95 0.03 265)"] },
-      "foreground": { "role": "neutral", "displayName": "슬레이트 잉크", "canonical": "#1f2933", "tonalRamp": ["oklch(0.18 0.02 240)", "oklch(0.28 0.02 240)", "oklch(0.40 0.02 240)", "oklch(0.52 0.02 240)", "oklch(0.63 0.02 240)", "oklch(0.75 0.015 240)", "oklch(0.86 0.01 240)", "oklch(0.96 0.005 240)"] },
-      "secondary": { "role": "neutral", "displayName": "블루그레이 미스트", "canonical": "#f0f4f9", "tonalRamp": ["oklch(0.30 0.02 245)", "oklch(0.42 0.02 245)", "oklch(0.54 0.02 245)", "oklch(0.66 0.018 245)", "oklch(0.78 0.015 245)", "oklch(0.88 0.012 245)", "oklch(0.94 0.008 245)", "oklch(0.98 0.004 245)"] },
-      "muted-foreground": { "role": "neutral", "displayName": "뮤트 슬레이트", "canonical": "#7b8794", "tonalRamp": ["oklch(0.25 0.02 245)", "oklch(0.36 0.02 245)", "oklch(0.47 0.02 245)", "oklch(0.58 0.02 245)", "oklch(0.66 0.02 245)", "oklch(0.76 0.015 245)", "oklch(0.86 0.01 245)", "oklch(0.95 0.005 245)"] },
-      "border": { "role": "neutral", "displayName": "쿨 보더", "canonical": "#e5eaf1", "tonalRamp": ["oklch(0.35 0.015 245)", "oklch(0.47 0.015 245)", "oklch(0.58 0.012 245)", "oklch(0.70 0.01 245)", "oklch(0.80 0.008 245)", "oklch(0.90 0.006 245)", "oklch(0.94 0.005 245)", "oklch(0.98 0.003 245)"] },
-      "success": { "role": "tertiary", "displayName": "모집중 그린", "canonical": "oklch(0.5 0.15 145)", "tonalRamp": ["oklch(0.20 0.08 145)", "oklch(0.30 0.11 145)", "oklch(0.40 0.14 145)", "oklch(0.50 0.15 145)", "oklch(0.60 0.14 145)", "oklch(0.72 0.11 145)", "oklch(0.84 0.07 145)", "oklch(0.94 0.03 145)"] },
-      "danger": { "role": "tertiary", "displayName": "마감 레드", "canonical": "oklch(0.55 0.2 25)", "tonalRamp": ["oklch(0.25 0.10 25)", "oklch(0.35 0.14 25)", "oklch(0.45 0.18 25)", "oklch(0.55 0.20 25)", "oklch(0.65 0.18 25)", "oklch(0.75 0.13 25)", "oklch(0.86 0.08 25)", "oklch(0.95 0.03 25)"] },
-      "warning": { "role": "tertiary", "displayName": "대기중 앰버", "canonical": "oklch(0.65 0.15 55)", "tonalRamp": ["oklch(0.30 0.08 55)", "oklch(0.40 0.11 55)", "oklch(0.50 0.13 55)", "oklch(0.60 0.15 55)", "oklch(0.68 0.15 55)", "oklch(0.78 0.12 55)", "oklch(0.87 0.08 55)", "oklch(0.95 0.03 55)"] }
+      "paper": { "role": "neutral", "displayName": "따뜻한 종이", "canonical": "#f9f7f3", "tonalRamp": ["oklch(0.22 0.012 85)", "oklch(0.33 0.014 85)", "oklch(0.45 0.016 85)", "oklch(0.57 0.018 85)", "oklch(0.70 0.018 85)", "oklch(0.82 0.016 85)", "oklch(0.92 0.012 85)", "oklch(0.97 0.008 85)"] },
+      "paper-line": { "role": "neutral", "displayName": "종이 괘선", "canonical": "#ebe6dd", "tonalRamp": ["oklch(0.28 0.012 85)", "oklch(0.40 0.014 85)", "oklch(0.52 0.016 85)", "oklch(0.63 0.018 85)", "oklch(0.74 0.018 85)", "oklch(0.84 0.016 85)", "oklch(0.91 0.014 85)", "oklch(0.96 0.010 85)"] },
+      "ink": { "role": "primary", "displayName": "먹빛 잉크", "canonical": "#262019", "tonalRamp": ["oklch(0.20 0.010 70)", "oklch(0.28 0.012 70)", "oklch(0.38 0.014 70)", "oklch(0.50 0.016 70)", "oklch(0.62 0.016 70)", "oklch(0.74 0.014 70)", "oklch(0.86 0.010 70)", "oklch(0.95 0.006 70)"] },
+      "ink-soft": { "role": "neutral", "displayName": "약한 잉크(메타)", "canonical": "#6f6656", "tonalRamp": ["oklch(0.25 0.012 80)", "oklch(0.35 0.016 80)", "oklch(0.45 0.018 80)", "oklch(0.55 0.020 80)", "oklch(0.65 0.018 80)", "oklch(0.76 0.014 80)", "oklch(0.86 0.010 80)", "oklch(0.95 0.006 80)"] },
+      "hl-yellow": { "role": "secondary", "displayName": "형광 옐로", "canonical": "#ffe24d", "tonalRamp": ["oklch(0.35 0.10 95)", "oklch(0.47 0.13 95)", "oklch(0.58 0.15 95)", "oklch(0.70 0.17 95)", "oklch(0.80 0.17 95)", "oklch(0.88 0.14 95)", "oklch(0.93 0.09 95)", "oklch(0.97 0.04 95)"] },
+      "hl-mint": { "role": "secondary", "displayName": "형광 민트(모집중)", "canonical": "#5fe0bd", "tonalRamp": ["oklch(0.32 0.07 168)", "oklch(0.44 0.09 168)", "oklch(0.56 0.11 168)", "oklch(0.68 0.12 168)", "oklch(0.79 0.11 168)", "oklch(0.87 0.09 168)", "oklch(0.93 0.06 168)", "oklch(0.97 0.03 168)"] },
+      "hl-coral": { "role": "secondary", "displayName": "형광 코랄(마감·좌석)", "canonical": "#ff8f7a", "tonalRamp": ["oklch(0.38 0.10 30)", "oklch(0.50 0.14 30)", "oklch(0.60 0.16 30)", "oklch(0.70 0.16 30)", "oklch(0.79 0.14 30)", "oklch(0.87 0.10 30)", "oklch(0.93 0.06 30)", "oklch(0.97 0.03 30)"] },
+      "hl-lavender": { "role": "secondary", "displayName": "형광 라벤더", "canonical": "#c3b4ff", "tonalRamp": ["oklch(0.35 0.10 290)", "oklch(0.47 0.13 290)", "oklch(0.58 0.15 290)", "oklch(0.69 0.15 290)", "oklch(0.79 0.13 290)", "oklch(0.87 0.10 290)", "oklch(0.93 0.06 290)", "oklch(0.97 0.03 290)"] },
+      "hl-sky": { "role": "secondary", "displayName": "형광 스카이", "canonical": "#86c5ff", "tonalRamp": ["oklch(0.35 0.09 245)", "oklch(0.47 0.12 245)", "oklch(0.58 0.14 245)", "oklch(0.70 0.14 245)", "oklch(0.80 0.12 245)", "oklch(0.88 0.09 245)", "oklch(0.93 0.06 245)", "oklch(0.97 0.03 245)"] },
+      "hl-orange": { "role": "secondary", "displayName": "형광 오렌지", "canonical": "#ffb45c", "tonalRamp": ["oklch(0.35 0.09 60)", "oklch(0.47 0.12 60)", "oklch(0.58 0.14 60)", "oklch(0.70 0.15 60)", "oklch(0.79 0.13 60)", "oklch(0.87 0.10 60)", "oklch(0.93 0.06 60)", "oklch(0.97 0.03 60)"] },
+      "hl-lime": { "role": "secondary", "displayName": "형광 라임", "canonical": "#b8e06a", "tonalRamp": ["oklch(0.35 0.09 128)", "oklch(0.47 0.12 128)", "oklch(0.58 0.14 128)", "oklch(0.70 0.15 128)", "oklch(0.80 0.13 128)", "oklch(0.88 0.10 128)", "oklch(0.93 0.06 128)", "oklch(0.97 0.03 128)"] },
+      "hl-pink": { "role": "secondary", "displayName": "형광 핑크", "canonical": "#ff9ec4", "tonalRamp": ["oklch(0.38 0.10 350)", "oklch(0.50 0.13 350)", "oklch(0.60 0.15 350)", "oklch(0.70 0.15 350)", "oklch(0.79 0.13 350)", "oklch(0.87 0.10 350)", "oklch(0.93 0.06 350)", "oklch(0.97 0.03 350)"] }
     },
     "typographyMeta": {
-      "body": { "displayName": "Body", "purpose": "기본 문단. 한글 가독성을 위해 17px / 행간 1.7 고정." },
-      "heading": { "displayName": "Heading", "purpose": "페이지·섹션·카드 제목. 굵기(600–700)로 위계." },
-      "label": { "displayName": "Label", "purpose": "배지·태그·메타 라벨. 12px / weight 500." }
+      "display": { "displayName": "Display / Heading", "purpose": "히어로·섹션·페이지 제목. 배민 주아체(Jua) — 손으로 쓴 다이어리 톤. 단일 굵기(400)라 그 자체가 무게. font-heading 유틸." },
+      "body": { "displayName": "Body", "purpose": "본문·설명·카드 제목·라벨. Pretendard Variable. 한글 17px / 행간 1.7 고정(The 17/1.7 Rule)." },
+      "label": { "displayName": "Label", "purpose": "상태 태그·좌석 수·메타. Pretendard 700 / 12px. 수치는 tabular-nums." }
     },
     "shadows": [
-      { "name": "card-sm", "value": "0 1px 2px 0 rgba(31,41,51,0.05)", "purpose": "카드의 아주 옅은 분리감(shadow-sm). 떠 있는 인상은 아님." },
-      { "name": "control-xs", "value": "0 1px 1px 0 rgba(31,41,51,0.04)", "purpose": "입력창·아웃라인 버튼의 미세 분리(shadow-xs)." }
+      { "name": "shadow-soft", "value": "0 1px 2px rgb(31 41 51 / 0.04), 0 4px 14px -4px rgb(31 41 51 / 0.10)", "purpose": "카드가 책상에서 살짝 뜬 기본 상태. 슬레이트 틴트(순검정 아님)." },
+      { "name": "shadow-lift", "value": "0 6px 14px -6px rgb(31 41 51 / 0.12), 0 18px 34px -10px rgb(31 41 51 / 0.18)", "purpose": "hover 시 카드를 집어 올리는 상승 상태(+ -translate-y-1)." }
     ],
     "motion": [
-      { "name": "ease-out-200", "value": "200ms ease-out", "purpose": "드롭다운·시트 등 오버레이 진입 전환." },
-      { "name": "transition-all", "value": "transition-all(기본)", "purpose": "버튼·컨트롤의 색·그림자 상태 전환." }
+      { "name": "press", "value": "active:scale-[0.97]", "purpose": "잉크 버튼을 누를 때의 촉각 반응." },
+      { "name": "lift", "value": "hover:-translate-y-1 (transition-all)", "purpose": "카드 hover 시 종이를 집어 올리는 상승." }
     ],
     "breakpoints": [
       { "name": "sm", "value": "640px" },
@@ -34,65 +38,93 @@
   },
   "components": [
     {
-      "name": "Primary Button",
+      "name": "Primary Button (Ink)",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "주요 행동(신청·생성·저장). 코발트 러닝 블루 채움 + 흰 글자.",
-      "html": "<button class=\"ds-btn-primary\">스터디 신청</button>",
-      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:center; height:2.25rem; padding:0.5rem 1rem; border:none; border-radius:0.625rem; background:var(--color-primary,#2f58e0); color:#fff; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.875rem; font-weight:500; cursor:pointer; transition:background .2s,transform .2s; } .ds-btn-primary:hover { background:color-mix(in oklab,var(--color-primary,#2f58e0) 90%,transparent); } .ds-btn-primary:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in oklab,var(--color-primary,#2f58e0) 50%,transparent); } .ds-btn-primary:active { transform:translateY(1px); }"
+      "description": "주 행동(찾기·만들기·신청·저장). 먹빛 잉크 채움 + 종이 글자. Ink-Action Rule.",
+      "html": "<button class=\"ds-btn-ink\">스터디 찾기</button>",
+      "css": ".ds-btn-ink { display:inline-flex; align-items:center; justify-content:center; padding:0.5rem 1rem; border:none; border-radius:0.625rem; background:var(--ink,#262019); color:var(--paper,#f8f5ec); font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.9375rem; font-weight:600; cursor:pointer; transition:background .2s,transform .1s; } .ds-btn-ink:hover { background:color-mix(in srgb,var(--ink,#262019) 90%,transparent); } .ds-btn-ink:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb,var(--ink,#262019) 30%,transparent); } .ds-btn-ink:active { transform:scale(0.97); }"
     },
     {
-      "name": "Secondary Button",
+      "name": "Outline Button (Ink)",
       "kind": "button",
-      "refersTo": "button-secondary",
-      "description": "보조 행동. 블루그레이 미스트 배경 + 슬레이트 글자.",
-      "html": "<button class=\"ds-btn-secondary\">취소</button>",
-      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; justify-content:center; height:2.25rem; padding:0.5rem 1rem; border:none; border-radius:0.625rem; background:var(--color-secondary,#f0f4f9); color:var(--color-foreground,#1f2933); font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.875rem; font-weight:500; cursor:pointer; transition:background .2s; } .ds-btn-secondary:hover { background:color-mix(in oklab,var(--color-secondary,#f0f4f9) 80%,#1f2933); }"
+      "refersTo": "button-outline",
+      "description": "중립·보조 행동. 투명 배경 + 2px 잉크 테두리 + 잉크 글자.",
+      "html": "<button class=\"ds-btn-outline\">스터디 만들기</button>",
+      "css": ".ds-btn-outline { display:inline-flex; align-items:center; justify-content:center; padding:0.5rem 1rem; border:2px solid color-mix(in srgb,var(--ink,#262019) 20%,transparent); border-radius:0.625rem; background:transparent; color:var(--ink,#262019); font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.9375rem; font-weight:600; cursor:pointer; transition:background .2s; } .ds-btn-outline:hover { background:color-mix(in srgb,var(--ink,#262019) 5%,transparent); }"
     },
     {
-      "name": "Status Badge (모집중)",
+      "name": "Status Badge (Highlighter)",
       "kind": "chip",
-      "refersTo": "badge-status-open",
-      "description": "모집 상태 배지. 상태색 단색 채움 + 흰 글자, 완전한 라운드.",
-      "html": "<span class=\"ds-badge-status\">모집중</span>",
-      "css": ".ds-badge-status { display:inline-flex; align-items:center; padding:0.125rem 0.5rem; border-radius:9999px; background:var(--color-success,oklch(0.5 0.15 145)); color:#fff; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.75rem; font-weight:500; line-height:1.4; }"
+      "refersTo": "status-recruiting",
+      "description": "모집 상태 태그. 모집중=민트, 마감=코랄, 그 외=옅은 잉크. 글자는 항상 잉크. Highlighter-Coding Rule.",
+      "html": "<span class=\"ds-status ds-status-recruiting\">모집중</span> <span class=\"ds-status ds-status-closed\">마감</span>",
+      "css": ".ds-status { display:inline-flex; align-items:center; padding:0.125rem 0.5rem; border-radius:0.625rem; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.75rem; font-weight:700; color:var(--ink,#262019); } .ds-status-recruiting { background:var(--hl-mint,#5fe0bd); } .ds-status-closed { background:var(--hl-coral,#ff8f7a); }"
     },
     {
-      "name": "Study Card",
+      "name": "Paper Card",
       "kind": "card",
       "refersTo": "card",
-      "description": "스터디·모집글 카드. 순백 배경 + 쿨 보더 + 아주 옅은 그림자, xl 라운드.",
-      "html": "<div class=\"ds-card\"><div class=\"ds-card-head\"><span class=\"ds-card-title\">React 스터디 모집</span><span class=\"ds-badge-status\">모집중</span></div><p class=\"ds-card-body\">주 1회 온라인, 4주 과정. 초급 환영.</p></div>",
-      "css": ".ds-card { display:flex; flex-direction:column; gap:0.75rem; padding:1.5rem; border:1px solid var(--color-border,#e5eaf1); border-radius:1rem; background:var(--color-card,#fff); box-shadow:0 1px 2px 0 rgba(31,41,51,0.05); } .ds-card-head { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; } .ds-card-title { font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:1.0625rem; font-weight:700; color:var(--color-foreground,#1f2933); } .ds-card-body { margin:0; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.9375rem; line-height:1.6; color:var(--color-muted-foreground,#7b8794); } .ds-badge-status { display:inline-flex; align-items:center; padding:0.125rem 0.5rem; border-radius:9999px; background:var(--color-success,oklch(0.5 0.15 145)); color:#fff; font-size:0.75rem; font-weight:500; }"
+      "description": "종이 카드 — 종이 바탕 + 2px 잉크 테두리 + 소프트 섀도우. hover 시 집어 올림. 내부 구분은 점선 괘선.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-head\"><h3 class=\"ds-card-title\">알고리즘 코테 스터디</h3><span class=\"ds-status ds-status-recruiting\">모집중</span></div><p class=\"ds-card-body\">월·수 20:00 · 온라인</p><div class=\"ds-card-divider\"></div><div class=\"ds-seat\"><div class=\"ds-seat-track\"><div class=\"ds-seat-fill\"></div></div><span class=\"ds-seat-label\">3/6석</span></div></article>",
+      "css": ".ds-card { display:flex; flex-direction:column; gap:0.75rem; padding:1.25rem; border:2px solid color-mix(in srgb,var(--ink,#262019) 15%,transparent); border-radius:1rem; background:var(--paper,#f8f5ec); box-shadow:0 1px 2px rgba(31,41,51,0.04),0 4px 14px -4px rgba(31,41,51,0.10); transition:transform .2s,box-shadow .2s,border-color .2s; } .ds-card:hover { transform:translateY(-4px); border-color:color-mix(in srgb,var(--ink,#262019) 40%,transparent); box-shadow:0 6px 14px -6px rgba(31,41,51,0.12),0 18px 34px -10px rgba(31,41,51,0.18); } .ds-card-head { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; } .ds-card-title { margin:0; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:1.0625rem; font-weight:700; color:var(--ink,#262019); } .ds-card-body { margin:0; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.9375rem; line-height:1.6; color:var(--ink-soft,#6f6656); } .ds-card-divider { border-top:1px dashed var(--paper-line,#e7e0d0); } .ds-seat { display:flex; align-items:center; gap:0.5rem; } .ds-seat-track { flex:1; height:0.375rem; border-radius:9999px; background:color-mix(in srgb,var(--ink,#262019) 10%,transparent); overflow:hidden; } .ds-seat-fill { width:50%; height:100%; border-radius:9999px; background:var(--hl-coral,#ff8f7a); } .ds-seat-label { font-family:'Pretendard Variable',sans-serif; font-size:0.75rem; font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink,#262019); }"
     },
     {
-      "name": "Text Input",
+      "name": "Input Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "입력창. 투명 배경 + 쿨 보더, md 라운드, 포커스 시 블루 링.",
-      "html": "<input class=\"ds-input\" placeholder=\"스터디 이름을 입력하세요\" />",
-      "css": ".ds-input { width:100%; height:2.25rem; padding:0.25rem 0.75rem; border:1px solid var(--color-border,#e5eaf1); border-radius:0.625rem; background:transparent; color:var(--color-foreground,#1f2933); font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.875rem; box-shadow:0 1px 1px 0 rgba(31,41,51,0.04); outline:none; transition:border-color .2s,box-shadow .2s; } .ds-input::placeholder { color:var(--color-muted-foreground,#7b8794); } .ds-input:focus-visible { border-color:var(--color-primary,#2f58e0); box-shadow:0 0 0 3px color-mix(in oklab,var(--color-primary,#2f58e0) 50%,transparent); }"
+      "description": "폼 인풋·검색. 종이 바탕 + 2px 잉크 테두리. 포커스 시 테두리 진해지고 잉크 링.",
+      "html": "<input class=\"ds-input\" placeholder=\"스터디·모집글 검색...\" />",
+      "css": ".ds-input { width:100%; padding:0.5rem 0.75rem; border:2px solid color-mix(in srgb,var(--ink,#262019) 15%,transparent); border-radius:0.625rem; background:var(--paper,#f8f5ec); color:var(--ink,#262019); font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.9375rem; outline:none; transition:border-color .2s,box-shadow .2s; } .ds-input::placeholder { color:var(--ink-soft,#6f6656); } .ds-input:focus-visible { border-color:color-mix(in srgb,var(--ink,#262019) 40%,transparent); box-shadow:0 0 0 3px color-mix(in srgb,var(--ink,#262019) 15%,transparent); }"
     },
     {
-      "name": "Tab Pill (active)",
-      "kind": "nav",
-      "refersTo": "button-primary",
-      "description": "목록 필터 탭. 활성 탭은 블루 pill, 비활성은 뮤트 텍스트.",
-      "html": "<div class=\"ds-tabs\"><button class=\"ds-tab ds-tab-active\">전체</button><button class=\"ds-tab\">모집중</button><button class=\"ds-tab\">마감</button></div>",
-      "css": ".ds-tabs { display:inline-flex; gap:0.25rem; padding:0.25rem; border-radius:9999px; background:var(--color-secondary,#f0f4f9); } .ds-tab { border:none; background:transparent; padding:0.375rem 0.875rem; border-radius:9999px; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.875rem; font-weight:500; color:var(--color-muted-foreground,#7b8794); cursor:pointer; transition:background .2s,color .2s; } .ds-tab:hover { color:var(--color-foreground,#1f2933); } .ds-tab-active { background:var(--color-primary,#2f58e0); color:#fff; }"
+      "name": "Category Tab (Highlighter Band)",
+      "kind": "custom",
+      "refersTo": "category-tab",
+      "description": "관심 분야 탭 — 파일 폴더처럼 상단 형광 밴드(카테고리 이미지 자리) + 아래 굵은 잉크 라벨. 대분류별 고정 형광색.",
+      "html": "<a class=\"ds-cat\"><span class=\"ds-cat-band\"></span><span class=\"ds-cat-label\">어학<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></span></a>",
+      "css": ".ds-cat { display:flex; flex-direction:column; overflow:hidden; border:2px solid color-mix(in srgb,var(--ink,#262019) 15%,transparent); border-radius:0.75rem; background:var(--paper,#f8f5ec); box-shadow:0 1px 2px rgba(31,41,51,0.04),0 4px 14px -4px rgba(31,41,51,0.10); cursor:pointer; transition:transform .2s,box-shadow .2s; } .ds-cat:hover { transform:translateY(-4px); box-shadow:0 6px 14px -6px rgba(31,41,51,0.12),0 18px 34px -10px rgba(31,41,51,0.18); } .ds-cat-band { height:3rem; background:var(--hl-mint,#5fe0bd); } .ds-cat-label { display:flex; align-items:center; justify-content:space-between; padding:0.625rem 0.875rem; font-family:'Pretendard Variable',Geist,-apple-system,system-ui,sans-serif; font-size:0.9375rem; font-weight:700; color:var(--ink,#262019); }"
+    },
+    {
+      "name": "Chat Bubble",
+      "kind": "custom",
+      "refersTo": "chat-bubble",
+      "description": "채팅 말풍선. 내 메시지=잉크 채움, 상대=종이+2px 잉크 테두리. 둥근 rounded-2xl.",
+      "html": "<div class=\"ds-chat\"><div class=\"ds-bubble ds-bubble-them\">언제 시작해요?</div><div class=\"ds-bubble ds-bubble-me\">월요일 저녁 8시요!</div></div>",
+      "css": ".ds-chat { display:flex; flex-direction:column; gap:0.5rem; align-items:flex-start; } .ds-bubble { max-width:70%; padding:0.5rem 0.875rem; border-radius:1rem; font-family:'Pretendard Variable',sans-serif; font-size:0.9375rem; line-height:1.5; box-shadow:0 1px 2px rgba(31,41,51,0.04); } .ds-bubble-them { background:var(--paper,#f8f5ec); border:2px solid color-mix(in srgb,var(--ink,#262019) 12%,transparent); color:var(--ink,#262019); } .ds-bubble-me { align-self:flex-end; background:var(--ink,#262019); color:var(--paper,#f8f5ec); }"
     }
   ],
   "narrative": {
-    "northStar": "함께 뛰는 러닝메이트",
-    "overview": "Study Mate는 스터디를 함께할 사람을 찾아 주는, 옆에서 페이스를 맞춰 뛰어 주는 러닝메이트 같은 서비스다. 화면은 조용한 학습 도구가 아니라 밝고 활기차게 옆에서 밀어 주는 느낌을 지향한다. 지배색인 코발트 러닝 블루가 활기를 이끌고, 나머지는 차분한 흰 바탕과 쿨한 블루그레이 중립으로 받쳐 준다. 밀도는 과하지 않고, 면은 거의 평평하게 두고 얇은 테두리로 구획한다. 형태는 둥근 모서리로 부드럽고 친근하게 — 20대 학습자가 부담 없이 다가오도록. 케빈스룸의 색·타이포 토큰에서 출발했지만, 원본의 3D 캐릭터·풀블리드 히어로·커머스 문법은 차용하지 않는다.",
-    "keyCharacteristics": ["단일 지배 블루(코발트 러닝 블루)가 활기를 이끈다.", "거의 평평한 면 + 얇은 테두리. 그림자는 최소.", "둥근 모서리로 부드럽고 친근하게.", "모집 상태(모집중·마감·대기중)를 색으로 즉시 읽힌다.", "한글 본문 17px / 행간 1.7로 편안한 가독성."],
-    "rules": [
-      { "name": "The One Blue Rule", "body": "포인트 색은 코발트 러닝 블루 하나뿐이다. 새 강조색을 만들지 않는다 — 강조가 필요하면 이 블루를 쓴다.", "section": "colors" },
-      { "name": "The Status-Only Color Rule", "body": "초록·빨강·노랑은 모집 상태의 의미로만 쓴다. 장식이나 일반 강조로 상태색을 끌어오지 않는다. 브랜드 강조는 언제나 블루의 몫이다.", "section": "colors" },
-      { "name": "The 17/1.7 Rule", "body": "본문 기준은 17px / 행간 1.7로 고정이다. 한글 가독성을 위한 값이므로 임의로 줄이지 않는다.", "section": "typography" },
-      { "name": "The Border-First Rule", "body": "요소를 구분할 땐 그림자보다 테두리를 먼저 쓴다. 그림자를 키워 카드를 띄우지 않는다 — 이 시스템의 깊이는 선으로 만든다.", "section": "elevation" }
+    "northStar": "살아있는 스터디 플래너",
+    "overview": "Study Mate의 홈은 조용한 디렉터리가 아니라 한 권의 스터디 플래너다. 찾는 스터디는 목록의 한 줄이 아니라 이번 주 내가 채울 다음 칸이다. 방문자는 스터디를 '이번 주를 채울 블록'으로 보고, 계획의 리듬을 느끼며, 찾고 신청한다. 이 월드는 이전의 옅고 평평한 SaaS(단일 블루 틴트 + 흰 바탕 + 카드 그리드)를 폐기하고 그 자리를 대체한다. 밋밋함의 원인은 완성도가 아니라 룰 자체였다 — 색을 옅은 틴트로만 쓰고, 표현을 카드 그리드로만 풀었다. 새 룰은 따뜻한 종이 바탕 + 형광펜 색면 + 먹빛 잉크로 색과 촉감을 되찾는다. 한국 20대 학습자(취준·자격증·어학·전공)가 매일 쓰는 물건 = 스터디 플래너/다이어리에서 왔다. D-day, 체크리스트, 형광펜 카테고리 코딩, 좌석(참여 인원) 블록이 이 세계의 어휘다.",
+    "keyCharacteristics": [
+      "따뜻한 종이 바탕(플레인) — 전면 그리드/모눈은 제너릭 시그니처라 쓰지 않는다.",
+      "형광펜 8색이 카테고리·상태를 코딩하는 색면/액센트(장식 아님, 의미다). 대분류 8종은 서로 겹치지 않는 고유색.",
+      "먹빛 잉크 텍스트 + 2px 잉크 테두리로 구획(선이 곧 구조).",
+      "D-day·체크리스트·좌석·'빈 칸 채우기' 등 플래너 어휘로 제품을 표현.",
+      "제목·히어로는 주아체(손글씨 디스플레이), 본문은 Pretendard. 강조는 굵기 + 형광펜 밑줄(hl-mark)."
     ],
-    "dos": ["Do 강조가 필요하면 코발트 러닝 블루(#2f58e0)를 쓴다 — 포인트 색은 이 블루 하나다.", "Do 요소 구분은 얇은 테두리(#e5eaf1)로 먼저 한다. 면은 평평하게 둔다.", "Do 모집 상태는 그린/레드/앰버 단색 채움 + 흰 글자로 즉시 읽히게 한다.", "Do 본문은 17px / 행간 1.7을 유지한다.", "Do 모서리는 둥글게(버튼 10px, 카드 16px, 배지 full) — 친근한 톤을 지킨다."],
-    "donts": ["Don't 블루 말고 새 강조색을 만들지 않는다.", "Don't 초록·빨강·노랑을 상태 의미 밖의 장식·일반 강조로 쓰지 않는다.", "Don't 그림자를 키워 카드를 띄우지 않는다(Border-First).", "Don't 날카로운 직각 모서리를 쓰지 않는다.", "Don't 케빈스룸 원본의 3D 캐릭터·풀블리드 히어로·MOQ 커머스 문법을 가져오지 않는다."]
+    "rules": [
+      { "name": "The Highlighter-Coding Rule", "body": "형광펜 8색은 카테고리와 모집 상태의 의미로 쓴다(카테고리 탭·좌석 바·상태 태그). 대분류 8종은 서로 겹치지 않는 고유색. 일반 강조는 형광펜이 아니라 굵기 + hl-mark 밑줄로 한다.", "section": "colors" },
+      { "name": "The Ink-Action Rule", "body": "주 행동(찾기·만들기·시작)은 잉크 채움 버튼(먹빛+종이 글자)이다. 옅은 블루 틴트로 강조하던 옛 룰은 폐기한다 — 강조의 무게중심은 잉크다.", "section": "colors" },
+      { "name": "No Blueprint Grid", "body": "종이 느낌을 낸다고 전면에 하이라인 그리드/모눈을 깔지 않는다(생성형 UI의 흔한 tell). 종이는 플레인, 괘선/바인딩 같은 구체적 플래너 시그니처는 카드 국소로만.", "section": "layout" },
+      { "name": "The Jua-for-Display Rule", "body": "주아체는 읽는 텍스트가 아니라 보는 텍스트(type for a moment)에만 쓴다: 히어로 헤드라인·섹션 제목·페이지 제목. 카드 제목·라벨·본문·폼 텍스트는 Pretendard. 주아체는 단일 굵기(400)라 font-bold를 겹치지 않는다(faux-bold 방지).", "section": "typography" },
+      { "name": "The 17/1.7 Rule", "body": "본문 기준은 17px / 행간 1.7로 고정이다. 한글 가독성을 위한 값이므로 임의로 줄이지 않는다.", "section": "typography" },
+      { "name": "The Border-First (2px) Rule", "body": "구분은 그림자보다 2px 잉크 테두리가 먼저. 카드·버튼·태그의 윤곽선이 이 세계의 주 구조다(마커로 그린 칸). 깊이는 2px 테두리 + 소프트 섀도우(슬레이트 틴트, 순검정 아님)로 만든다.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do 바탕은 종이(paper), 텍스트·테두리·주 버튼은 잉크(ink).",
+      "Do 카테고리·상태는 형광펜 8색으로 코딩(의미, 대분류별 고유색), 글자는 잉크.",
+      "Do 구분은 2px 잉크 테두리 + 점선 괘선으로 먼저.",
+      "Do 강조는 굵기 + hl-mark 형광 밑줄로. 대형 헤딩은 주아체(font-heading).",
+      "Do 플래너 어휘(D-day·좌석·체크리스트·빈 칸 채우기)로 제품을 말한다."
+    ],
+    "donts": [
+      "Don't 옛 룰(옅은 단일 블루 틴트·흰 바탕·평평)로 되돌아가지 않는다.",
+      "Don't 형광펜을 의미(카테고리/상태) 밖의 일반 장식으로 흩뿌리지 않는다.",
+      "Don't 전면 그리드/모눈 배경을 깔지 않는다(제너릭 시그니처).",
+      "Don't 순검정 그림자로 카드를 띄우지 않는다(슬레이트 틴트 소프트 섀도우).",
+      "Don't 날카로운 직각. 주아체를 본문·작은 라벨에 쓰지 않는다."
+    ]
   }
 }

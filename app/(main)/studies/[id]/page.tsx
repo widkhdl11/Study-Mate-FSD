@@ -38,7 +38,7 @@ async function StudyDetailLoader({
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-paper text-ink">
       <main className="flex-1">
         <HeaderSection study={study} currentUserId={user.value.id} />
         <TabSection study={study} user={user.value} />

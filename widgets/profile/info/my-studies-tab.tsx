@@ -58,24 +58,24 @@ export default function MyStudiesTab({
             placeholder="스터디 제목·설명으로 검색"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="max-w-sm bg-background"
+            className="max-w-sm bg-paper border-ink/15"
           />
 
           {filtered.length === 0 ? (
-            <p className="py-12 text-center text-sm text-muted-foreground">
+            <p className="py-12 text-center text-sm text-ink-soft">
               검색 결과가 없어요.
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {visible.map((study: StudyResponse) => (
                 <Link key={study.id} href={`/studies/${study.id}`}>
-                  <Card className="group overflow-hidden hover:border-primary/50 transition-colors h-full cursor-pointer p-6 space-y-4">
+                  <Card className="group overflow-hidden border-2 border-ink/15 bg-paper shadow-soft transition-all hover:-translate-y-1 hover:border-ink/40 hover:shadow-lift h-full cursor-pointer p-6 space-y-4">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1">
-                        <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                        <h3 className="font-bold text-lg text-ink group-hover:text-ink/60 transition-colors line-clamp-1">
                           {study.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                        <p className="text-sm text-ink-soft line-clamp-2 mt-1">
                           {study.description}
                         </p>
                       </div>
@@ -84,23 +84,23 @@ export default function MyStudiesTab({
                     <div className="flex flex-wrap items-center gap-2">
                       <StudyCategoryBadges categoryPath={getCategoryPathByValue(study.studyCategory)} />
 
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <span className="text-xs text-ink-soft flex items-center gap-1">
                         <StudyRegionLabel region={study.region} />
                       </span>
                     </div>
 
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-ink-soft">
                           <Users className="w-3.5 h-3.5" />
-                          <span className="text-xs">
+                          <span className="text-xs tabular-nums">
                             {study.currentParticipants}/{study.maxParticipants}명
                           </span>
                         </div>
                       </div>
-                      <div className="w-full bg-muted/60 rounded-full h-1.5 overflow-hidden">
+                      <div className="w-full bg-ink/10 rounded-full h-1.5 overflow-hidden">
                         <div
-                          className="h-full bg-primary rounded-full transition-all"
+                          className="h-full bg-hl-coral rounded-full transition-all"
                           style={{
                             width: `${
                               (study.currentParticipants / study.maxParticipants) * 100
@@ -110,11 +110,11 @@ export default function MyStudiesTab({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-border">
+                    <div className="flex items-center justify-between pt-2 border-t-2 border-dashed border-paper-line">
                       <Badge className={getStatusColor(study.status)}>
                         {studyStatusConversion(study.status)}
                       </Badge>
-                      <span className="text-xs text-muted-foreground">관리</span>
+                      <span className="text-xs text-ink-soft">관리</span>
                     </div>
                   </Card>
                 </Link>
@@ -126,6 +126,7 @@ export default function MyStudiesTab({
             <div className="flex justify-center pt-2">
               <Button
                 variant="outline"
+                className="border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5"
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
               >
                 더 보기 ({filtered.length - visibleCount}개 남음)

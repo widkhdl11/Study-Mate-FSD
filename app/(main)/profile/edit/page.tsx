@@ -25,18 +25,18 @@ async function ProfileEditLoader() {
     redirect("/login");
   }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-muted/30 to-background px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-paper px-4 py-12">
       <div className="w-full max-w-2xl">
         {/* 헤더 */}
         <div className="mb-8">
           <Link href="/profile">
-            <Button variant="ghost" className="mb-4 gap-2 bg-transparent">
+            <Button variant="ghost" className="mb-4 gap-2 bg-transparent text-ink hover:bg-ink/5 hover:text-ink">
               <ArrowLeft className="w-4 h-4" />
               프로필로 돌아가기
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold text-foreground">프로필 수정</h1>
-          <p className="mt-2 text-sm text-muted-foreground">회원 정보를 수정할 수 있습니다</p>
+          <h1 className="font-heading text-3xl font-normal text-ink">프로필 수정</h1>
+          <p className="mt-2 text-sm text-ink-soft">회원 정보를 수정할 수 있습니다</p>
         </div>
         <ProfileUpdateForm useData={currentUser.value} />
       </div>

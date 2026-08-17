@@ -13,7 +13,7 @@ interface PostDetailWidgetProps {
 
 export default function PostDetailWidget({ postData, relatedPosts, MainSectionSlot, SidebarSectionSlot }: PostDetailWidgetProps) {
   return (
-     <div className="min-h-screen bg-background flex flex-col">
+     <div className="min-h-screen bg-paper text-ink flex flex-col">
         <main className="flex-1">
          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <PostImageSection postData={postData} />

@@ -39,7 +39,7 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
 
   return (
     /* 프로필 수정 폼 카드 */
-    <Card className="p-6">
+    <Card className="bg-paper border-2 border-ink/15 shadow-soft p-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* 사용자명 필드 */}
@@ -48,9 +48,9 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>아이디</FormLabel>
+                <FormLabel className="text-ink font-semibold">아이디</FormLabel>
                 <FormControl>
-                  <Input placeholder="이름을 입력해주세요" disabled={isPending} {...field} />
+                  <Input placeholder="이름을 입력해주세요" className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30" disabled={isPending} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -63,9 +63,9 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>이메일</FormLabel>
+                <FormLabel className="text-ink font-semibold">이메일</FormLabel>
                 <FormControl>
-                  <Input placeholder="example@email.com" type="email" disabled {...field} />
+                  <Input placeholder="example@email.com" type="email" className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30" disabled {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -78,13 +78,13 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>간단 소개</FormLabel>
+                <FormLabel className="text-ink font-semibold">간단 소개</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="자기소개를 입력해주세요"
                     disabled={isPending}
                     rows={4}
-                    className="resize-none"
+                    className="resize-none border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                     {...field}
                   />
                 </FormControl>
@@ -99,9 +99,9 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
             name="birthDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>생년월일</FormLabel>
+                <FormLabel className="text-ink font-semibold">생년월일</FormLabel>
                 <FormControl>
-                  <Input type="date" disabled={isPending} {...field} className="w-36 mw-auto" />
+                  <Input type="date" disabled={isPending} {...field} className="w-36 mw-auto border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -114,10 +114,10 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
             name="gender"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>성별</FormLabel>
+                <FormLabel className="text-ink font-semibold">성별</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                       <SelectValue placeholder="성별을 선택해주세요" />
                     </SelectTrigger>
                   </FormControl>
@@ -135,13 +135,13 @@ export function ProfileUpdateForm({ useData }: { useData: ProfileResponse }) {
           <div className="flex gap-3 pt-4">
             <Button
               type="submit"
-              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="flex-1 bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]"
               disabled={isPending}
             >
               {isPending ? "수정 중..." : "수정하기"}
             </Button>
             <Link href="/profile" className="flex-1">
-              <Button type="button" variant="outline" className="w-full bg-transparent" disabled={isPending}>
+              <Button type="button" variant="outline" className="w-full border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5 hover:text-ink" disabled={isPending}>
                 취소
               </Button>
             </Link>

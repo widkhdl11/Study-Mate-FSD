@@ -61,7 +61,7 @@ export default function StudyCreateForm() {
   const detailRegions = getSubRegion(mainRegionValue)
 
   return (
-      <Card className="p-6 md:p-8">
+      <Card className="bg-paper border-2 border-ink/15 shadow-soft p-6 md:p-8">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -73,10 +73,11 @@ export default function StudyCreateForm() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>스터디 제목</FormLabel>
+                    <FormLabel className="text-ink font-semibold">스터디 제목</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="스터디 제목을 입력해주세요"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         type="text"
                         {...field}
@@ -94,7 +95,7 @@ export default function StudyCreateForm() {
                 name="mainCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>대분류</FormLabel>
+                    <FormLabel className="text-ink font-semibold">대분류</FormLabel>
                     <Select
                       value={mainCategoryValue}
                       onValueChange={(value) => {
@@ -106,7 +107,7 @@ export default function StudyCreateForm() {
                         form.setValue("studyCategory", "");
                       }}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                         <SelectValue placeholder="대분류 선택" />
                       </SelectTrigger>
                       <SelectContent>
@@ -128,7 +129,7 @@ export default function StudyCreateForm() {
                 name="subCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>중분류</FormLabel>
+                    <FormLabel className="text-ink font-semibold">중분류</FormLabel>
                     <Select
                       key={`sub-${mainCategoryValue}`}
                       value={subCategoryValue}
@@ -141,7 +142,7 @@ export default function StudyCreateForm() {
                       }}
                       disabled={isPending || subcategories.length === 0}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                         <SelectValue placeholder={mainCategoryValue ? "중분류 선택" : "대분류 먼저 선택"} />
                       </SelectTrigger>
                       <SelectContent>
@@ -163,7 +164,7 @@ export default function StudyCreateForm() {
                 name="detailCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>소분류</FormLabel>
+                    <FormLabel className="text-ink font-semibold">소분류</FormLabel>
                     <Select
                       key={`detail-${mainCategoryValue}-${subCategoryValue}`}
                       value={detailCategoryValue}
@@ -180,7 +181,7 @@ export default function StudyCreateForm() {
                       }}
                       disabled={isPending || detailCategories.length === 0}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                         <SelectValue placeholder={subCategoryValue ? "소분류 선택" : "중분류 먼저 선택"} />
                       </SelectTrigger>
                       <SelectContent>
@@ -204,7 +205,7 @@ export default function StudyCreateForm() {
                 name="mainRegion"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>시/도</FormLabel>
+                    <FormLabel className="text-ink font-semibold">시/도</FormLabel>
                     <Select
                       value={mainRegionValue}
                       onValueChange={(value) => {
@@ -224,7 +225,7 @@ export default function StudyCreateForm() {
                         }
                       }}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                         <SelectValue placeholder="시/도 선택" />
                       </SelectTrigger>
                       <SelectContent>
@@ -247,7 +248,7 @@ export default function StudyCreateForm() {
                     name="detailRegion"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>시/군/구</FormLabel>
+                        <FormLabel className="text-ink font-semibold">시/군/구</FormLabel>
                         <Select
                           key={`sub-region-${mainRegionValue}`}
                           value={detailRegionValue}
@@ -264,7 +265,7 @@ export default function StudyCreateForm() {
                           }}
                           disabled={isPending || detailRegions.length === 0}
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full border-2 border-ink/15 bg-paper text-ink data-[placeholder]:text-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30">
                             <SelectValue placeholder={mainRegionValue ? "시/군/구 선택" : "시/도 먼저 선택"} />
                           </SelectTrigger>
                           <SelectContent>
@@ -287,13 +288,14 @@ export default function StudyCreateForm() {
                 name="maxParticipants"
                 render={({ field }) => (
                   <FormItem className="sm:max-w-[12rem]">
-                    <FormLabel>최대 인원</FormLabel>
+                    <FormLabel className="text-ink font-semibold">최대 인원</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="2"
                         max="20"
                         placeholder="2-20명"
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft tabular-nums focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         {...field}
                       />
@@ -309,10 +311,11 @@ export default function StudyCreateForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>설명</FormLabel>
+                    <FormLabel className="text-ink font-semibold">설명</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="스터디에 대해 설명해주세요."
+                        className="border-2 border-ink/15 bg-paper text-ink placeholder-ink-soft focus-visible:border-ink/40 focus-visible:ring-ink/30"
                         disabled={isPending}
                         rows={5}
                         {...field}
@@ -327,7 +330,7 @@ export default function StudyCreateForm() {
               <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="flex-1 bg-ink text-paper hover:bg-ink/90 active:scale-[0.97]"
                   disabled={isPending}
                 >
                   {isPending ? "만드는 중..." : "스터디 만들기"}
@@ -336,7 +339,7 @@ export default function StudyCreateForm() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full bg-transparent"
+                    className="w-full border-2 border-ink/20 bg-transparent text-ink hover:bg-ink/5 hover:text-ink"
                     disabled={isPending}
                   >
                     취소

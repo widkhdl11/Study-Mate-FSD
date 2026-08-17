@@ -21,6 +21,7 @@ export { useIsLiked } from "./api/query/isLiked/useIsLiked";
 // ── UI (표현) ──
 export { default as PostListItem } from "./ui/PostListItem";
 export { default as PostImageSection } from "./ui/PostImageSection";
+export { default as PostCard, type StudyPostCardView } from "./ui/PostCard";
 
 // ── 공개 타입 ──
 export type { MyPostWithStudyRow } from "./api/query/myPostsWithStudy/types";

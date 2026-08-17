@@ -1,13 +1,12 @@
 import { AIRecommendedStudies } from '@/features/ai-recommend'
-import { HomeWidget } from '@/widgets/home'
+import { CtaSection, HomeWidget } from '@/widgets/home'
 
 export default function HomePage() {
     return (
         <>
             <HomeWidget />
-            <section className='my-8 px-4'>
-                <AIRecommendedStudies />
-            </section>
+            <AIRecommendedStudies />
+            <CtaSection />
         </>
     )
 }

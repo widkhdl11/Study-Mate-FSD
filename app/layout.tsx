@@ -61,6 +61,14 @@ export default function RootLayout({
     <html lang="ko" className={`${pretendard.variable} ${GeistSans.variable}`}>
       <head>
         <meta name="naver-site-verification" content="8699548ac724e7466db107bc0072bc6894628fac" />
+        {/* 디스플레이 서체(주아체) 한글 서브셋 preload — 히어로 헤드라인 swap 지연 최소화 */}
+        <link
+          rel="preload"
+          href="/fonts/jua/jua-korean-400-normal.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="antialiased font-sans">
         <ReactQueryClientProvider>

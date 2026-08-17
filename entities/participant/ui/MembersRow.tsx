@@ -15,7 +15,7 @@ export default function MemberRow({ participant, statusBadgeSlot, actionSlot }: 
   return (
     <div
       key={participant.id}
-      className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
+      className="flex items-center justify-between p-4 bg-ink/5 rounded-lg hover:bg-ink/10 transition-colors"
     >
       <div className="flex items-center gap-4">
         <Avatar className="h-10 w-10">
@@ -23,27 +23,27 @@ export default function MemberRow({ participant, statusBadgeSlot, actionSlot }: 
             src={getProfileImageUrl(participant?.avatarUrl || "")}
             alt={participant.username}
           />
-          <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+          <AvatarFallback className="bg-ink text-paper text-lg">
             {participant.username}
           </AvatarFallback>
         </Avatar>
         <div>
           <div className="flex items-center gap-2">
-            <p className="font-semibold text-foreground">
+            <p className="font-semibold text-ink">
               {participant.username}
             </p>
             {participant.role === "host" && (
-              <Badge className="bg-primary text-primary-foreground text-xs">
+              <Badge className="bg-ink text-paper text-xs">
                 호스트
               </Badge>
             )}
             {participant.role === "common" && (
-              <Badge className="bg-success text-white text-xs">
+              <Badge className="bg-hl-mint text-ink text-xs">
                 멤버
               </Badge>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-ink-soft">
             가입일: {participant.createdAt}
           </p>
         </div>
